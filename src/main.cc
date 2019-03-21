@@ -1,13 +1,12 @@
-#include <fstream>
-#include "inipp.hh"
+#include <SDL2/SDL.h>
+#include "Graphics.hh"
+
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
 
 int main() {
-	inipp::Ini<char> ini;
-	std::ifstream is("creatures.ini");
-	ini.parse(is);
-	ini.default_section(ini.sections["DEFAULT"]);
-	ini.interpolate();
-	std::cout << "ini file after default section and interpolation:" << std::endl;
-	ini.generate(std::cout);
+	Graphics("bingo bongo game time", SCREEN_WIDTH, SCREEN_HEIGHT);
+	SDL_Delay(2000);
+
 	return 0;
 }
