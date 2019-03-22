@@ -3,15 +3,16 @@
 
 #include <string>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 /**
  * Used to display graphics on the screen and load images and stuff.
  */
-class Graphics
-{
+class Graphics {
     SDL_Window *window;
     SDL_Surface *screen;
-    SDL_Surface *tileset;
+    SDL_Renderer *renderer;
+    SDL_Texture *tileset;
     SDL_Rect srcRect;
     SDL_Rect dstRect;
 
@@ -38,13 +39,14 @@ public:
      * @param fg is the foreground colour to give the tile.
      * @param bg is the background colour to give the tile.
      */
-    void blitTile(int tile, int x, int y, int fg, int bg);
+    void blitTile(int tile, int x, int y, unsigned int fg, unsigned int bg);
 
     /**
-     * Covers the whole screen in a colour.
+     * Fills a given rect with colour.
      * @param colour is the colour stored as an int 1 byte each colour.
+     * @param rect   is the rect to fill or null for whole screen.
      */
-    void flush(int colour);
+    void flush(int colour, SDL_Rect *rect = NULL);
 
     /**
      * Updates the screen to show what has been blitted on there lately.

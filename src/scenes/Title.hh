@@ -4,10 +4,12 @@
 #include "../Scene.hh"
 #include <string>
 
-class Title
+class Title: public Scene
 {
     std::string *word;
-    
+    int x = 0;
+    int y = 0;
+
 public:
     /**
      * Creates teh title scene.

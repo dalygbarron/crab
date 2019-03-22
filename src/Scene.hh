@@ -1,6 +1,10 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Graphics.hh"
+
+class Scene;
+
 /**
  * Data structure for defining the transition from one scene to the next.
  */

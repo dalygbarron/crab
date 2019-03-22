@@ -2,13 +2,12 @@
 #include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 
 
-Graphics::Graphics(std::string *title, int width, int height, std::string *tileset)
-{
+Graphics::Graphics(std::string *title, int width, int height, std::string *tileset) {
     // Start sdl and stuff.
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
     }
@@ -20,62 +19,70 @@ Graphics::Graphics(std::string *title, int width, int height, std::string *tiles
         height,
         SDL_WINDOW_SHOWN
     );
-    if (!this->window)
-    {
+    if (!this->window) {
         std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
     }
     this->screen = SDL_GetWindowSurface(this->window);
+    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+    if (!this->renderer) {
+        std::cout << "sdl: " << SDL_GetError() << std::endl;
+        throw 1;
+    }
+    int imgFlags = IMG_INIT_PNG;
+    if(!(IMG_Init(imgFlags) & imgFlags)) {
+        std::cout << "sdl: " << SDL_GetError() << std::endl;
+        throw 1;
+    }
     // Load the tilset.
-	SDL_Surface* loadedSurface = SDL_LoadBMP(tileset->c_str());
-	if(!loadedSurface)
-	{
+	SDL_Surface* loadedSurface = IMG_Load(tileset->c_str());
+	if(!loadedSurface) {
 		std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
 	}
-    SDL_SetColorKey(loadedSurface, SDL_TRUE, SDL_MapRGB(loadedSurface->format, 0, 0, 0));
-    this->tileset = SDL_ConvertSurface(loadedSurface, this->screen->format, NULL);
-    if (!this->tileset)
-    {
+    this->tileset = SDL_CreateTextureFromSurface(this->renderer, loadedSurface);
+    if (!this->tileset) {
         std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
     }
 	SDL_FreeSurface(loadedSurface);
     // Set up the tiling rectangles.
-    this->srcRect.w = this->tileset->w / 16;
-    this->srcRect.h = this->tileset->h / 16;
-    this->dstRect.x = this->srcRect.w;
+    SDL_QueryTexture(this->tileset, NULL, NULL, &this->srcRect.w, &this->srcRect.h);
+    this->srcRect.w /= 16;
+    this->srcRect.h /= 16;
+    this->dstRect.w = this->srcRect.w;
     this->dstRect.h = this->srcRect.h;
     // Clear the background to start.
     this->flush(0xf00faa);
     this->frame();
 }
 
-Graphics::~Graphics()
-{
+Graphics::~Graphics() {
+    SDL_DestroyTexture(this->tileset);
+    SDL_DestroyRenderer(this->renderer);
     SDL_DestroyWindow(this->window);
-    SDL_FreeSurface(this->tileset);
     SDL_Quit();
 }
 
-void Graphics::blitTile(int tile, int x, int y, int fg, int bg)
-{
+void Graphics::blitTile(int tile, int x, int y, unsigned int fg, unsigned int bg) {
     this->srcRect.x = (tile % 16) * this->srcRect.w;
     this->srcRect.y = tile / 16 * this->srcRect.h;
     this->dstRect.x = x * this->dstRect.w;
     this->dstRect.y = y * this->dstRect.h;
-    SDL_BlitSurface(this->tileset, &this->srcRect, this->screen, &this->dstRect);
+    this->flush(bg, &this->dstRect);
+    SDL_SetTextureColorMod(this->tileset, (fg >> 16) & 0xff, (fg >> 8) & 0xff, fg & 0xff);
+    SDL_RenderCopy(this->renderer, this->tileset, &this->srcRect, &this->dstRect);
 }
 
-void Graphics::flush(int colour)
-{
-    unsigned char r = (colour >> 4) & 0xff;
-    unsigned char g = (colour >> 2) & 0xff;
+void Graphics::flush(int colour, SDL_Rect *rect) {
+    unsigned char r = (colour >> 16) & 0xff;
+    unsigned char g = (colour >> 8) & 0xff;
     unsigned char b = colour & 0xff;
-    SDL_FillRect(this->screen, NULL, SDL_MapRGB(this->screen->format, r, g, b));
+    SDL_SetRenderDrawColor(this->renderer, r, g, b, 0xFF);
+    if (rect) SDL_RenderFillRect(this->renderer, rect);
+    else SDL_RenderClear(this->renderer);
 }
 
-void Graphics::frame()
-{
-    SDL_UpdateWindowSurface(this->window);
+void Graphics::frame() {
+    SDL_RenderPresent(this->renderer);
 }
