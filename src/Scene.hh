@@ -32,8 +32,10 @@ public:
     /**
      * Displays the scene.
      * @param graphics is the graphics system used for drawing.
+     * @param active   is a flag to tell the scene if it's the top scene or not so it can look duller or save effort if
+     *                 it's just in the background.
      */
-    virtual void render(Graphics *graphics) = 0;
+    virtual void render(Graphics *graphics, int active = 69) = 0;
 };
 
 

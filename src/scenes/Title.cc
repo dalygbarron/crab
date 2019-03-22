@@ -14,8 +14,11 @@ void Title::update(int key, struct Transition *transition) {
     this->y += 1;
 }
 
-void Title::render(Graphics *graphics) {
-    graphics->flush(rand() % 0xffffff);
+void Title::render(Graphics *graphics, int active) {
+    std::string b = "Hello, how are you, my friend?";
+    if (active) graphics->flush(rand() & 0xff0f3f);
     graphics->blitTile(x, x, y, 0xff00ff, 0xff0000);
+    graphics->blitBox(5, 5, 40, 5, Graphics::NAVY);
+    graphics->blitString(&b, 5, 5, Graphics::WHITE);
     graphics->frame();
 }

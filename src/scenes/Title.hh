@@ -27,8 +27,9 @@ public:
     /**
      * Displays the title and it's background and it's nice text. it is opaque.
      * @param graphics helps us acheive this goal.
+     * @param active   says whether it's the top scene, and if not background isn't drawn.
      */
-    void render(Graphics *graphics);
+    void render(Graphics *graphics, int active);
 };
 
 
