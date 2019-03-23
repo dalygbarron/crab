@@ -1,7 +1,6 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <string>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
@@ -31,6 +30,9 @@ public:
     const static int LIGHT_GREY = 0xbbbbbb;
     const static int WHITE = 0xffffff;
 
+    const int width;
+    const int height;
+
     /**
      * Creates the renderer and a game window.
      * @param title  is the title of the window.
@@ -38,7 +40,7 @@ public:
      * @param height is the height of the window.
      * @throws int when there is an sdl problem.
      */
-    Graphics(std::string *title, int width, int height, std::string *tileset);
+    Graphics(char *title, int width, int height, int fullscreen, char *tileset);
 
     /**
      * Destroys the renderer and turns off SDL again.
@@ -81,7 +83,7 @@ public:
      * @param y      is the top start of the text.
      * @param colour is the colour of the text.
      */
-    void blitString(std::string *text, int x, int y, unsigned int colour);
+    void blitString(char *text, int x, int y, unsigned int colour);
 
     /**
      * Fills a given rect with colour.

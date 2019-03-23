@@ -1,24 +1,35 @@
 #include "Graphics.hh"
-#include <string>
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
 
-Graphics::Graphics(std::string *title, int width, int height, std::string *tileset) {
+Graphics::Graphics(
+    char *title,
+    int width,
+    int height,
+    int fullscreen,
+    char *tileset
+): width(width), height(height) {
     // Start sdl and stuff.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
     }
+    // Load the tilset.
+	SDL_Surface* loadedSurface = IMG_Load(tileset);
+	if(!loadedSurface) {
+		std::cout << "sdl: " << SDL_GetError() << std::endl;
+        throw 1;
+	}
     // make window.
     this->window = SDL_CreateWindow(
-        title->c_str(),
+        title,
         SDL_WINDOWPOS_UNDEFINED,
         SDL_WINDOWPOS_UNDEFINED,
-        width,
-        height,
-        SDL_WINDOW_SHOWN
+        width * loadedSurface->w / 16,
+        height * loadedSurface->h / 16,
+        SDL_WINDOW_SHOWN | (fullscreen ? SDL_WINDOW_FULLSCREEN : 0)
     );
     if (!this->window) {
         std::cout << "sdl: " << SDL_GetError() << std::endl;
@@ -36,12 +47,6 @@ Graphics::Graphics(std::string *title, int width, int height, std::string *tiles
         std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
     }
-    // Load the tilset.
-	SDL_Surface* loadedSurface = IMG_Load(tileset->c_str());
-	if(!loadedSurface) {
-		std::cout << "sdl: " << SDL_GetError() << std::endl;
-        throw 1;
-	}
     this->tileset = SDL_CreateTextureFromSurface(this->renderer, loadedSurface);
     if (!this->tileset) {
         std::cout << "sdl: " << SDL_GetError() << std::endl;
@@ -96,10 +101,24 @@ void Graphics::blitCharacter(unsigned char c, int x, int y, unsigned int colour)
     SDL_RenderCopy(this->renderer, this->tileset, &this->srcRect, &this->dstRect);
 }
 
-void Graphics::blitString(std::string *text, int x, int y, unsigned int colour) {
-    for (char c: *text) {
-        this->blitCharacter(c, x, y, colour);
-        x++;
+void Graphics::blitString(char *text, int x, int y, unsigned int colour) {
+    int offset = 0;
+    for (int i = 0; text[i]; i++) {
+        // Managing special characters.
+        if (text[i] == '@') {
+            char type = text[i + 1];
+            if (type == '@') {
+                this->blitCharacter('@', x + offset, y, colour);
+                i++;
+            } else if (type == 'i') {
+                this->blitCharacter(text[i + 2], x + offset, y, Graphics::RED);
+                i += 2;
+            }
+        } else {
+            // displaying normal text.
+            this->blitCharacter(text[i], x + offset, y, colour);
+        }
+        offset++;
     }
 }
 

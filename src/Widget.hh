@@ -2,14 +2,13 @@
 #define GUI_H
 
 #include <deque>
+#include "Graphics.hh"
 
 /**
  * Represents some aspect of the gui like a button or a selecty thingy or some text I guess.
  */
 class Widget {
-    deque<Widget *> children;
-    int x;
-    int y;
+protected:
     int w;
     int h;
 
@@ -21,7 +20,7 @@ public:
      * @param w is it's width.
      * @param h is it's height.
      */
-    Widget(int x, int y, int w, int h);
+    Widget(int w, int h);
 
     /**
      * Gives the gui item a chance to update itself and receive user input.
@@ -33,8 +32,10 @@ public:
     /**
      * Displays the GUI thingy for your enjoyment.
      * @param graphics is the rendering system.
+     * @param x is the left location to start rendering.
+     * @param y is the top location to start rendering.
      */
-    virtual void render(Graphics *graphics) = 0;
+    virtual void render(Graphics *graphics, int x, int y) = 0;
 };
 
 

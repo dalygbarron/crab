@@ -5,17 +5,9 @@
 
 class Scene;
 
-/**
- * Data structure for defining the transition from one scene to the next.
- * The type code is used to determine how to exit the current scene. If it is >= 0 then the scene is
- * replaced with the scene stored in scene and the given value is sent to the next scene in the
- * value field. If it is -1 the new scene stored in scene is used. If it is -2 the program closes,
- * and if it is -3 then nothing happens.
- */
 struct Transition
 {
     Scene *scene;
-    int type;
     int value;
 };
 
@@ -29,15 +21,17 @@ class Scene
 public:
     static const int STACK_REPLACE = 0;
     static const int STACK_PUSH = -1;
-    static const int STACK_CLOSE = -2;
-    static const int STACK_NONE = -3;
+    static const int STACK_POP = -2;
+    static const int STACK_CLOSE = -3;
+    static const int STACK_NONE = -4;
 
     /**
      * Lets the scene do an update on a user keypress.
      * @param key is the keycode that the user has given.
      * @param transition defines where the game state will go after this frame.
+     * @param
      */
-    virtual void update(int key, struct Transition *transition) = 0;
+    virtual int update(int key, struct Transition *transition) = 0;
 
     /**
      * Displays the scene.

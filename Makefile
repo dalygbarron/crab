@@ -1,4 +1,4 @@
-OBJS = src/main.cc src/Graphics.cc src/scenes/Title.cc
+OBJS = src/main.cc src/Graphics.cc src/Widget.cc
 
 OBJ_NAME = main
 
