@@ -9,7 +9,6 @@ Title::Title(std::string *word) {
 }
 
 void Title::update(int key, struct Transition *transition) {
-    transition->scene = this;
     this->x += 1;
     this->y += 1;
 }

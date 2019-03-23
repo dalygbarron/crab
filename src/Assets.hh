@@ -6,8 +6,9 @@
 /**
  * This is where functions for the loading of various types will be.
  */
-class Assets
-{
+class Assets {
+	Prototype prototypes[];
+
 public:
 	/**
 	 * Creates the assets object and preloads all data and builds
@@ -22,9 +23,6 @@ public:
 	 * @return the freshly created creature which is brand new.
 	 */
 	Creature createCreature(string name);
-
-private:
-	Prototype prototypes[];
 };
 
 #endif

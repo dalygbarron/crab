@@ -2,7 +2,6 @@
 #include <fstream>
 #include "inipp.hh"
 
-Assets::Assets()
-{
+Assets::Assets() {
 
 }

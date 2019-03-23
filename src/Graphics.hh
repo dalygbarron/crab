@@ -22,6 +22,7 @@ public:
     const static int BLUE = 0xff;
     const static int NAVY = 0x33;
     const static int YELLOW = 0xffff00;
+    const static int ORANGE = 0xfab200;
     const static int CYAN = 0xffff;
     const static int MAGENTA = 0xff00ff;
     const static int BLACK = 0;

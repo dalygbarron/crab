@@ -6,3 +6,8 @@ Widget::Widget(int x, int y, int w, int h) {
     this->w = w;
     this->h = h;
 }
+
+int Widget::update(int key) {
+    // does nothing by default.
+    return -1;
+}

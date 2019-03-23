@@ -6,9 +6,10 @@
  */
 class Prototype
 {
-private:
-    byte icon;
-    byte colour;
+    unsigned int icon;
+    unsigned int colour;
+
+public:
 };
 
 #endif

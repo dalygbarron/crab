@@ -26,9 +26,9 @@ public:
     /**
      * Gives the gui item a chance to update itself and receive user input.
      * @param key is the user input that it gets.
-     * @return true to keep the gui alive and false to get rid of it.
+     * @return a number >= 0 to tell us that some shit is going down.
      */
-    virtual int update(int key) = 0;
+    virtual int update(int key);
 
     /**
      * Displays the GUI thingy for your enjoyment.

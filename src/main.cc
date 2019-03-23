@@ -27,14 +27,18 @@ int main() {
 			if (SDL_PollEvent(&e) == 0) {
 				continue;
 			} else {
-				if (e.type == SDL_QUIT) {
+				if (e.type == SDL_QUIT || scenes.empty()) {
 					running = 0;
 				} else if (e.type == SDL_KEYDOWN) {
+					transition.type = Scene::STACK_NONE;
 					scenes.back()->update(e.key.keysym.sym, &transition);
-					if (!transition.scene) {
+					if (transition.type >= 0) {
 						scenes.pop_back();
-					} else if (transition.scene != scenes.back()) {
+						transition.value = transition.type;
+					} else if (transition.type == Scene::STACK_PUSH) {
 						scenes.push_back(transition.scene);
+					} else if (transition.type == Scene::STACK_CLOSE) {
+						running = 0;
 					}
 				} else {
 					continue;
