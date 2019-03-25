@@ -5,7 +5,7 @@
 
 class Guide: public Scene {
 public:
-    int update(int key, struct Transition *transition) {
+    Scene *logic(int key) {
 
     }
 

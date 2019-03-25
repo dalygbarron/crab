@@ -2,12 +2,13 @@
 #define TITLE_H
 
 #include "../Scene.hh"
-#include "../menus/GameMenu.hh"
 #include <iostream>
 #include <cstdlib>
+#include "../widgets/Text.hh"
 
 class Title: public Scene
 {
+    Text bongo = Text("helloooe");
     int x = 0;
     int y = 0;
 
@@ -15,32 +16,23 @@ public:
     /**
      * Waits for the user to click out of it and little else.
      * @param key is the keypress we have got.
-     * @param transition we will use to go to the next scene real soon.
      */
-    int update(int key, struct Transition *transition) {
-        if (transition->value >= 0) {
-            transition->scene;
-            return Scene::STACK_NONE;
-        } else {
-            transition->scene = new GameMenu();
-            return Scene::STACK_PUSH;
-        }
+    Scene *logic(int key) {
+        x += 2;
+        y += 1;
+        return this;
     }
 
     /**
      * Displays the title and it's background and it's nice text. it is opaque.
      * @param graphics helps us acheive this goal.
-     * @param active   says whether it's the top scene, and if not background isn't drawn.
      */
-    void render(Graphics *graphics, int active) {
+    void render(Graphics *graphics) {
         for (int i = 0; i < graphics->height; i++) {
             graphics->blitBox(0, i, graphics->width, 1, i / 2);
         }
-        if (active) {
-            for (int i = 0; i < graphics->height; i++) {
-                graphics->blitString("..Liquid Pig Studios Presents..", 10, i, Graphics::WHITE);
-            }
-        }
+        graphics->blitCharacter(y, x, y, Graphics::RED);
+        bongo.render(graphics, 2, 2, 10, 1);
     }
 };
 

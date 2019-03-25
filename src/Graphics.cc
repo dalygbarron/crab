@@ -60,7 +60,7 @@ Graphics::Graphics(
     this->dstRect.w = this->srcRect.w;
     this->dstRect.h = this->srcRect.h;
     // Clear the background to start.
-    this->flush(0xf00faa);
+    this->flush(0);
     this->frame();
 }
 
@@ -129,6 +129,18 @@ void Graphics::flush(int colour, SDL_Rect *rect) {
     SDL_SetRenderDrawColor(this->renderer, r, g, b, 0xFF);
     if (rect) SDL_RenderFillRect(this->renderer, rect);
     else SDL_RenderClear(this->renderer);
+}
+
+int Graphics::input() {
+    SDL_Event e;
+    while (69) {
+        if (SDL_PollEvent(&e) == 0) {
+            continue;
+        } else {
+            if (e.type == SDL_QUIT) throw 0;
+            else if (e.type == SDL_KEYDOWN) return e.key.keysym.sym;
+        }
+    }
 }
 
 void Graphics::frame() {

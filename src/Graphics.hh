@@ -86,6 +86,13 @@ public:
     void blitString(char *text, int x, int y, unsigned int colour);
 
     /**
+     * Gets user input. Technically not graphics related but whatever lol.
+     * @return a user given keycode.
+     * @throws int 0 when a quit event appears.
+     */
+    int input();
+
+    /**
      * Fills a given rect with colour.
      * @param colour is the colour stored as an int 1 byte each colour.
      * @param rect   is the rect to fill or null for whole screen.
