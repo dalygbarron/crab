@@ -12,16 +12,10 @@
 class ListSelector: public Widget {
     int index = 0;
     int offset = 0;
-    Widget *list;
-    int n = 0;
 
 public:
-    ListSelector(Widget *list, int n){
-        this->list = list;
-        this->n = n;
-    }
-
-    int logic(int key) {
+    int logic(Graphics *graphics) {
+        int key = graphics->input();
         if (key == SDLK_UP) {
             this->index--;
             if (this->index < 0) this->index = this->n - 1;
@@ -35,10 +29,11 @@ public:
     }
 
     void render(Graphics *graphics, int x, int y, int w, int h) {
-        graphics->blitBox(x, y, w, h, Graphics::NAVY);
         graphics->blitBox(x, y + this->index, w, 1, Graphics::ORANGE);
-        for (int i = 0; i < h; i++) {
-            widget->render(graphics, x, y + i);
+        int i = 0;
+        for (Widget *child: this->children) {
+            child->render(graphics, x, y + i, w, h);
+            i++;
         }
     }
 };

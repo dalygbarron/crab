@@ -11,8 +11,10 @@
 class Scene {
     /**
      * Does stuff.
+     * @param graphics really shouldn't have to be here but is used to execute GUI things blocking.
+     * @param key      is the most recent keypress to the scene.
      */
-    virtual Scene *logic(int key) = 0;
+    virtual Scene *logic(Graphics *graphics) = 0;
 
     /**
      * Displays the scene.

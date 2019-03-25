@@ -2,7 +2,6 @@
 #define TEXT_H
 
 #include "../Widget.hh"
-#include <string>
 #include "../Graphics.hh"
 
 class Text: public Widget {
@@ -17,6 +16,8 @@ public:
     Text(char *content, int colour = Graphics::CYAN) {
         this->content = content;
         this->colour = colour;
+        this->width = 50;
+        this->height = 1;
     }
 
     /**

@@ -5,6 +5,7 @@
 #include <iostream>
 #include <cstdlib>
 #include "../widgets/Text.hh"
+#include "../menus/MainMenu.hh"
 
 class Title: public Scene
 {
@@ -17,9 +18,11 @@ public:
      * Waits for the user to click out of it and little else.
      * @param key is the keypress we have got.
      */
-    Scene *logic(int key) {
-        x += 2;
-        y += 1;
+    Scene *logic(Graphics *graphics) {
+        MainMenu menu = MainMenu();
+        int jump = menu.execute(graphics, 10, 10, 50, 50);
+        x += jump;
+        y += jump;
         return this;
     }
 

@@ -6,6 +6,23 @@
 
 /**
  * Used to display graphics on the screen and load images and stuff.
+ * Actually, this does more than just graphics, it also controls user input, and I plan to also make
+ * it control music and sound effects just for the hell of it.
+ *                  .^o ~\
+ *                 Y /'~) }      _____
+ *                 l/  / /    ,-~     ~~--.,_
+ *                    ( (    /  ~-._         ^.
+ *                     \ "--'--.    "-._       \
+ *                      "-.________     ~--.,__ ^.
+ *                                \"~r-.,___.-'-. ^.
+ *                                 YI    \\      ~-.\
+ *                                 ||     \\        `\
+ *                                 ||     //
+ *                                 ||    //
+ *                                 ||  //
+ *                                 || ( c
+ *                    ___._ __  ___I|__`--__._ __  _
+ *                  "~     ~  "~   ::  ~~"    ~  ~~
  */
 class Graphics {
     SDL_Window *window;

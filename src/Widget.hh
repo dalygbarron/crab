@@ -1,26 +1,57 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include <forward_list>
 #include "Graphics.hh"
 
 /**
  * Represents some aspect of the gui like a button or a selecty thingy or some text I guess.
  */
 class Widget {
+protected:
+    int width;
+    int height;
+    std::forward_list<Widget *> children;
+
 public:
+    /**
+     * Destroys the widget and all it's children recursively.
+     */
+    ~Widget();
+
+    /**
+     * Adds a child to this widget so it will render it and stuff.
+     * @param child is the child to add to the widget in order.
+     */
+    void addChild(Widget *child);
+
+    /**
+     * Gives the width of this widget. This doesn't necessarily have to to be followed but might be
+     * handy for certain parent widgets.
+     * @return the width.
+     */
+    int getWidth();
+
+    /**
+     * Gives the height of this widget. This doesn't necessarily have to to be followed but might be
+     * handy for certain parent widgets.
+     * @return the height.
+     */
+    int getHeight();
+
     /**
      * Run the widget and return once it's completely done.
      * @param graphics is used for input and display.
      * @return int which is >= 0 when something cool is happening.
      */
-    int execute(Graphics *graphics);
+    int execute(Graphics *graphics, int x, int y, int w, int h);
 
     /**
      * Gives the gui item a chance to update itself and receive user input.
-     * @param key is the user input that it gets.
+     * @param graphics is used to get input and run other widgets.
      * @return a number >= 0 to tell us that some shit is going down.
      */
-    virtual int logic(int key);
+    virtual int logic(Graphics *graphics);
 
     /**
      * Displays the GUI thingy for your enjoyment.
