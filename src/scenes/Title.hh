@@ -8,7 +8,7 @@
 
 class Title: public Scene
 {
-    Text bongo = Text("helloooe");
+    Text bongo = Text("CRABef iuh");
     int x = 0;
     int y = 0;
 

@@ -12,38 +12,33 @@
 class ListSelector: public Widget {
     int index = 0;
     int offset = 0;
-    std::forward_list<Widget *> *list;
+    Widget *list;
+    int n = 0;
 
 public:
-    ListSelector(
-        int w,
-        int h,
-        std::forward_list<Widget *> *list
-    ): Widget(w, h) {
+    ListSelector(Widget *list, int n){
         this->list = list;
+        this->n = n;
     }
 
-    ~ListSelector() {
-        for (Widget *widget: *list) delete widget;
-    }
-
-    int update(int key) {
+    int logic(int key) {
         if (key == SDLK_UP) {
             this->index--;
+            if (this->index < 0) this->index = this->n - 1;
         } else if (key == SDLK_DOWN) {
             this->index++;
+            if (this->index >= this->n) this->index = 0;
         } else if (key == SDLK_RETURN) {
             return this->index;
         }
         return -1;
     }
 
-    void render(Graphics *graphics, int x, int y) {
-        graphics->blitBox(x, y + this->index, this->w, 1, Graphics::ORANGE);
-        int i = 0;
-        for (Widget *widget: *list) {
+    void render(Graphics *graphics, int x, int y, int w, int h) {
+        graphics->blitBox(x, y, w, h, Graphics::NAVY);
+        graphics->blitBox(x, y + this->index, w, 1, Graphics::ORANGE);
+        for (int i = 0; i < h; i++) {
             widget->render(graphics, x, y + i);
-            i++;
         }
     }
 };

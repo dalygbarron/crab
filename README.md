@@ -36,13 +36,27 @@ weapons are aimed in roguelikes. Instead, it should be more like a game of chess
 your enemies so that the attack will hit them. For example there may be an attack that fires a lazer in the four
 cardinal directions at once, or maybe you can only fire a given weapon in a single cardinal direction.
 
-This will m
+This rule is not legally binding however, so some attacks can still be aimed directly at enemies, but maybe they will
+not be as strong, or have limited range or whatever. Also I am gonna try this out and if it sucks I will just drop it.
+
+One potential danger is that if enemies are pathfinding to get line of sight to the player to shoot him and can only
+shoot in a few directions they will all start stepping in front of each other which will kind of fuck that up. Oh
+but you wouldn't generally have many enemies doing that kind of attack in the same place.
+
+Also, I will make it that it shows you a red indictor of all attacks you were hit by since your last turn so you
+can see where these attacks are coming from.
 
 ### Levelling
 Since you are in a mech it does not make much sense for you to level up IMO. However, a roguelike without levelling
-would be quite gay, so I must figure out a way to make you level up.
+would be quite gay, so I must figure out a way to make you level up. Ok yeah as you kill more enemies you will gain
+will power which will make you more powerful in some way or other. Other than that you will need to keep getting
+new mech chassises and weapons and shit to get more powere.
 
 ### Improvisation
+One very fun aspect of roguelikes is when you are stuck in a very bad situation and forced to use every random piece of
+junk in your inventory in an attempt to make some kind of escape plan. I would like to create these kinds of situations
+in the game by having a lot of funny different items that you can end up with that may explode or do something else if
+hurled or ignited or activated.
 
 
 ## Artistic Style
