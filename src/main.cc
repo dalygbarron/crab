@@ -13,7 +13,7 @@ int main(int argc, char **argv) {
 	Scene *scene = new Title();
 	// Main loop.
 	while (69) {
-		std::cout << "scene go" << std::endl;
+		std::cout << "-" << std::endl;
 		Scene *newScene;
 		try {
 			newScene = scene->execute(&george);
