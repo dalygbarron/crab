@@ -2,6 +2,7 @@
 #define FRAME_H
 
 #include "../Widget.hh"
+#include <iostream>
 #include "../Graphics.hh"
 
 class Frame: public Widget {

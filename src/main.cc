@@ -11,6 +11,7 @@
 int main(int argc, char **argv) {
 	Graphics george("Space CRAB", SCREEN_WIDTH, SCREEN_HEIGHT, argc > 1, "bing.png");
 	Scene *scene = new Title();
+	scene->render(&george);
 	// Main loop.
 	while (69) {
 		std::cout << "-" << std::endl;
@@ -18,11 +19,12 @@ int main(int argc, char **argv) {
 		try {
 			newScene = scene->execute(&george);
 		} catch (int i) {
+			delete scene;
 			return i;
 		}
 		if (newScene == NULL) {
 			delete scene;
-			break;
+			return 0;
 		} else if (newScene != scene) {
 			delete scene;
 			scene = newScene;

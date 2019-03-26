@@ -8,7 +8,7 @@
  * Used to display graphics on the screen and load images and stuff.
  * Actually, this does more than just graphics, it also controls user input, and I plan to also make
  * it control music and sound effects just for the hell of it.
- *                  .^o ~\
+ *                  .^o ~\ I am le ostritch
  *                 Y /'~) }      _____
  *                 l/  / /    ,-~     ~~--.,_
  *                    ( (    /  ~-._         ^.

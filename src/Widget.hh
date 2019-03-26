@@ -8,6 +8,7 @@
  * Represents some aspect of the gui like a button or a selecty thingy or some text I guess.
  */
 class Widget {
+    int nChildren = 0;
 protected:
     int width;
     int height;
@@ -24,6 +25,12 @@ public:
      * @param child is the child to add to the widget in order.
      */
     void addChild(Widget *child);
+
+    /**
+     * Gets the number of children that this widget has.
+     * @return int number of children.
+     */
+    int getNChildren();
 
     /**
      * Gives the width of this widget. This doesn't necessarily have to to be followed but might be
@@ -48,10 +55,11 @@ public:
 
     /**
      * Gives the gui item a chance to update itself and receive user input.
-     * @param graphics is used to get input and run other widgets.
+     * @param graphics is used to execute more widgets.
+     * @param key      is the user input key. This should be sent in so an owner widget can selectively run children.
      * @return a number >= 0 to tell us that some shit is going down.
      */
-    virtual int logic(Graphics *graphics);
+    virtual int logic(Graphics *graphics, int key);
 
     /**
      * Displays the GUI thingy for your enjoyment.

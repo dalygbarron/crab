@@ -17,6 +17,10 @@ oppsite, and for every piece of progress in the world of machines, humans have b
 The space crabs are in fact themselves humans that have been degraded into some kind of pest species with chemicals
 and reverse evolution.
 
+Another good example is that the earth people's war machines and mechas will have "personality" and be personified in
+themselves, whereas ones that are built on mars will not do that. Like how these fucking stupid windows and mac
+computers start talking to you and saying bullshit when you boot them up for the first time like I just heard.
+
 ## Gameplay
 ### Time
 I want the time taken to perform a given action to be very clear and I want every action to have an associated time
