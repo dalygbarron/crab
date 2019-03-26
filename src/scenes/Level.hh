@@ -1,18 +1,13 @@
-#ifndef TITLE_H
-#define TITLE_H
+#ifndef LEVEL_H
+#define LEVEL_H
 
 #include "../Scene.hh"
-#include <iostream>
-#include <cstdlib>
-#include "../widgets/Text.hh"
-#include "../menus/MainMenu.hh"
-#include "../scenes/Level.hh"
 
-class Title: public Scene
+class Level: public Scene
 {
-    Text bongo = Text("CRABef iuh");
     int x = 0;
     int y = 0;
+
 
 public:
     /**
@@ -20,9 +15,12 @@ public:
      * @param key is the keypress we have got.
      */
     Scene *logic(Graphics *graphics) {
-        MainMenu menu = MainMenu();
-        menu.execute(graphics, 10, 10, 50, 50);
-        return new Level();
+        int key = graphics->input();
+        if (key == SDLK_UP) this->y--;
+        if (key == SDLK_DOWN) this->y++;
+        if (key == SDLK_LEFT) this->x--;
+        if (key == SDLK_RIGHT) this->x++;
+        return this;
     }
 
     /**
@@ -34,7 +32,6 @@ public:
             graphics->blitBox(0, i, graphics->width, 1, i / 2);
         }
         graphics->blitCharacter(y, x, y, Graphics::RED);
-        bongo.render(graphics, 2, 2, 10, 1);
     }
 };
 
