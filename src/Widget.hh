@@ -18,7 +18,7 @@ public:
     /**
      * Destroys the widget and all it's children recursively.
      */
-    ~Widget();
+    virtual ~Widget();
 
     /**
      * Adds a child to this widget so it will render it and stuff.

@@ -21,8 +21,9 @@ public:
     Scene *logic(Graphics *graphics) {
         MainMenu menu = MainMenu();
         int jump = menu.execute(graphics, 10, 10, 50, 50);
-        x += jump;
-        y += jump;
+        this->x += jump;
+        this->y += jump;
+        std::cout << "a" << std::endl;
         return this;
     }
 

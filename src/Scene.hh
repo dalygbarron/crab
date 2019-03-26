@@ -17,12 +17,13 @@ class Scene {
     virtual Scene *logic(Graphics *graphics) = 0;
 
 public:
+    virtual ~Scene();
     /**
      * Displays the scene.
      * @param graphics is the graphics system used for drawing.
      */
     virtual void render(Graphics *graphics) = 0;
-    
+
     /**
      * Lets the scene do an update on a user keypress.
      * @param graphics is used for rendering.

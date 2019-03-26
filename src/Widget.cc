@@ -1,4 +1,5 @@
 #include "Widget.hh"
+#include <iostream>
 
 Widget::~Widget() {
     for (Widget *child: this->children) delete child;
@@ -31,5 +32,9 @@ int Widget::execute(Graphics *graphics, int x, int y, int w, int h) {
 }
 
 int Widget::logic(Graphics *graphics, int key) {
+    for (Widget *child: this->children) {
+        int output = child->logic(graphics, key);
+        if (output >= 0) return output;
+    }
     return -1;
 }
