@@ -1,7 +1,7 @@
 #ifndef MAIN_MENU_H
 #define MAIN_MENU_H
 
-#include "../Widget.hh"
+#include "../widgets/Tall.hh"
 #include <iostream>
 #include "../Graphics.hh"
 #include "../widgets/HBox.hh"
@@ -11,7 +11,7 @@
 /**
  * This is the menu where you choose whether to play or whatever.
  */
-class MainMenu: public Widget {
+class MainMenu: public Tall {
 
 
 public:

@@ -54,6 +54,11 @@ public:
     int execute(Graphics *graphics, int x, int y);
 
     /**
+     * Resets the widget's width and height to what it deems appropriate.
+     */
+    virtual void fit() = 0;
+
+    /**
      * Gives the gui item a chance to update itself and receive user input.
      * @param graphics is used to execute more widgets.
      * @param key      is the user input key. This should be sent in so an owner widget can selectively run children.

@@ -5,11 +5,15 @@
 
 class Level: public Scene
 {
+    Map *map;
     int x = 0;
     int y = 0;
 
-
 public:
+    Level(Map *map) {
+        this->map = map;
+    }
+
     /**
      * Waits for the user to click out of it and little else.
      * @param key is the keypress we have got.

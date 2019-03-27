@@ -1,13 +1,13 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include "../Widget.hh"
+#include "Tall.hh"
 #include <SDL2/SDL.h>
 
 /**
  * Displays a nice list stacked vertically of things that you may choose.
  */
-class ListSelector: public Widget {
+class ListSelector: public Tall {
     int index = 0;
     int offset = 0;
 

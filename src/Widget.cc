@@ -15,12 +15,13 @@ int Widget::getHeight() {
 
 void Widget::addChild(Widget *child) {
     this->children.push_back(child);
+    this->fit();
 }
 
-int Widget::execute(Graphics *graphics, int x, int y, int w, int h) {
+int Widget::execute(Graphics *graphics, int x, int y) {
     while (69) {
         int output = this->logic(graphics, graphics->input());
-        this->render(graphics, x, y, w, h);
+        this->render(graphics, x, y);
         graphics->frame();
         if (output >= 0) return output;
     }

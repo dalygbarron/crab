@@ -16,8 +16,12 @@ public:
     Text(char const *content, int colour = Graphics::CYAN) {
         this->content = content;
         this->colour = colour;
-        this->width = 50;
+        this->width = strlen(content);
         this->height = 1;
+    }
+
+    void fit() {
+        // does nothing.
     }
 
     /**

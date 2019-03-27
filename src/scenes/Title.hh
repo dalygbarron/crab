@@ -31,9 +31,7 @@ public:
      * @param graphics helps us acheive this goal.
      */
     void render(Graphics *graphics) {
-        for (int i = 0; i < graphics->height; i++) {
-            graphics->blitBox(0, i, graphics->width, 1, i / 2);
-        }
+        for (int i = 0; i < graphics->height; i++) graphics->blitBox(0, i, graphics->width, 1, i);
         if (this->choice >= 0) graphics->blitString(choices[this->choice], 0, 0, Graphics::CYAN);
     }
 };
