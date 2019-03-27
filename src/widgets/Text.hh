@@ -5,7 +5,7 @@
 #include "../Graphics.hh"
 
 class Text: public Widget {
-    char *content;
+    char const *content;
     int colour;
 
 public:
@@ -13,7 +13,7 @@ public:
      * creates the text with actual text it shows.
      * @param content is the text it will display.
      */
-    Text(char *content, int colour = Graphics::CYAN) {
+    Text(char const *content, int colour = Graphics::CYAN) {
         this->content = content;
         this->colour = colour;
         this->width = 50;

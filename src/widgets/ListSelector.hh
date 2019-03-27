@@ -17,10 +17,10 @@ public:
     int logic(Graphics *graphics, int key) {
         if (key == SDLK_UP) {
             this->index--;
-            if (this->index < 0) this->index = this->getNChildren() - 1;
+            if (this->index < 0) this->index = this->children.size() - 1;
         } else if (key == SDLK_DOWN) {
             this->index++;
-            if (this->index >= this->getNChildren()) this->index = 0;
+            if (this->index >= this->children.size()) this->index = 0;
         } else if (key == SDLK_RETURN) {
             return this->index;
         }

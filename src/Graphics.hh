@@ -57,7 +57,7 @@ public:
      * @param height is the height of the window.
      * @throws int when there is an sdl problem.
      */
-    Graphics(char *title, int width, int height, int fullscreen, char *tileset);
+    Graphics(char const *title, int width, int height, int fullscreen, char const *tileset);
 
     /**
      * Destroys the renderer and turns off SDL again.
@@ -100,7 +100,7 @@ public:
      * @param y      is the top start of the text.
      * @param colour is the colour of the text.
      */
-    void blitString(char *text, int x, int y, unsigned int colour);
+    void blitString(char const *text, int x, int y, unsigned int colour);
 
     /**
      * Gets user input. Technically not graphics related but whatever lol.

@@ -5,11 +5,11 @@
 
 
 Graphics::Graphics(
-    char *title,
+    char const *title,
     int width,
     int height,
     int fullscreen,
-    char *tileset
+    char const *tileset
 ): width(width), height(height) {
     // Start sdl and stuff.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -53,6 +53,7 @@ Graphics::Graphics(
         throw 1;
     }
 	SDL_FreeSurface(loadedSurface);
+    // Turn off vsync.
     // Set up the tiling rectangles.
     SDL_QueryTexture(this->tileset, NULL, NULL, &this->srcRect.w, &this->srcRect.h);
     this->srcRect.w /= 16;
@@ -101,7 +102,7 @@ void Graphics::blitCharacter(unsigned char c, int x, int y, unsigned int colour)
     SDL_RenderCopy(this->renderer, this->tileset, &this->srcRect, &this->dstRect);
 }
 
-void Graphics::blitString(char *text, int x, int y, unsigned int colour) {
+void Graphics::blitString(char const *text, int x, int y, unsigned int colour) {
     int offset = 0;
     for (int i = 0; text[i]; i++) {
         // Managing special characters.

@@ -18,13 +18,10 @@ int main(int argc, char **argv) {
 		Scene *newScene;
 		try {
 			newScene = scene->execute(&george);
-			std::cout << "g" << std::endl;
 		} catch (int i) {
 			delete scene;
 			return i;
 		}
-		std::cout << "newScene" << std::endl;
-		std::cout << newScene << std::endl;
 		if (newScene == NULL) {
 			delete scene;
 			return 0;

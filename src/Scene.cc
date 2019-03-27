@@ -9,6 +9,5 @@ Scene *Scene::execute(Graphics *graphics) {
     this->render(graphics);
     graphics->frame();
     Scene *next = this->logic(graphics);
-    std::cout << "q" << std::endl;
     return next;
 }

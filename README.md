@@ -2,6 +2,7 @@
 This game is a mecha space game where you are in mars which is your home but it is getting overrun by a lot of space
 crabs.
 
+
 ## General Ideas
 The game should make mechas look kinda heroic while looking down on less human like forms of weapon. This is because
 the mecha is a form of tool which extends human capabilities and makes them more superior. On the other hand more
@@ -20,6 +21,23 @@ and reverse evolution.
 Another good example is that the earth people's war machines and mechas will have "personality" and be personified in
 themselves, whereas ones that are built on mars will not do that. Like how these fucking stupid windows and mac
 computers start talking to you and saying bullshit when you boot them up for the first time like I just heard.
+
+
+## Code Style
+### formatting
+Formatting is simple and fairly self explanatory. Will expand on that later if really needed. Docstring all arguments
+and classes and things.
+
+Everything should be in a class.
+
+### Files
+All subtypes are implemented in header file only, and should have their own special folder, while other types must have
+both a .cc and .hh. One single subtype can also have multiple folders, for example menus and widgets which are both
+just subtypes of widgets.
+
+You do not need to make a menu class for every little detail so do not bother doing that as it's a waste of space when
+you can just set the widgets up within the scene class.
+
 
 ## Gameplay
 ### Time

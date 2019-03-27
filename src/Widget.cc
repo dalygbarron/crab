@@ -14,12 +14,7 @@ int Widget::getHeight() {
 }
 
 void Widget::addChild(Widget *child) {
-    this->children.push_front(child);
-    this->nChildren++;
-}
-
-int Widget::getNChildren() {
-    return this->nChildren;
+    this->children.push_back(child);
 }
 
 int Widget::execute(Graphics *graphics, int x, int y, int w, int h) {

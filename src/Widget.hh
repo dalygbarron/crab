@@ -1,7 +1,7 @@
 #ifndef GUI_H
 #define GUI_H
 
-#include <forward_list>
+#include <list>
 #include "Graphics.hh"
 
 /**
@@ -12,7 +12,7 @@ class Widget {
 protected:
     int width;
     int height;
-    std::forward_list<Widget *> children;
+    std::list<Widget *> children;
 
 public:
     /**

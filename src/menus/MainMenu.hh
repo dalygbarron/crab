@@ -12,15 +12,15 @@
  * This is the menu where you choose whether to play or whatever.
  */
 class MainMenu: public Widget {
-    char *choices[5] = {"New Game", "Load Game", "Guide", "Piss", "Quit"};
+
 
 public:
-    MainMenu() {
+    MainMenu(char const **choices) {
         Frame *frame = new Frame(Graphics::NAVY);
         ListSelector *selector = new ListSelector();
 
         for (int i = 0; i < 5; i++) { // TODO: magic number.
-            selector->addChild(new Text(this->choices[i]));
+            selector->addChild(new Text(choices[i]));
         }
         frame->addChild(selector);
         this->addChild(frame);

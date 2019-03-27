@@ -10,7 +10,8 @@
 
 class Title: public Scene
 {
-    Text bongo = Text("CRABef iuh");
+    char const *choices[5] = {"New Game", "Load Game", "Guide", "Credits", "Quit"};
+    int choice = -1;
     int x = 0;
     int y = 0;
 
@@ -20,9 +21,19 @@ public:
      * @param key is the keypress we have got.
      */
     Scene *logic(Graphics *graphics) {
+<<<<<<< Updated upstream
         MainMenu menu = MainMenu();
         menu.execute(graphics, 10, 10, 50, 50);
         return new Level();
+=======
+        if (this->choice < 0) {
+            MainMenu menu = MainMenu(this->choices);
+            this->choice = menu.execute(graphics, 10, 10, 10, 7);
+        } else {
+            graphics->input();
+        }
+        return this;
+>>>>>>> Stashed changes
     }
 
     /**
@@ -33,8 +44,7 @@ public:
         for (int i = 0; i < graphics->height; i++) {
             graphics->blitBox(0, i, graphics->width, 1, i / 2);
         }
-        graphics->blitCharacter(y, x, y, Graphics::RED);
-        bongo.render(graphics, 2, 2, 10, 1);
+        if (this->choice >= 0) graphics->blitString(choices[this->choice], 0, 0, Graphics::CYAN);
     }
 };
 
