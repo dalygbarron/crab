@@ -21,14 +21,9 @@ public:
     }
 
     /**
-     * displays the text.
-     * @param graphics manages the picutrue.
-     * @param x is the horizontal location of the text.
-     * @param y is the vertical location to put the top of the text.
-     * @param w is the horizontal bounding of the text.
-     * @param h is the vertical bounding of the text.
+     * @Override
      */
-    void render(Graphics *graphics, int x, int y, int w, int h) {
+    void render(Graphics *graphics, int x, int y) {
         graphics->blitString(this->content, x, y, this->colour);
     }
 };

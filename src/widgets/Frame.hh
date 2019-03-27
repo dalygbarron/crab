@@ -8,15 +8,17 @@
 class Frame: public Widget {
     int colour;
 public:
-    Frame(int colour) {
+    Frame(int colour, int width, int heigh) {
         this->colour = colour;
+        this->width = width;
+        this->height = height;
     }
 
-    void render(Graphics *graphics, int x, int y, int w, int h) {
-        graphics->blitBox(x, y, w, h, colour);
+    void render(Graphics *graphics, int x, int y) {
+        graphics->blitBox(x, y, this->width, this->height, colour);
         int offset = 0;
         for (Widget *child: this->children) {
-            child->render(graphics, x, y + offset, w, h);
+            child->render(graphics, x, y + offset);
             offset += child->getHeight();
         }
     }

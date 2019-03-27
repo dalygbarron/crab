@@ -4,7 +4,7 @@
 #include "../Widget.hh"
 #include <iostream>
 #include "../Graphics.hh"
-#include "../widgets/Frame.hh"
+#include "../widgets/HBox.hh"
 #include "../widgets/ListSelector.hh"
 #include "../widgets/Text.hh"
 
@@ -16,18 +16,21 @@ class MainMenu: public Widget {
 
 public:
     MainMenu(char const **choices) {
-        Frame *frame = new Frame(Graphics::NAVY);
+        HBox *box = new HBox();
         ListSelector *selector = new ListSelector();
+        ListSelector *other = new ListSelector();
 
         for (int i = 0; i < 5; i++) { // TODO: magic number.
             selector->addChild(new Text(choices[i]));
+            other->addChild(new Text(choices[i]));
         }
-        frame->addChild(selector);
-        this->addChild(frame);
+        box->addChild(selector);
+        box->addChild(other);
+        this->addChild(box);
     }
 
-    void render(Graphics *graphics, int x, int y, int w, int h) {
-        for (Widget *child: this->children) child->render(graphics, x, y, w, h);
+    void render(Graphics *graphics, int x, int y) {
+        for (Widget *child: this->children) child->render(graphics, x, y);
     }
 };
 

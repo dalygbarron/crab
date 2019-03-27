@@ -29,7 +29,7 @@ public:
      */
     void render(Graphics *graphics) {
         for (int i = 0; i < graphics->height; i++) {
-            graphics->blitBox(0, i, graphics->width, 1, i / 2);
+            graphics->blitBox(0, i, graphics->width, 1, i);
         }
         graphics->blitCharacter(y, x, y, Graphics::RED);
     }

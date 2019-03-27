@@ -21,19 +21,9 @@ public:
      * @param key is the keypress we have got.
      */
     Scene *logic(Graphics *graphics) {
-<<<<<<< Updated upstream
-        MainMenu menu = MainMenu();
-        menu.execute(graphics, 10, 10, 50, 50);
+        MainMenu menu = MainMenu(choices);
+        menu.execute(graphics, 10, 10);
         return new Level();
-=======
-        if (this->choice < 0) {
-            MainMenu menu = MainMenu(this->choices);
-            this->choice = menu.execute(graphics, 10, 10, 10, 7);
-        } else {
-            graphics->input();
-        }
-        return this;
->>>>>>> Stashed changes
     }
 
     /**

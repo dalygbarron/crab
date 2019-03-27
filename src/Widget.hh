@@ -10,8 +10,8 @@
 class Widget {
     int nChildren = 0;
 protected:
-    int width;
-    int height;
+    int width = 1;
+    int height = 1;
     std::list<Widget *> children;
 
 public:
@@ -51,7 +51,7 @@ public:
      * @param graphics is used for input and display.
      * @return int which is >= 0 when something cool is happening.
      */
-    int execute(Graphics *graphics, int x, int y, int w, int h);
+    int execute(Graphics *graphics, int x, int y);
 
     /**
      * Gives the gui item a chance to update itself and receive user input.
@@ -69,7 +69,7 @@ public:
      * @param w        is the bounding width.
      * @param h        is the bounding height;
      */
-    virtual void render(Graphics *graphics, int x, int y, int w, int h) = 0;
+    virtual void render(Graphics *graphics, int x, int y) = 0;
 };
 
 

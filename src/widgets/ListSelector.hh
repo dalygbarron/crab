@@ -2,8 +2,6 @@
 #define LIST_H
 
 #include "../Widget.hh"
-#include <forward_list>
-#include <iostream>
 #include <SDL2/SDL.h>
 
 /**
@@ -27,11 +25,14 @@ public:
         return -1;
     }
 
-    void render(Graphics *graphics, int x, int y, int w, int h) {
-        graphics->blitBox(x, y + this->index, w, 1, Graphics::ORANGE);
+    void render(Graphics *graphics, int x, int y) {
         int i = 0;
+        int offset = 0;
         for (Widget *child: this->children) {
-            child->render(graphics, x, y + i, w, h);
+            int height = child->getHeight();
+            if (i == this->index) graphics->blitBox(x, y + offset, child->getWidth(), height, Graphics::ORANGE);
+            child->render(graphics, x, y + offset);
+            offset += height;
             i++;
         }
     }
