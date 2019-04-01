@@ -9,6 +9,7 @@
  */
 class Map {
     unsigned char *warmths;
+    Floor const **floors;
     Wall const **walls;
     int width;
     int height;
@@ -51,6 +52,17 @@ public:
      * @param wall is the wall to set it to. NULL for no wall.
      */
     void setWall(int x, int y, Wall const *wall);
+
+    /**
+     * Renders the map to the screen in a bounded area.
+     * @param x  is the left side of the box the map is rendered in.
+     * @param y  is the top side of the box the map is renderered in.
+     * @param w  is the width of the box the map is rendered in.
+     * @param h  is the height of the box the map is rendered in.
+     * @param mx is the left of the tile that should appear in the middle of the map view.
+     * @param my is the top of the tile that should appear in the middle of the map view.
+     */
+    void render(int x, int y, int w, int h, int mx, int my);
 
     /**
      * Gets the value of a generated pathfinding map at a given location. These pathfinding maps are used for enemies
