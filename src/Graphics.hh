@@ -85,7 +85,7 @@ public:
     void blitBox(int x, int y, int w, int h, unsigned int colour);
 
     /**
-     * Draws a single character to the screen.
+     * Draws a single character to the screen with no backgrond.
      * @param c      is the character of choice.
      * @param x      is the left tile position.
      * @param y      is the top tile position.
