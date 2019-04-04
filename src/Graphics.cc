@@ -2,7 +2,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "font.hh"
+#include "font.h"
 
 #define TILE_WIDTH 16
 #define TILE_HEIGHT 16
@@ -21,11 +21,11 @@ Graphics::Graphics(
     }
     // create the tileset surface.
     SDL_Surface *loadedSurface = SDL_CreateRGBSurfaceFrom(
-        font,
+        MagickImage,
         TILE_WIDTH * 16,
         TILE_HEIGHT * 16,
-        32,
-        32,
+        24,
+        4 * 3 * TILE_WIDTH * 16,
         0xff000000,
         0xff0000,
         0xff00,
