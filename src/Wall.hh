@@ -8,12 +8,24 @@
 class Wall
 {
 public:
-    unsigned char tile;
-    unsigned char fg;
-    unsigned char bg;
-    char const *name;
-    char blockSight;
-    char blockMove;
+    const unsigned char tile;
+    const unsigned int colour;
+    const char *description;
+    const char blockSight;
+    const char blockMove;
+
+    /**
+     * Generic constructor.
+     */
+    Wall();
+
+    /**
+     * Creates the wall and gives it all it's stuff.
+     * @param tile        is the tile that the wall renders as.
+     * @param colour      is the colour of the wall tile.
+     * @param description is the textual description of the wall.
+     */
+    Wall(unsigned char tile, unsigned int colour, const char *description);
 
 };
 

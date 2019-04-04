@@ -9,7 +9,7 @@
 #define SCREEN_HEIGHT 48
 
 int main(int argc, char **argv) {
-	Graphics george("Space CRAB", SCREEN_WIDTH, SCREEN_HEIGHT, argc > 1, "bing.png");
+	Graphics george("Space CRAB", SCREEN_WIDTH, SCREEN_HEIGHT, argc > 1);
 	Scene *scene = new Title();
 	scene->render(&george);
 	// Main loop.

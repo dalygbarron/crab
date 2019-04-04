@@ -10,9 +10,21 @@
  * Contains creative type data about the game.
  */
 namespace Content {
-    Prototype *prototypes;
-    Floor *floors;
-    Wall *walls;
+    const ProtoCreature protoCreatures[] = {};
+
+    const ProtoItem protoItems[] = {};
+
+    const Floor floors[] = {
+        Floor(),
+        Floor(0xb0, 0x00ff00, 0x0fa011, "a nice grass")
+    };
+
+    const unsigned char WALL_NONE = 0;
+    const unsigned char WALL_TREE = 1;
+    const Wall walls[] = {
+        Wall(),
+        Wall(0x01, 0x332300, "a nice tree")
+    };
 };
 
 #endif

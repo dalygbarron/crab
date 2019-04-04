@@ -31,13 +31,11 @@ void Map::render(Graphics *graphics, int x, int y, int w, int h, int mx, int my)
         for (int iy = 0; iy < h; iy++) {
             int tx = (x + ix - (mx - this->width / 2)) % this->width;
             int ty = (y + iy - (my - this->height / 2)) * this->width;
-            const Floor *floor = Content::floors[this->getTile(tx, ty, Map::LAYER_FLOOR)];
-            const Wall *wall = Content::walls[this->getTile(tx, ty, Map::LAYER_WALL)];
+            const Floor *floor = Content::floors + this->getTile(tx, ty, Map::LAYER_FLOOR);
+            const Wall *wall = Content::walls + this->getTile(tx, ty, Map::LAYER_WALL);
             graphics->blitTile(floor->tile, ix, iy, floor->fg, floor->bg);
-
         }
     }
-
 }
 
 void Map::microwave(int x, int y) {

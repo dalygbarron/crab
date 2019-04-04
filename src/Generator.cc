@@ -3,7 +3,6 @@
 #include <fstream>
 #include "Map.hh"
 #include "Content.hh"
-#include "inipp.hh"
 
 /**
  * Generates a map full of randomised junk for a quick test.
@@ -50,11 +49,6 @@ Map *cave(int depth, int entrances) {
  */
 Map *house(int depth, int entrances) {
     return NULL;
-}
-
-Generator::Generator() {
-	std::ifstream is("content/generator.ini");
-	ini.parse(is);
 }
 
 Map *Generator::generate(unsigned char type, int depth, int entrances) {

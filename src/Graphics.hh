@@ -54,12 +54,13 @@ public:
 
     /**
      * Creates the renderer and a game window.
-     * @param title  is the title of the window.
-     * @param width  is the width of the window.
-     * @param height is the height of the window.
+     * @param title      is the title of the window.
+     * @param width      is the width of the window.
+     * @param height     is the height of the window.
+     * @param fullscreen is true if you want the game in fullscreen.
      * @throws int when there is an sdl problem.
      */
-    Graphics(char const *title, int width, int height, int fullscreen, char const *tileset);
+    Graphics(char const *title, int width, int height, int fullscreen);
 
     /**
      * Destroys the renderer and turns off SDL again.

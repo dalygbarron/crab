@@ -2,26 +2,36 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "font.hh"
+
+#define TILE_WIDTH 16
+#define TILE_HEIGHT 16
 
 
 Graphics::Graphics(
     char const *title,
     int width,
     int height,
-    int fullscreen,
-    char const *tileset
+    int fullscreen
 ): width(width), height(height) {
     // Start sdl and stuff.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
     }
-    // Load the tilset.
-	SDL_Surface* loadedSurface = IMG_Load(tileset);
-	if(!loadedSurface) {
-		std::cout << "sdl: " << SDL_GetError() << std::endl;
-        throw 1;
-	}
+    // create the tileset surface.
+    SDL_Surface *loadedSurface = SDL_CreateRGBSurfaceFrom(
+        font,
+        TILE_WIDTH * 16,
+        TILE_HEIGHT * 16,
+        32,
+        32,
+        0xff000000,
+        0xff0000,
+        0xff00,
+        0xff
+    );
+
     // make window.
     this->window = SDL_CreateWindow(
         title,
