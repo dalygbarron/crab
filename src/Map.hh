@@ -11,16 +11,16 @@
  * Also contains items and other things.
  */
 class Map {
-    unsigned char *warmths;
-    const Floor **floors;
-    const Wall **walls;
     int width;
     int height;
+    unsigned char *tiles;
 
 public:
-    static const int WARMTH_SINK = 0;
-    static const int WARMTH_CARDINAL = 1;
-    static const int WARMTH_N = 2;
+    static const int LAYER_FLOOR = 0;
+    static const int LAYER_WALL = 1;
+    static const int LAYER_SINK = 2;
+    static const int LAYER_CARDINAL = 3;
+    static const int LAYER_N = 4;
 
     /**
      * Creates the map as a square of given width and height.
@@ -38,23 +38,24 @@ public:
     /**
      * Deletes the junk.
      */
-    virtual ~Map();
+    ~Map();
 
     /**
-     * Tells you what wall is at a given location.
-     * @param x is the horizontal position.
-     * @param y is the vertical position.
-     * @return a pointer to the prototypal wall.
+     * Gets a tile code from the layers of the map and hands it to you.
+     * @param x is the left of the tile.
+     * @param y is the top of the tile.
+     * @param z is which layer to get the tile from.
+     * @return the code that corresponds to something depending on the layer it is from.
      */
-    Wall const *getWall(int x, int y);
+    unsigned char getTile(int x, int y, int z);
 
     /**
-     * Sets the wall at the given point to a given wall.
-     * @param x    is the horizontal location.
-     * @param y    is the vertical location.
-     * @param wall is the wall to set it to. NULL for no wall.
+     * Sets a tile to a value.
+     * @param x is the left of the tile.
+     * @param y is the top of the tile.
+     * @param z is which layer to get the tile from.
      */
-    void setWall(int x, int y, Wall const *wall);
+    void setTile(unsigned char value, int x, int y, int z);
 
     /**
      * Renders the map to the screen in a bounded area.
@@ -69,21 +70,13 @@ public:
     void render(Graphics *graphics, int x, int y, int w, int h, int mx, int my);
 
     /**
-     * Gets the value of a generated pathfinding map at a given location. These pathfinding maps are used for enemies
-     * to find their way to the player and can be used from any location. However, for special pathfinding to some
-     * other target a path must be specially generated another way.
-     * @param x    is the horizontal location.
-     * @param y    is the vertical location.
-     * @param type is which pathfinding map to use.
+     * Recalculates all the generic pathfinding paths the map stores. These maps can be used to find
+     * the direction to walk in towards the player from any location on the map by moving from a
+     * tile with a higher value to a lower one.
+     * @param x is the horizontal pathfinding target
+     * @param y is the vertical pathfinding target.
      */
-    unsigned char getWarmth(int x, int y, int type);
-
-    /**
-     * Recalculates all the pathfinding paths the map stores.
-     * @param x is the horizontal target.
-     * @param y is the vertical target.
-     */
-    void recalculateWarmth(int x, int y);
+    void microwave(int x, int y);
 
     /**
      * Writes the map out to a stream.

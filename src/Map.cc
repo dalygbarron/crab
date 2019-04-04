@@ -2,11 +2,10 @@
 
 #include <iostream>
 #include "Graphics.hh"
+#include "Content.hh"
 
 Map::Map(int width, int height) {
-    this->floors = new const Floor*[width * height];
-    this->walls = new const Wall*[width * height];
-    this->warmths = new unsigned char[width * height * Map::WARMTH_N];
+    this->tiles = new unsigned char[width * height * Map::LAYER_N];
     this->width = width;
     this->height = height;
 }
@@ -16,17 +15,15 @@ Map::Map(std::istream *stream) {
 }
 
 Map::~Map() {
-    delete this->floors;
-    delete this->walls;
-    delete this->warmths;
+    delete this->tiles;
 }
 
-Wall const *Map::getWall(int x, int y) {
-    return this->walls[x % this->width + y * this->width];
+unsigned char Map::getTile(int x, int y, int z) {
+    return this->tiles[width * height * z + y * this->width + x];
 }
 
-void Map::setWall(int x, int y, Wall const *wall) {
-    this->walls[x % this->width + y * this->width] = wall;
+void Map::setTile(unsigned char value, int x, int y, int z) {
+    this->tiles[width * height * z + y * this->width + x] = value;
 }
 
 void Map::render(Graphics *graphics, int x, int y, int w, int h, int mx, int my) {
@@ -34,8 +31,8 @@ void Map::render(Graphics *graphics, int x, int y, int w, int h, int mx, int my)
         for (int iy = 0; iy < h; iy++) {
             int tx = (x + ix - (mx - this->width / 2)) % this->width;
             int ty = (y + iy - (my - this->height / 2)) * this->width;
-            const Floor *floor = this->floors[(x + ix) % this->width + (y + iy) * this->width];
-            const Wall *wall = this->walls[(x + ix) % this->width + (y + iy) * this->width];
+            const Floor *floor = Content::floors[this->getTile(tx, ty, Map::LAYER_FLOOR)];
+            const Wall *wall = Content::walls[this->getTile(tx, ty, Map::LAYER_WALL)];
             graphics->blitTile(floor->tile, ix, iy, floor->fg, floor->bg);
 
         }
@@ -43,11 +40,7 @@ void Map::render(Graphics *graphics, int x, int y, int w, int h, int mx, int my)
 
 }
 
-unsigned char Map::getWarmth(int x, int y, int type) {
-    return this->warmths[type * this->width * this->height + x % this->width + y * this->width];
-}
-
-void Map::recalculateWarmth(int x, int y) {
+void Map::microwave(int x, int y) {
     // TODO: Gotta do some pathfinding algorithms here.
 
 }
