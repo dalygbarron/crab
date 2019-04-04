@@ -5,7 +5,8 @@
  * A living breathing creature in the game which walks around in the level and shit.
  */
 class Creature {
-    Prototype *prototype;
+    const Prototype *prototype;
+    unsigned short timer;
 
 public:
     /**

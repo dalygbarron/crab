@@ -1,8 +1,9 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "Generator.hh"
 
 /**
  * Used to display graphics on the screen and load images and stuff.
@@ -49,6 +50,7 @@ public:
 
     const int width;
     const int height;
+    Generator generator;
 
     /**
      * Creates the renderer and a game window.
