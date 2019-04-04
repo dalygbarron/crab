@@ -58,6 +58,14 @@ public:
     void setTile(unsigned char value, int x, int y, int z);
 
     /**
+     * Gets the floor tile object at a given location.
+     * @param x is the left of the tile.
+     * @param y is the top of the tile.
+     * @return a pointer to the actual floor object.
+     */
+    const Floor *getFloor(int x, int y);
+
+    /**
      * Renders the map to the screen in a bounded area.
      * @param graphics is the renderer.
      * @param x        is the left side of the box the map is rendered in.

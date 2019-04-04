@@ -11,11 +11,11 @@
  * @return the new map.
  */
 Map *junk(int depth, int entrances) {
-    Map *map = new Map(50, 50);
-    for (int x = 0; x < 50; x++) {
-        for (int y = 0; y < 50; y++) {
+    Map *map = new Map(300, 300);
+    for (int x = 0; x < 300; x++) {
+        for (int y = 0; y < 300; y++) {
             map->setTile(1, x, y, Map::LAYER_FLOOR);
-            map->setTile(0, x, y, Map::LAYER_WALL);
+            map->setTile(rand() % 2, x, y, Map::LAYER_WALL);
         }
     }
     return map;

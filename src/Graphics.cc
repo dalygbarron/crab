@@ -2,10 +2,8 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "font.h"
 
-#define TILE_WIDTH 16
-#define TILE_HEIGHT 16
+#define TILESET_FILE "bing.png"
 
 
 Graphics::Graphics(
@@ -19,19 +17,12 @@ Graphics::Graphics(
         std::cout << "sdl: " << SDL_GetError() << std::endl;
         throw 1;
     }
-    // create the tileset surface.
-    SDL_Surface *loadedSurface = SDL_CreateRGBSurfaceFrom(
-        MagickImage,
-        TILE_WIDTH * 16,
-        TILE_HEIGHT * 16,
-        24,
-        4 * 3 * TILE_WIDTH * 16,
-        0xff000000,
-        0xff0000,
-        0xff00,
-        0xff
-    );
-
+    // Load the tilset.
+	SDL_Surface* loadedSurface = IMG_Load(TILESET_FILE);
+	if(!loadedSurface) {
+		std::cout << "sdl: " << SDL_GetError() << std::endl;
+        throw 1;
+	}
     // make window.
     this->window = SDL_CreateWindow(
         title,

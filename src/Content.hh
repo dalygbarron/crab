@@ -16,7 +16,7 @@ namespace Content {
 
     const Floor floors[] = {
         Floor(),
-        Floor(0xb0, 0x00ff00, 0x0fa011, "a nice grass")
+        Floor(0xb0, 0x137032, 0x06140e, "a nice grass")
     };
 
     const unsigned char WALL_NONE = 0;
