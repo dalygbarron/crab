@@ -1,8 +1,9 @@
-#ifndef RENDERER_H
-#define RENDERER_H
+#ifndef GRAPHICS_H
+#define GRAPHICS_H
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include "Generator.hh"
 
 /**
  * Used to display graphics on the screen and load images and stuff.
@@ -49,6 +50,7 @@ public:
 
     const int width;
     const int height;
+    Generator generator;
 
     /**
      * Creates the renderer and a game window.
@@ -85,7 +87,7 @@ public:
     void blitBox(int x, int y, int w, int h, unsigned int colour);
 
     /**
-     * Draws a single character to the screen.
+     * Draws a single character to the screen with no backgrond.
      * @param c      is the character of choice.
      * @param x      is the left tile position.
      * @param y      is the top tile position.

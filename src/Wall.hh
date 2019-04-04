@@ -8,9 +8,12 @@
 class Wall
 {
 public:
-private:
-    byte icon;
-    byte colour;
+    unsigned char tile;
+    unsigned char fg;
+    unsigned char bg;
+    char const *name;
+    char blockSight;
+    char blockMove;
 
 };
 

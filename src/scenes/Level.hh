@@ -2,6 +2,7 @@
 #define LEVEL_H
 
 #include "../Scene.hh"
+#include "../Map.hh"
 
 class Level: public Scene
 {

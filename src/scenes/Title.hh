@@ -23,7 +23,8 @@ public:
     Scene *logic(Graphics *graphics) {
         MainMenu menu = MainMenu(choices);
         menu.execute(graphics, 10, 10);
-        return new Level();
+        Map *map = graphics->generator.generate(Generator::GENERATOR_JUNK);
+        return new Level(map);
     }
 
     /**

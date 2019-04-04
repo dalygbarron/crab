@@ -2,6 +2,9 @@
 #define MAP_H
 
 #include <iostream>
+#include "Graphics.hh"
+#include "Floor.hh"
+#include "Wall.hh"
 
 /**
  * This has all floors and walls and shit like that.
@@ -9,7 +12,8 @@
  */
 class Map {
     unsigned char *warmths;
-    Wall const **walls;
+    const Floor **floors;
+    const Wall **walls;
     int width;
     int height;
 
@@ -29,7 +33,7 @@ public:
      * Loads the map from an input stream.
      * @param stream is the input stream to read the map from.
      */
-    Map(istream *stream);
+    Map(std::istream *stream);
 
     /**
      * Deletes the junk.
@@ -53,6 +57,18 @@ public:
     void setWall(int x, int y, Wall const *wall);
 
     /**
+     * Renders the map to the screen in a bounded area.
+     * @param graphics is the renderer.
+     * @param x        is the left side of the box the map is rendered in.
+     * @param y        is the top side of the box the map is renderered in.
+     * @param w        is the width of the box the map is rendered in.
+     * @param h        is the height of the box the map is rendered in.
+     * @param mx       is the left of the tile that should appear in the middle of the map view.
+     * @param my       is the top of the tile that should appear in the middle of the map view.
+     */
+    void render(Graphics *graphics, int x, int y, int w, int h, int mx, int my);
+
+    /**
      * Gets the value of a generated pathfinding map at a given location. These pathfinding maps are used for enemies
      * to find their way to the player and can be used from any location. However, for special pathfinding to some
      * other target a path must be specially generated another way.
@@ -73,7 +89,7 @@ public:
      * Writes the map out to a stream.
      * @param stream is the output it writes to.
      */
-    void output(ostream *stream);
+    void output(std::ostream *stream);
 };
 
 #endif
