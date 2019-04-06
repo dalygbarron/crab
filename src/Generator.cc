@@ -4,7 +4,7 @@
 #include "Map.hh"
 #include "Content.hh"
 
-#define JUNK_THRESHOLD 10
+#define JUNK_THRESHOLD 3
 
 /**
  * Generates a map full of randomised junk for a quick test.
