@@ -37,7 +37,7 @@ public:
     const static int MAROON = 0xa00014;
     const static int GREEN = 0xff00;
     const static int BLUE = 0xff;
-    const static int NAVY = 0x33;
+    const static int NAVY = 0x20;
     const static int YELLOW = 0xffff00;
     const static int ORANGE = 0xfab200;
     const static int CYAN = 0xffff;

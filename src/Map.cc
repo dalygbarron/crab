@@ -38,15 +38,15 @@ void Map::render(Graphics *graphics, int x, int y, int w, int h, int mx, int my)
             int tx = (x + ix - (mx - this->width / 2));
             int ty = (y + iy - (my - this->height / 2));
             if (tx < 0 || ty < 0 || tx >= this->width || ty >= this->height) {
-                graphics->blitTile(0, ix, iy, 0, 0);
+                // does nothing.
             } else {
                 const Floor *floor = Content::floors + this->getTile(tx, ty, Map::LAYER_FLOOR);
                 int wallIndex = this->getTile(tx, ty, Map::LAYER_WALL);
                 if (wallIndex == 0) {
-                    graphics->blitTile(floor->tile, ix, iy, floor->fg, floor->bg);
+                    graphics->blitCharacter(floor->tile, ix, iy, floor->colour);
                 } else {
                     const Wall *wall = Content::walls + wallIndex;
-                    graphics->blitTile(wall->tile, ix, iy, wall->colour, floor->bg);
+                    graphics->blitCharacter(wall->tile, ix, iy, wall->colour);
                 }
             }
         }

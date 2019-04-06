@@ -14,16 +14,18 @@ namespace Content {
 
     const ProtoItem protoItems[] = {};
 
+    const unsigned char FLOOR_GRASS = 0;
+    const unsigned char FLOOR_N = 1;
     const Floor floors[] = {
-        Floor(),
-        Floor(0xb0, 0x137032, 0x06140e, "a nice grass")
+        Floor(0xb0, 0x137032, "a nice grass")
     };
 
     const unsigned char WALL_NONE = 0;
     const unsigned char WALL_TREE = 1;
+    const unsigned char WALL_N = 2;
     const Wall walls[] = {
         Wall(),
-        Wall(0x01, 0x332300, "a nice tree")
+        Wall(0x05, 0x332300, "a nice tree")
     };
 };
 

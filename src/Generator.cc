@@ -4,6 +4,8 @@
 #include "Map.hh"
 #include "Content.hh"
 
+#define JUNK_THRESHOLD 10
+
 /**
  * Generates a map full of randomised junk for a quick test.
  * @param depth     is not used here.
@@ -14,8 +16,10 @@ Map *junk(int depth, int entrances) {
     Map *map = new Map(300, 300);
     for (int x = 0; x < 300; x++) {
         for (int y = 0; y < 300; y++) {
-            map->setTile(1, x, y, Map::LAYER_FLOOR);
-            map->setTile(rand() % 2, x, y, Map::LAYER_WALL);
+            map->setTile(rand() % Content::FLOOR_N, x, y, Map::LAYER_FLOOR);
+            int choice = rand() % (JUNK_THRESHOLD + Content::WALL_N);
+            if (choice >= Content::WALL_N) choice = 0;
+            map->setTile(choice, x, y, Map::LAYER_WALL);
         }
     }
     return map;

@@ -1,16 +1,16 @@
 #include "Floor.hh"
+#include "Graphics.hh"
 
 
-Floor::Floor(): tile(0), fg(0), bg(0), description("") {
+Floor::Floor(): tile(0), colour(Graphics::WHITE), description("") {
     // does nothing.
 }
 
 
 Floor::Floor(
     unsigned char tile,
-    unsigned int fg,
-    unsigned int bg,
+    unsigned int colour,
     const char *description
-): tile(tile), fg(fg), bg(bg), description(description) {
+): tile(tile), colour(colour), description(description) {
     // does nothing.
 }

@@ -22,6 +22,8 @@ public:
     static const int LAYER_CARDINAL = 3;
     static const int LAYER_N = 4;
 
+    int colour = Graphics::NAVY;
+
     /**
      * Creates the map as a square of given width and height.
      * @param width  is the width of the map.

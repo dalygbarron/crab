@@ -9,8 +9,7 @@ class Floor
 {
 public:
     const unsigned char tile;
-    const unsigned int fg;
-    const unsigned int bg;
+    const unsigned int colour;
     const char *description;
 
     /**
@@ -21,11 +20,10 @@ public:
     /**
      * Builds a floor with it's things.
      * @param tile        is the tile it should render as.
-     * @param fg          is the colour the tile is drawn in.
-     * @param bg          is the colour behind the tile.
+     * @param colour      is the colour it is drawn in.
      * @param description is the text description of the tile.
      */
-    Floor(unsigned char tile, unsigned int fg, unsigned int bg, const char *description);
+    Floor(unsigned char tile, unsigned int colour, const char *description);
 
 };
 

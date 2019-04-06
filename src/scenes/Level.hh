@@ -33,14 +33,14 @@ public:
      * @param graphics helps us acheive this goal.
      */
     void render(Graphics *graphics) {
-        graphics->flush(0x06140e);
+        graphics->flush(this->map->colour);
         graphics->blitString("Tony Abbot", graphics->height, 0, Graphics::WHITE);
         graphics->blitString("camel rider", graphics->height, 1, Graphics::WHITE);
         graphics->blitString("+10/20", graphics->height, 2, Graphics::WHITE);
         graphics->blitString("*4/9", graphics->height, 3, Graphics::WHITE);
         graphics->blitString("^123/643", graphics->height, 4, Graphics::WHITE);
         this->map->render(graphics, 0, 0, graphics->height, graphics->height, 20, 20);
-        graphics->blitTile(y, x, y, Graphics::RED, this->map->getFloor(x, y)->bg);
+        graphics->blitTile(0x03, x, y, Graphics::RED, this->map->colour);
     }
 };
 
