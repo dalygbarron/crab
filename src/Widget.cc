@@ -1,8 +1,28 @@
 #include "Widget.hh"
 #include <iostream>
+#include "Input.hh"
 
 Widget::~Widget() {
     for (Widget *child: this->children) delete child;
+}
+
+int Widget::event(int type, int parameter) {
+    if (type != Input::EVENT_KEY) return false;
+    for (Widget *child: this->children) {
+        int response = child->event(type, parameter);
+        if (response) return true;
+    }
+    return true;
+}
+
+
+void Widget::addChild(Widget *child) {
+    this->children.push_back(child);
+    this->fit();
+}
+
+int Widget::getNChildren() {
+    return this->children.size();
 }
 
 int Widget::getWidth() {
@@ -11,26 +31,4 @@ int Widget::getWidth() {
 
 int Widget::getHeight() {
     return this->height;
-}
-
-void Widget::addChild(Widget *child) {
-    this->children.push_back(child);
-    this->fit();
-}
-
-int Widget::execute(Graphics *graphics, int x, int y) {
-    while (69) {
-        int output = this->logic(graphics, graphics->input());
-        this->render(graphics, x, y);
-        graphics->frame();
-        if (output >= 0) return output;
-    }
-}
-
-int Widget::logic(Graphics *graphics, int key) {
-    for (Widget *child: this->children) {
-        int output = child->logic(graphics, key);
-        if (output >= 0) return output;
-    }
-    return -1;
 }

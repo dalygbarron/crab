@@ -1,13 +1,14 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include "Observer.hh"
 #include <list>
 #include "Graphics.hh"
 
 /**
  * Represents some aspect of the gui like a button or a selecty thingy or some text I guess.
  */
-class Widget {
+class Widget: public Listener {
     int nChildren = 0;
 protected:
     int width = 1;
@@ -19,6 +20,11 @@ public:
      * Destroys the widget and all it's children recursively.
      */
     virtual ~Widget();
+
+    /**
+     * Override.
+     */
+    virtual int event(int type, int parameter);
 
     /**
      * Adds a child to this widget so it will render it and stuff.
@@ -47,24 +53,9 @@ public:
     int getHeight();
 
     /**
-     * Run the widget and return once it's completely done.
-     * @param graphics is used for input and display.
-     * @return int which is >= 0 when something cool is happening.
-     */
-    int execute(Graphics *graphics, int x, int y);
-
-    /**
      * Resets the widget's width and height to what it deems appropriate.
      */
     virtual void fit() = 0;
-
-    /**
-     * Gives the gui item a chance to update itself and receive user input.
-     * @param graphics is used to execute more widgets.
-     * @param key      is the user input key. This should be sent in so an owner widget can selectively run children.
-     * @return a number >= 0 to tell us that some shit is going down.
-     */
-    virtual int logic(Graphics *graphics, int key);
 
     /**
      * Displays the GUI thingy for your enjoyment.

@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Observer.hh"
 #include "Graphics.hh"
 
 /**
@@ -8,27 +9,34 @@
  * menu in the game will also be a scene menu, and they will be arranged in a stack so that scenes
  * will operate on top of other scenes, and then come back to them etc.
  */
-class Scene {
+class Scene: public Listener {
+    Widget *gui = NULL;
+
     /**
-     * Does stuff.
-     * @param graphics really shouldn't have to be here but is used to execute GUI things blocking.
-     * @param key      is the most recent keypress to the scene.
+     * Actually does the scene's self sorting out logic.
+     * @return the next scene. same for same, new one for new scene, and null for end game.
      */
-    virtual Scene *logic(Graphics *graphics) = 0;
+    virtual Scene *logic() = 0;
 
 public:
     virtual ~Scene();
+
+    /**
+     * Override
+     */
+    virtual int event(int type, int parameter) = 0;
+
+    /**
+     * Sorts out the scene's gui widgets and then does it's logic.
+     * @return the next scene. same for same, new one for new scene, and null for end game.
+     */
+    Scene *update();
+
     /**
      * Displays the scene.
      * @param graphics is the graphics system used for drawing.
      */
     virtual void render(Graphics *graphics) = 0;
-
-    /**
-     * Lets the scene do an update on a user keypress.
-     * @param graphics is used for rendering.
-     */
-    Scene *execute(Graphics *graphics);
 };
 
 #endif

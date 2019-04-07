@@ -3,6 +3,7 @@
 
 #include "../Scene.hh"
 #include "../Map.hh"
+#include "../Input.hh"
 
 class Level: public Scene
 {
@@ -15,17 +16,13 @@ public:
         this->map = map;
     }
 
-    /**
-     * Waits for the user to click out of it and little else.
-     * @param key is the keypress we have got.
-     */
-    Scene *logic(Graphics *graphics) {
-        int key = graphics->input();
-        if (key == SDLK_UP) this->y--;
-        if (key == SDLK_DOWN) this->y++;
-        if (key == SDLK_LEFT) this->x--;
-        if (key == SDLK_RIGHT) this->x++;
-        return this;
+    int event(int type, int parameter) {
+        if (type != Input::EVENT_KEY) return false;
+        if (parameter == SDLK_UP) this->y--;
+        if (parameter == SDLK_DOWN) this->y++;
+        if (parameter == SDLK_LEFT) this->x--;
+        if (parameter == SDLK_RIGHT) this->x++;
+        return true;
     }
 
     /**
