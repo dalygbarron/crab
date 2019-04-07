@@ -21,10 +21,9 @@ public:
      * Generates a new map for you of the given type and parameters.
      * @param type      is a code for the kind of generation algorithm to use. look at GENERATOR_* in this file.
      * @param depth     is how far down this map is as they get harder etc.
-     * @param entrances is the number of up stairs this area must have.
      * @return the new map for your pleasure.
      */
-    Map *generate(unsigned char type, int depth = 1, int entrances = 0);
+    Map *generate(unsigned char type, int depth = 1);
 };
 
 #endif

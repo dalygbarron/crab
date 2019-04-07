@@ -5,6 +5,9 @@
 #include "../Map.hh"
 #include "../Input.hh"
 
+/**
+ * Scene where you play the game for real.
+ */
 class Level: public Scene
 {
     Map *map;
@@ -16,7 +19,7 @@ public:
         this->map = map;
     }
 
-    int event(int type, int parameter) {
+    int event(Speaker *speaker, int type, int parameter) {
         if (type != Listener::EVENT_KEY) return false;
         if (parameter == SDLK_UP) this->y--;
         if (parameter == SDLK_DOWN) this->y++;
@@ -25,10 +28,6 @@ public:
         return true;
     }
 
-    /**
-     * Displays the title and it's background and it's nice text. it is opaque.
-     * @param graphics helps us acheive this goal.
-     */
     void render(Graphics *graphics) {
         graphics->flush(this->map->colour);
         graphics->blitString("Tony Abbot", graphics->height, 0, Graphics::WHITE);

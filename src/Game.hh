@@ -12,8 +12,15 @@
 class Game: public Listener {
     Graphics graphics;
     Input input;
+    Generator generator;
     Scene *scene;
     int kill = false;
+
+    /**
+     * Sets the scene that will run, and links it up for this to listen to it's events.
+     * @param scene is the scene to run.
+     */
+    void setScene(Scene *scene);
 
 public:
     /**

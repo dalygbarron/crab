@@ -20,6 +20,7 @@ public:
     static const int EVENT_KEY = 1;
     static const int EVENT_WIDGET_CLOSE = 2;
     static const int EVENT_WIDGET_UPDATE = 3;
+    static const int EVENT_MAP = 4;
 
     /**
      * Virtual destructor so it can be extended.

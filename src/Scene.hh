@@ -10,7 +10,7 @@
  * menu in the game will also be a scene menu, and they will be arranged in a stack so that scenes
  * will operate on top of other scenes, and then come back to them etc.
  */
-class Scene: public Listener {
+class Scene: public Listener, public Speaker {
     Widget *gui = NULL;
 
 protected:

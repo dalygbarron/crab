@@ -55,12 +55,12 @@ Map *house(int depth, int entrances) {
     return NULL;
 }
 
-Map *Generator::generate(unsigned char type, int depth, int entrances) {
+Map *Generator::generate(unsigned char type, int depth) {
     switch(type) {
-        case GENERATOR_JUNK: return junk(depth, entrances);
-        case GENERATOR_SHIP: return ship(depth, entrances);
-        case GENERATOR_CAVE: return cave(depth, entrances);
-        case GENERATOR_HOUSE: return house(depth, entrances);
+        case GENERATOR_JUNK: return junk(depth, 1);
+        case GENERATOR_SHIP: return ship(depth, 1);
+        case GENERATOR_CAVE: return cave(depth, 1);
+        case GENERATOR_HOUSE: return house(depth, 1);
     }
     throw "invalid generator";
 }
