@@ -12,19 +12,19 @@ class HBox: public Wide {
     int index = 0;
 
 public:
-    int logic(Graphics *graphics, int key) {
-        if (key == SDLK_LEFT) {
-            index--;
-        } else if (key == SDLK_RIGHT) {
-            index++;
-        } else {
-            int i = 0;
-            for (Widget *child: this->children) {
-                if (i == index) return child->logic(graphics, key);
-                i++;
+    int event(Speaker *speaker, int type, int parameter) {
+        if (type == Listener::EVENT_KEY) {
+            if (parameter == SDLK_LEFT) {
+                this->index++;
+                return true;
+            } else if (parameter == SDLK_RIGHT) {
+                this->index--;
+                return true;
+            } else {
+                for (Widget *child: this->children) child->event(speaker, type, parameter);
             }
         }
-        return -1;
+        return Widget::event(speaker, type, parameter);
     }
 
     void render(Graphics *graphics, int x, int y) {

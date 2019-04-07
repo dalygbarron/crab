@@ -4,6 +4,7 @@
 #include "../Scene.hh"
 #include <iostream>
 #include <cstdlib>
+#include "../Observer.hh"
 #include "../widgets/Text.hh"
 #include "../menus/MainMenu.hh"
 #include "../scenes/Level.hh"
@@ -16,15 +17,18 @@ class Title: public Scene
     int y = 0;
 
 public:
-    /**
-     * Waits for the user to click out of it and little else.
-     * @param key is the keypress we have got.
-     */
-    Scene *logic(Graphics *graphics) {
-        MainMenu menu = MainMenu(choices);
-        menu.execute(graphics, 10, 10);
-        Map *map = graphics->generator.generate(Generator::GENERATOR_JUNK);
-        return new Level(map);
+
+    Title(Input *input) {
+        this->addGui(input, new MainMenu(choices));
+    }
+
+    int event(Speaker *speaker, int type, int parameter) {
+        if (type == Listener::EVENT_WIDGET_CLOSE) {
+            std::cout << parameter << std::endl;
+            this->removeGui();
+            return true;
+        }
+        return false;
     }
 
     /**

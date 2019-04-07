@@ -12,17 +12,20 @@ class ListSelector: public Tall {
     int offset = 0;
 
 public:
-    int logic(Graphics *graphics, int key) {
-        if (key == SDLK_UP) {
-            this->index--;
-            if (this->index < 0) this->index = this->children.size() - 1;
-        } else if (key == SDLK_DOWN) {
-            this->index++;
-            if (this->index >= this->children.size()) this->index = 0;
-        } else if (key == SDLK_RETURN) {
-            return this->index;
+    int event(Speaker *speaker, int type, int parameter) {
+        if (type == Listener::EVENT_KEY) {
+            if (parameter == SDLK_DOWN) {
+                this->index++;
+                return true;
+            } else if (parameter == SDLK_UP) {
+                this->index--;
+                return true;
+            } else if (parameter == SDLK_RETURN) {
+                this->parentSpeak(Listener::EVENT_WIDGET_CLOSE, this->index);
+                return true;
+            }
         }
-        return -1;
+        return false;
     }
 
     void render(Graphics *graphics, int x, int y) {

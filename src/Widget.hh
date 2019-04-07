@@ -4,16 +4,31 @@
 #include "Observer.hh"
 #include <list>
 #include "Graphics.hh"
+#include "Input.hh"
 
 /**
  * Represents some aspect of the gui like a button or a selecty thingy or some text I guess.
  */
-class Widget: public Listener {
+class Widget: public Listener, public Speaker {
     int nChildren = 0;
 protected:
     int width = 1;
     int height = 1;
+    Widget *parent = NULL;
     std::list<Widget *> children;
+    Widget *gui = NULL;
+
+    /**
+     * Add a pop up widget that takes control away from this one.
+     * @param input is used to hook up the gui element for input listening.
+     * @param gui   is the popup.
+     */
+    void addGui(Input *input, Widget *gui);
+
+    /**
+     * Removes popup widget that is taking control from this one.
+     */
+    void removeGui();
 
 public:
     /**
@@ -24,7 +39,13 @@ public:
     /**
      * Override.
      */
-    virtual int event(int type, int parameter);
+    virtual int event(Speaker *speaker, int type, int parameter);
+
+    /**
+     * If a widget is inside another widget then this sets that as this widget's parent.
+     * @param parent is the parent widget.
+     */
+    void setParent(Widget *parent);
 
     /**
      * Adds a child to this widget so it will render it and stuff.
@@ -56,6 +77,14 @@ public:
      * Resets the widget's width and height to what it deems appropriate.
      */
     virtual void fit() = 0;
+
+    /**
+     * Gets this widget's parent to speak on it's behalf, unless there is no parent in which case it just speaks.
+     * NB: This is what should pretty much always be used in widgets.
+     * @param type      is the type of event.
+     * @param parameter is a parameter to that event.
+     */
+    void parentSpeak(int type, int parameter);
 
     /**
      * Displays the GUI thingy for your enjoyment.

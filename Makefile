@@ -10,14 +10,16 @@ CC = g++
 
 
 %.o: src/%.cc $(HEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS)
-
+	$(CC) -c -o $@ $< $(CFLAGS) -g
 
 all: $(OBJS)
-	$(CC) $(OBJS) $(LFLAGS) -o $(OBJ_NAME) -std=c++14
+	$(CC) $(OBJS) $(LFLAGS) -o $(OBJ_NAME) $(CFLAGS) -g
 
 run: all
 	./$(OBJ_NAME)
 
 clean:
 	rm -f $(OBJ_NAME) $(OBJS)
+
+count:
+	git ls-files | xargs wc -l

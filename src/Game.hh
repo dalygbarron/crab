@@ -25,7 +25,7 @@ public:
     /**
      * Override
      */
-    int event(int type, int parameter);
+    int event(Speaker *speaker, int type, int parameter);
 
     /**
      * Runs the game until it is done.

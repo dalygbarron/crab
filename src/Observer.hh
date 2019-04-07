@@ -16,20 +16,38 @@ class Listener {
     std::forward_list<Speaker *> speakers;
 
 public:
+    static const int EVENT_QUIT = 0;
+    static const int EVENT_KEY = 1;
+    static const int EVENT_WIDGET_CLOSE = 2;
+    static const int EVENT_WIDGET_UPDATE = 3;
+
     /**
      * Virtual destructor so it can be extended.
      */
     virtual ~Listener();
 
     /**
+     * Adds a speaker to the list of speakers this must be removed from when it is deleted.
+     * @param speaker is the speaker to add to the lst.
+     */
+    void addSpeaker(Speaker *speaker);
+
+    /**
+     * removes a certain speaker from the observer.
+     * @param speaker is the speaker to be removed.
+     */
+    void removeSpeaker(Speaker *speaker);
+
+    /**
      * Called when the event we are listening for has occured.
+     * @param speaker   is the one sending the event so you can do stuff.
      * @param type      is the type of event that this is.
      * @param parameter is a piece of additional information about the event for example if type represents a keypress,
      *                  then parameter may represent the key code.
      * @return true if we are willing to process this event, or false if we are ignoring it and it should be sent to the
      *         next listener on the speaker's queue, as the top listener on the queue always gets to look first.
      */
-    virtual int event(int type, int parameter) = 0;
+    virtual int event(Speaker *speaker, int type, int parameter) = 0;
 };
 
 /**
@@ -39,6 +57,11 @@ class Speaker {
     std::forward_list<Listener *> listeners;
 
 public:
+    /**
+     * needed for polymorphism.
+     */
+    virtual ~Speaker();
+
     /**
      * Sends out an event.
      * @param type      is the type of the event.

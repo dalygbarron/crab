@@ -17,7 +17,7 @@ public:
     }
 
     int event(int type, int parameter) {
-        if (type != Input::EVENT_KEY) return false;
+        if (type != Listener::EVENT_KEY) return false;
         if (parameter == SDLK_UP) this->y--;
         if (parameter == SDLK_DOWN) this->y++;
         if (parameter == SDLK_LEFT) this->x--;

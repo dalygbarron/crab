@@ -9,9 +9,6 @@
  */
 class Input: public Speaker {
 public:
-    static const int EVENT_QUIT = 0;
-    static const int EVENT_KEY = 1;
-
     /**
      * Updates the input system and checks if there is anything interesting to look for.
      */

@@ -1,6 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
+#include "Widget.hh"
 #include "Observer.hh"
 #include "Graphics.hh"
 
@@ -12,11 +13,18 @@
 class Scene: public Listener {
     Widget *gui = NULL;
 
+protected:
     /**
-     * Actually does the scene's self sorting out logic.
-     * @return the next scene. same for same, new one for new scene, and null for end game.
+     * Adds a widget that renders in front of the scene, taking control away from it.
+     * @param input is needed to hook up the new gui thingy for input listening.
+     * @param gui is the new widget to do this with.
      */
-    virtual Scene *logic() = 0;
+    void addGui(Input *input, Widget *gui);
+
+    /**
+     * Remove the widget that is currently taking control away from the scene.
+     */
+    void removeGui();
 
 public:
     virtual ~Scene();
@@ -24,19 +32,19 @@ public:
     /**
      * Override
      */
-    virtual int event(int type, int parameter) = 0;
+    virtual int event(Speaker *speaker, int type, int parameter) = 0;
 
     /**
-     * Sorts out the scene's gui widgets and then does it's logic.
-     * @return the next scene. same for same, new one for new scene, and null for end game.
-     */
-    Scene *update();
-
-    /**
-     * Displays the scene.
+     * Scene's unique rendering functionality. Does not display gui.
      * @param graphics is the graphics system used for drawing.
      */
     virtual void render(Graphics *graphics) = 0;
+
+    /**
+     * Renders the scene and any gui to the screen.
+     * @param graphics is the graphics system to render with.
+     */
+    void display(Graphics *graphics);
 };
 
 #endif

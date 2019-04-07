@@ -3,19 +3,22 @@
 #include "scenes/Title.hh"
 
 
-Game::Game(int argc): Graphics("bongo", 64, 48, argc > 1) {
-    this->input->pushListener(this);
-    this->scene = new Title();
+Game::Game(int argc): graphics("bongo", 64, 48, argc > 1) {
+    this->input.pushListener(this);
+    this->scene = new Title(&this->input);
+    input.pushListener(this->scene);
 }
 
-int Game::event(int type, int parameter) {
-    if (type != Input::EVENT_QUIT) return false;
-    // TODO: do proper quitting.
+int Game::event(Speaker *speaker, int type, int parameter) {
+    if (type != Listener::EVENT_QUIT) return false;
+    this->kill = true;
+    return true;
 }
 
 void Game::run() {
     while (!this->kill) {
-        this->scene->render();
-        this->input->update();
+        this->scene->display(&this->graphics);
+        graphics.frame();
+        this->input.update();
     }
 }
