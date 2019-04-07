@@ -8,11 +8,9 @@ Widget::~Widget() {
 }
 
 int Widget::event(Speaker *speaker, int type, int parameter) {
-    if (type == Listener::EVENT_KEY) {
-        for (Widget *child: this->children) {
-            int used = child->event(speaker, type, parameter);
-            if (used) return true;
-        }
+    for (Widget *child: this->children) {
+        int used = child->event(speaker, type, parameter);
+        if (used) return true;
     }
     return false;
 }

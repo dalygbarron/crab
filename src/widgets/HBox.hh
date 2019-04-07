@@ -15,16 +15,21 @@ public:
     int event(Speaker *speaker, int type, int parameter) {
         if (type == Listener::EVENT_KEY) {
             if (parameter == SDLK_LEFT) {
-                this->index++;
-                return true;
-            } else if (parameter == SDLK_RIGHT) {
                 this->index--;
                 return true;
+            } else if (parameter == SDLK_RIGHT) {
+                this->index++;
+                return true;
             } else {
-                for (Widget *child: this->children) child->event(speaker, type, parameter);
+                // TODO: this is pure autism.
+                int i = 0;
+                for (Widget *child: this->children) {
+                    if (i == index) return child->event(speaker, type, parameter);
+                    i++;
+                }
             }
         }
-        return Widget::event(speaker, type, parameter);
+        return false;
     }
 
     void render(Graphics *graphics, int x, int y) {
