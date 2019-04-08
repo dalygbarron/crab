@@ -3,7 +3,7 @@
 #include "Graphics.hh"
 
 Scene::~Scene() {
-    this->removeGui();
+    // FUCK
 }
 
 void Scene::addGui(Input *input, Widget *gui) {
@@ -13,8 +13,9 @@ void Scene::addGui(Input *input, Widget *gui) {
     gui->pushListener(this);
 }
 
-void Scene::removeGui() {
+void Scene::removeGui(Input *input) {
     if (this->gui) {
+        input->popListener();
         delete this->gui;
         this->gui = NULL;
     }

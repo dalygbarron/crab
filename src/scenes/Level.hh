@@ -3,6 +3,7 @@
 
 #include "../Scene.hh"
 #include "../Map.hh"
+#include <iostream>
 #include "../Input.hh"
 
 /**
@@ -15,12 +16,14 @@ class Level: public Scene
     int y = 0;
 
 public:
-    Level(Map *map) {
+    Level(Input *input, Map *map) {
         this->map = map;
+        input->pushListener(this);
     }
 
     int event(Speaker *speaker, int type, int parameter) {
-        if (type != Listener::EVENT_KEY) return false;
+        std::cout << 4 << std::endl;
+        if (type != Speaker::EVENT_KEY) return false;
         if (parameter == SDLK_UP) this->y--;
         if (parameter == SDLK_DOWN) this->y++;
         if (parameter == SDLK_LEFT) this->x--;

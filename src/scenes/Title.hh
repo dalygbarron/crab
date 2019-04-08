@@ -26,8 +26,8 @@ public:
     }
 
     int event(Speaker *speaker, int type, int parameter) {
-        if (type == Listener::EVENT_WIDGET_CLOSE) {
-            this->speak(Listener::EVENT_MAP, 462378);
+        if (type == Speaker::EVENT_WIDGET_CLOSE) {
+            this->speak(Speaker::EVENT_MAP, 462378);
             return true;
         }
         return false;

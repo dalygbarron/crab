@@ -5,12 +5,14 @@
 #include <list>
 #include "Graphics.hh"
 #include "Input.hh"
+#include "Layer.hh"
 
 /**
  * Represents some aspect of the gui like a button or a selecty thingy or some text I guess.
  */
-class Widget: public Listener, public Speaker {
+class Widget: public Listener, public Layer {
     int nChildren = 0;
+
 protected:
     int width = 1;
     int height = 1;
@@ -20,10 +22,9 @@ protected:
 
     /**
      * Add a pop up widget that takes control away from this one.
-     * @param input is used to hook up the gui element for input listening.
      * @param gui   is the popup.
      */
-    void addGui(Input *input, Widget *gui);
+    void addGui(Widget *gui);
 
     /**
      * Removes popup widget that is taking control from this one.
@@ -36,10 +37,7 @@ public:
      */
     virtual ~Widget();
 
-    /**
-     * Override.
-     */
-    virtual int event(Speaker *speaker, int type, int parameter);
+    virtual int event(void *speaker, int type, int parameter) override;
 
     /**
      * If a widget is inside another widget then this sets that as this widget's parent.

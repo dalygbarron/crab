@@ -13,7 +13,7 @@ class HBox: public Wide {
 
 public:
     int event(Speaker *speaker, int type, int parameter) {
-        if (type == Listener::EVENT_KEY) {
+        if (type == Speaker::EVENT_KEY) {
             if (parameter == SDLK_LEFT) {
                 this->index--;
                 return true;

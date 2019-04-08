@@ -1,6 +1,6 @@
 rwildcard=$(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
-OBJS = main.o Graphics.o Widget.o Scene.o Map.o Generator.o Floor.o Wall.o Observer.o Input.o Game.o
+OBJS = main.o Graphics.o Widget.o Scene.o Map.o Generator.o Floor.o Wall.o Observer.o Input.o Game.o Layer.o
 HEADERS := $(call rwildcard,src/,*.hh)
 OBJ_NAME = main
 CFLAGS = -std=c++14

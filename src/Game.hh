@@ -13,7 +13,7 @@ class Game: public Listener {
     Graphics graphics;
     Input input;
     Generator generator;
-    Scene *scene;
+    Scene *scene = NULL;
     int kill = false;
 
     /**

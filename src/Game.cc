@@ -1,4 +1,5 @@
 #include "Game.hh"
+#include <iostream>
 #include "Input.hh"
 #include "scenes/Title.hh"
 
@@ -9,18 +10,18 @@ Game::Game(int argc): graphics("bongo", 64, 48, argc > 1) {
 }
 
 int Game::event(Speaker *speaker, int type, int parameter) {
-    if (type == Listener::EVENT_QUIT) {
+    if (type == Speaker::EVENT_QUIT) {
         this->kill = true;
         return true;
-    } else if (type == Listener::EVENT_MAP) {
-        this->setScene(new Level(generator.generate(0, 0)));
+    } else if (type == Speaker::EVENT_MAP) {
+        this->setScene(new Level(&this->input, generator.generate(0, 0)));
     }
     return false;
 }
 
 void Game::setScene(Scene *scene) {
     if (this->scene) {
-        this->removeSpeaker(this->scene);
+        this->scene->removeGui(&this->input);
         delete this->scene;
     }
     this->scene = scene;

@@ -13,7 +13,7 @@ class ListSelector: public Tall {
 
 public:
     int event(Speaker *speaker, int type, int parameter) {
-        if (type == Listener::EVENT_KEY) {
+        if (type == Speaker::EVENT_KEY) {
             if (parameter == SDLK_DOWN) {
                 this->index++;
                 return true;
@@ -21,7 +21,7 @@ public:
                 this->index--;
                 return true;
             } else if (parameter == SDLK_RETURN) {
-                this->parentSpeak(Listener::EVENT_WIDGET_CLOSE, this->index);
+                this->parentSpeak(Speaker::EVENT_WIDGET_CLOSE, this->index);
                 return true;
             }
         }
