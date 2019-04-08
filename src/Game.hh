@@ -17,7 +17,9 @@ class Game: public Listener {
     int kill = false;
 
     /**
-     * Sets the scene that will run, and links it up for this to listen to it's events.
+     * Sets the scene that will run, and links it up for this to listen to it's events. Does not delete the old scene
+     * because you need to do that before you instantiate the new one so it doesn't add itself as a listener on top
+     * before the old ones get delet.
      * @param scene is the scene to run.
      */
     void setScene(Scene *scene);
@@ -29,10 +31,7 @@ public:
      */
     Game(int argc);
 
-    /**
-     * Override
-     */
-    int event(Speaker *speaker, int type, int parameter);
+    int event(void *speaker, int type, unsigned int parameter) override;
 
     /**
      * Runs the game until it is done.

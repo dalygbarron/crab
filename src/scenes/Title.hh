@@ -22,12 +22,13 @@ class Title: public Scene
 public:
 
     Title(Input *input) {
-        this->addGui(input, new MainMenu(choices));
+        this->pushLayer(new MainMenu(choices));
     }
 
-    int event(Speaker *speaker, int type, int parameter) {
+    int event(void *speaker, int type, unsigned int parameter) {
         if (type == Speaker::EVENT_WIDGET_CLOSE) {
-            this->speak(Speaker::EVENT_MAP, 462378);
+            std::cout << 9 <<std::endl;
+            Speaker::speak(this, Speaker::EVENT_MAP, 2487);
             return true;
         }
         return false;

@@ -14,12 +14,12 @@ public:
         this->height = height;
     }
 
-    void render(Graphics *graphics, int x, int y) {
+    void render(Graphics *graphics, int x, int y) override {
         graphics->blitBox(x, y, this->width, this->height, colour);
         int offset = 0;
-        for (Widget *child: this->children) {
-            child->render(graphics, x, y + offset);
-            offset += child->getHeight();
+        for (Widget *content: this->contents) {
+            content->render(graphics, x, y + offset);
+            offset += content->getHeight();
         }
     }
 };

@@ -2,8 +2,9 @@
 #define LEVEL_H
 
 #include "../Scene.hh"
-#include "../Map.hh"
 #include <iostream>
+#include "../Map.hh"
+#include "../Observer.hh"
 #include "../Input.hh"
 
 /**
@@ -18,11 +19,9 @@ class Level: public Scene
 public:
     Level(Input *input, Map *map) {
         this->map = map;
-        input->pushListener(this);
     }
 
-    int event(Speaker *speaker, int type, int parameter) {
-        std::cout << 4 << std::endl;
+    int event(void *speaker, int type, unsigned int parameter) override {
         if (type != Speaker::EVENT_KEY) return false;
         if (parameter == SDLK_UP) this->y--;
         if (parameter == SDLK_DOWN) this->y++;
@@ -31,7 +30,7 @@ public:
         return true;
     }
 
-    void render(Graphics *graphics) {
+    void render(Graphics *graphics) override {
         graphics->flush(this->map->colour);
         graphics->blitString("Tony Abbot", graphics->height, 0, Graphics::WHITE);
         graphics->blitString("camel rider", graphics->height, 1, Graphics::WHITE);

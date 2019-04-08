@@ -19,18 +19,17 @@ public:
         HBox *box = new HBox();
         ListSelector *selector = new ListSelector();
         ListSelector *other = new ListSelector();
-
         for (int i = 0; i < 5; i++) { // TODO: magic number.
-            selector->addChild(new Text(choices[i]));
-            other->addChild(new Text(choices[i]));
+            selector->addContent(new Text(choices[i]));
+            other->addContent(new Text(choices[i]));
         }
-        box->addChild(selector);
-        box->addChild(other);
-        this->addChild(box);
+        box->addContent(selector);
+        box->addContent(other);
+        this->addContent(box);
     }
 
     void render(Graphics *graphics, int x, int y) {
-        for (Widget *child: this->children) child->render(graphics, x, y);
+        for (Widget *content: this->contents) content->render(graphics, x, y);
     }
 };
 

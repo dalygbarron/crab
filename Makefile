@@ -10,10 +10,10 @@ CC = g++
 
 
 %.o: src/%.cc $(HEADERS)
-	$(CC) -c -o $@ $< $(CFLAGS) -g
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 all: $(OBJS)
-	$(CC) $(OBJS) $(LFLAGS) -o $(OBJ_NAME) $(CFLAGS) -g
+	$(CC) $(OBJS) $(LFLAGS) -o $(OBJ_NAME) $(CFLAGS)
 
 run: all
 	./$(OBJ_NAME)

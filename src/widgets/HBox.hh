@@ -3,6 +3,7 @@
 
 #include "Wide.hh"
 #include <SDL2/SDL.h>
+#include <iostream>
 #include "../Graphics.hh"
 
 /**
@@ -12,7 +13,7 @@ class HBox: public Wide {
     int index = 0;
 
 public:
-    int event(Speaker *speaker, int type, int parameter) {
+    int event(void *speaker, int type, unsigned int parameter) override {
         if (type == Speaker::EVENT_KEY) {
             if (parameter == SDLK_LEFT) {
                 this->index--;
@@ -23,8 +24,8 @@ public:
             } else {
                 // TODO: this is pure autism.
                 int i = 0;
-                for (Widget *child: this->children) {
-                    if (i == index) return child->event(speaker, type, parameter);
+                for (Widget *content: this->contents) {
+                    if (i == index) return content->event(speaker, type, parameter);
                     i++;
                 }
             }
@@ -32,22 +33,22 @@ public:
         return false;
     }
 
-    void render(Graphics *graphics, int x, int y) {
+    void render(Graphics *graphics, int x, int y) override {
         int offset = 0;
         int i = 0;
         graphics->blitBox(x, y, this->getWidth(), this->getHeight(), Graphics::BLACK);
-        for (Widget *child: this->children) {
+        for (Widget *content: this->contents) {
             if (i == this->index) {
                 graphics->blitBox(
                     x + offset,
                     y,
-                    child->getWidth(),
-                    child->getHeight(),
+                    content->getWidth(),
+                    content->getHeight(),
                     Graphics::NAVY
                 );
             }
-            child->render(graphics, x + offset, y);
-            offset += child->getWidth();
+            content->render(graphics, x + offset, y);
+            offset += content->getWidth();
             i++;
         }
     }

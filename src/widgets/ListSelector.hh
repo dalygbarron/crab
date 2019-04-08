@@ -2,6 +2,7 @@
 #define LIST_H
 
 #include "Tall.hh"
+#include <iostream>
 #include <SDL2/SDL.h>
 
 /**
@@ -12,7 +13,7 @@ class ListSelector: public Tall {
     int offset = 0;
 
 public:
-    int event(Speaker *speaker, int type, int parameter) {
+    int event(void *speaker, int type, unsigned int parameter) override {
         if (type == Speaker::EVENT_KEY) {
             if (parameter == SDLK_DOWN) {
                 this->index++;
@@ -21,20 +22,21 @@ public:
                 this->index--;
                 return true;
             } else if (parameter == SDLK_RETURN) {
-                this->parentSpeak(Speaker::EVENT_WIDGET_CLOSE, this->index);
+                std::cout << 1 << std::endl;
+                Speaker::speak(this, Speaker::EVENT_WIDGET_CLOSE, this->index);
                 return true;
             }
         }
         return false;
     }
 
-    void render(Graphics *graphics, int x, int y) {
+    void render(Graphics *graphics, int x, int y) override {
         int i = 0;
         int offset = 0;
-        for (Widget *child: this->children) {
-            int height = child->getHeight();
-            if (i == this->index) graphics->blitBox(x, y + offset, child->getWidth(), height, Graphics::ORANGE);
-            child->render(graphics, x, y + offset);
+        for (Widget *content: this->contents) {
+            int height = content->getHeight();
+            if (i == this->index) graphics->blitBox(x, y + offset, content->getWidth(), height, Graphics::ORANGE);
+            content->render(graphics, x, y + offset);
             offset += height;
             i++;
         }

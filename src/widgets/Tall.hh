@@ -10,13 +10,12 @@ class Tall: public Widget {
     void fit() {
         this->width = 0;
         this->height = 0;
-        for (Widget *child: this->children) {
-            int childWidth = child->getWidth();
-            int childHeight = child->getHeight();
+        for (Widget *content: this->contents) {
+            int childWidth = content->getWidth();
+            int childHeight = content->getHeight();
             if (childWidth > this->width) this->width = childWidth;
             this->height += childHeight;
         }
-
     }
 };
 

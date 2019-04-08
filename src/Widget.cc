@@ -3,44 +3,20 @@
 #include "Input.hh"
 
 Widget::~Widget() {
-    if (this->gui) delete this->gui;
-    for (Widget *child: this->children) delete child;
+    for (Widget *content: this->contents) delete content;
 }
 
-int Widget::event(Speaker *speaker, int type, int parameter) {
-    for (Widget *child: this->children) {
-        int used = child->event(speaker, type, parameter);
+int Widget::event(void *speaker, int type, unsigned int parameter) {
+    for (Widget *content: this->contents) {
+        int used = content->event(speaker, type, parameter);
         if (used) return true;
     }
     return false;
 }
 
-void Widget::addGui(Input *input, Widget *gui) {
-    if (this->gui) delete this->gui;
-    this->gui = gui;
-    input->pushListener(gui);
-    gui->pushListener(this);
-}
-
-void Widget::removeGui() {
-    if (this->gui) {
-        delete this->gui;
-        this->gui = NULL;
-    }
-}
-
-void Widget::setParent(Widget *parent) {
-    this->parent = parent;
-}
-
-void Widget::addChild(Widget *child) {
-    this->children.push_back(child);
-    child->setParent(this);
+void Widget::addContent(Widget *content) {
+    this->contents.push_back(content);
     this->fit();
-}
-
-int Widget::getNChildren() {
-    return this->children.size();
 }
 
 int Widget::getWidth() {
@@ -51,7 +27,6 @@ int Widget::getHeight() {
     return this->height;
 }
 
-void Widget::parentSpeak(int type, int parameter) {
-    if (this->parent) parent->parentSpeak(type, parameter);
-    else this->speak(type, parameter);
+void Widget::render(Graphics *graphics) {
+    this->render(graphics, 0, 0);
 }

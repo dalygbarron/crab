@@ -11,23 +11,22 @@
 class Listener {
     int listening = false;
 
-    /**
-     * Called when the event we are listening for has occured.
-     * @param type      is the type of event that this is.
-     * @param parameter is a piece of additional information about the event for example if type represents a keypress,
-     *                  then parameter may represent the key code.
-     * @return true if we are willing to process this event, or false if we are ignoring it and it should be sent to the
-     *         next listener on the speaker's queue, as the top listener on the queue always gets to look first.
-     */
-    virtual int event(int type, int parameter) = 0;
-    
 public:
     /**
      * Virtual destructor so it can be extended.
      */
     virtual ~Listener();
 
-
+    /**
+     * Called when the event we are listening for has occured.
+     * @param speaker is a pointer to the object that sent the event.
+     * @param type      is the type of event that this is.
+     * @param parameter is a piece of additional information about the event for example if type represents a keypress,
+     *                  then parameter may represent the key code.
+     * @return true if we are willing to process this event, or false if we are ignoring it and it should be sent to the
+     *         next listener on the speaker's queue, as the top listener on the queue always gets to look first.
+     */
+    virtual int event(void *speaker, int type, unsigned int parameter) = 0;
 
     /**
      * Sets whether the listener is listening or not so it knows whether to remove itself from the listener stack upon
@@ -45,13 +44,13 @@ namespace Speaker {
     const int EVENT_MAP = 4;
 
     /**
-     * Adds a listener to the top of stack.
+     * Adds a listener to the list of listeners.
      * @param listener is the listener to add.
      */
     void pushListener(Listener *listener);
 
     /**
-     * Removes the listener on the top of the stack.
+     * Removes a listener from the list.
      */
     void popListener();
 

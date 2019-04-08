@@ -10,9 +10,9 @@ class Wide: public Widget {
     void fit() {
         this->width = 0;
         this->height = 0;
-        for (Widget *child: this->children) {
-            int childWidth = child->getWidth();
-            int childHeight = child->getHeight();
+        for (Widget *content: this->contents) {
+            int childWidth = content->getWidth();
+            int childHeight = content->getHeight();
             this->width += childWidth;
             if (childHeight > this->height) this->height = childHeight;
         }

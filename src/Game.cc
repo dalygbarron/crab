@@ -2,30 +2,28 @@
 #include <iostream>
 #include "Input.hh"
 #include "scenes/Title.hh"
+#include "Observer.hh"
 
 
 Game::Game(int argc): graphics("bongo", 64, 48, argc > 1) {
-    this->input.pushListener(this);
+    Speaker::pushListener(this);
     this->setScene(new Title(&this->input));
 }
 
-int Game::event(Speaker *speaker, int type, int parameter) {
+int Game::event(void *speaker, int type, unsigned int parameter) {
     if (type == Speaker::EVENT_QUIT) {
         this->kill = true;
         return true;
     } else if (type == Speaker::EVENT_MAP) {
+        delete this->scene;
         this->setScene(new Level(&this->input, generator.generate(0, 0)));
     }
     return false;
 }
 
 void Game::setScene(Scene *scene) {
-    if (this->scene) {
-        this->scene->removeGui(&this->input);
-        delete this->scene;
-    }
     this->scene = scene;
-    scene->pushListener(this);
+    Speaker::pushListener(scene);
 }
 
 void Game::run() {

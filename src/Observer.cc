@@ -1,23 +1,34 @@
 #include "Observer.hh"
+#include <iostream>
+#include <forward_list>
 
 
 Listener::~Listener() {
-    if (this->listening) Speaker::popListener();
-}
-
-void Speaker::speak(void *speaker, int type, int parameter) {
-    for (Listener *listener: this->listeners) {
-        if (listener->event(type, parameter)) return;
+    if (this->listening) {
+        Speaker::popListener();
+        std::cout << "out" << std::endl;
     }
 }
 
+void Listener::setListening(int listening) {
+    this->listening = listening;
+}
+
+std::forward_list<Listener *> listeners;
+
 void Speaker::pushListener(Listener *listener) {
-    Speaker::listeners.push_front(listener);
+    listeners.push_front(listener);
     listener->setListening(true);
 }
 
-
 void Speaker::popListener() {
-    Speaker::listeners.front()->setListening(false);
-    Speaker::listeners.pop_front();
+    listeners.front()->setListening(false);
+    listeners.pop_front();
+}
+
+void Speaker::speak(void *speaker, int type, unsigned int parameter) {
+    for (Listener *listener: listeners) {
+        if (listener == speaker) continue;
+        if (listener->event(speaker, type, parameter)) return;
+    }
 }
