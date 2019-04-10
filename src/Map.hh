@@ -23,6 +23,13 @@ class Map {
     unsigned char *tiles;
     std::forward_list<Creature *> creatures;
 
+    /**
+     * Make a creature walk in a direction.
+     * @param actor is the creature walking.
+     * @param direction is the direction to go in by the codes in Move.hh
+     */
+    void walk(Creature *actor, int direction);
+
 public:
     static const unsigned char LAYER_FLOOR = 0;
     static const unsigned char LAYER_WALL = 1;
@@ -86,6 +93,11 @@ public:
      * @param move is the move to apply.
      */
     void applyMove(Move move);
+
+    /**
+     * Goes through all creatures in the map that are ready to have a turn and applies their turns.
+     */
+    void update();
 
     /**
      * Renders the map to the screen in a bounded area.

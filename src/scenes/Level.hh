@@ -14,6 +14,15 @@ class Level: public Layer
     Map *map;
     Player *player;
 
+    /**
+     * Runs a game turn.
+     * @param move is the player's move in this turn.
+     */
+    void turn(Move move) {
+        this->map->applyMove(move);
+        this->map->update();
+    }
+
 public:
     Level(Map *map, Position playerPos) {
         this->map = map;
@@ -23,10 +32,10 @@ public:
 
     int event(int type, unsigned int parameter) override {
         if (type != Layer::EVENT_KEY) return false;
-        // if (parameter == SDLK_UP) this->y--;
-        // if (parameter == SDLK_DOWN) this->y++;
-        // if (parameter == SDLK_LEFT) this->x--;
-        // if (parameter == SDLK_RIGHT) this->x++;
+        else if (parameter == SDLK_UP) this->turn(Move(this->player, Move::ACTION_WALK, Move::DIR_N));
+        else if (parameter == SDLK_DOWN) this->turn(Move(this->player, Move::ACTION_WALK, Move::DIR_S));
+        else if (parameter == SDLK_LEFT) this->turn(Move(this->player, Move::ACTION_WALK, Move::DIR_W));
+        else if (parameter == SDLK_RIGHT) this->turn(Move(this->player, Move::ACTION_WALK, Move::DIR_E));
         return true;
     }
 

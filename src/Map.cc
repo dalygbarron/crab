@@ -38,13 +38,25 @@ void Map::addCreature(Creature *creature, Position position) {
 }
 
 void Map::applyMove(Move move) {
-    // TODO: implement.
+    switch (move.action) {
+        case Move::ACTION_WALK:
+            this->walk(move.actor, move.parameter);
+            return;
+        case Move::ACTION_SKIP:
+            return;
+        case Move::ACTION_INVALID:
+            std::cerr << "invalid action!" << std::endl;
+            return;
+    }
 }
 
+void Map::update() {
+    for (Creature *creature: this->creatures) this->applyMove(creature->getMove(this));
+}
 
 void Map::render(Graphics *graphics, Rect rect, Position middle) {
     Rect bounds(Position(), this->dimensions);
-    Position camera = middle - this->dimensions / 2;
+    Position camera = middle - graphics->dimensions / 2;
     // render tiles.
     for (int ix = 0; ix < rect.size.x; ix++) {
         for (int iy = 0; iy < rect.size.y; iy++) {
@@ -64,8 +76,8 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
     }
     // Render creatures.
     for (Creature *creature: this->creatures) {
-        Position pos = creature->getPosition();
-        graphics->blitCharacter(3, pos - camera, Colour::RED);
+        Position pos = creature->getPosition() - camera;
+        if (rect.contains(pos)) graphics->blitTile(3, pos, Colour::RED, this->topColour);
     }
 }
 
@@ -74,6 +86,33 @@ void Map::microwave(Position position) {
 
 }
 
-void output(std::ostream *stream) {
+void Map::output(std::ostream *stream) {
     // TODO: Gotta output the map to the stream/
+}
+
+void Map::walk(Creature *actor, int direction) {
+    Position pos = actor->getPosition();
+    if (direction == Move::DIR_N) {
+        pos.y--;
+    } else if (direction == Move::DIR_NE) {
+        pos.x++;
+        pos.y--;
+    } else if (direction == Move::DIR_E) {
+        pos.x++;
+    } else if (direction == Move::DIR_SE) {
+        pos.x++;
+        pos.y++;
+    } else if (direction == Move::DIR_S) {
+        pos.y++;
+    } else if (direction == Move::DIR_SW) {
+        pos.x--;
+        pos.y++;
+    } else if (direction == Move::DIR_W) {
+        pos.x--;
+    } else if (direction == Move::DIR_NW) {
+        pos.x--;
+        pos.y--;
+    }
+    // TODO: collision detection and hand to hand combat.
+    actor->setPosition(pos);
 }
