@@ -41,13 +41,13 @@ public:
 
     void render(Graphics *graphics) override {
         Rect mapBox(Position(), Position(graphics->dimensions.y, graphics->dimensions.y));
-        graphics->flushGradient(this->map->topColour, this->map->bottomColour);
+        graphics->flush(this->map->topColour);
         graphics->blitString("Tony Abbot", Position(graphics->dimensions.y, 0), Colour::WHITE);
         graphics->blitString("camel rider", Position(graphics->dimensions.y, 1), Colour::WHITE);
         graphics->blitString("+10/20", Position(graphics->dimensions.y, 2), Colour::WHITE);
         graphics->blitString("*4/9", Position(graphics->dimensions.y, 3), Colour::WHITE);
         graphics->blitString("^123/643", Position(graphics->dimensions.y, 4), Colour::WHITE);
-        this->map->render(graphics, mapBox, Position(20, 20));
+        this->map->render(graphics, mapBox, this->player->getPosition());
         // graphics->blitTile(0x03, x, y, Colour::RED, this->map->colour);
     }
 };

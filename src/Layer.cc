@@ -2,14 +2,20 @@
 #include <iostream>
 
 void Layer::notify(Layer *notifier, int type, unsigned int parameter) {
-    if (this->child) this->child->notify(notifier, type, parameter);
-    else this->report(notifier, type, parameter);
-}
-
-void Layer::report(Layer *notifier, int type, unsigned int parameter) {
-    if (this != notifier && this->event(type, parameter)) return;
-    else if (this->parent) this->parent->report(notifier, type, parameter);
-    else std::cerr << "event not reported:(" << type << ',' << parameter << ')' << std::endl;
+    // get to top of the stack.
+    Layer *current = this;
+    while (current->child) current = current->child;
+    // come back down the stack.
+    while (true) {
+        if (current != notifier && current->event(type, parameter)) {
+            return;
+        } else if (current->parent) {
+            current = current->parent;
+        } else {
+            std::cerr << "event not reported:(" << type << ',' << parameter << ')' << std::endl;
+            return;
+        }
+    }
 }
 
 void Layer::queueEvent(Layer *notifier, int type, unsigned int parameter) {

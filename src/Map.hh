@@ -95,6 +95,14 @@ public:
     void applyMove(Move move);
 
     /**
+     * Recalculates all the generic pathfinding paths the map stores. These maps can be used to find
+     * the direction to walk in towards the player from any location on the map by moving from a
+     * tile with a higher value to a lower one.
+     * @param position is the position that should be the target for path finding.
+     */
+    void microwave(Position position);
+
+    /**
      * Goes through all creatures in the map that are ready to have a turn and applies their turns.
      */
     void update();
@@ -106,14 +114,6 @@ public:
      * @param middle   is what position should appear in the middle of the screen.
      */
     void render(Graphics *graphics, Rect rect, Position middle);
-
-    /**
-     * Recalculates all the generic pathfinding paths the map stores. These maps can be used to find
-     * the direction to walk in towards the player from any location on the map by moving from a
-     * tile with a higher value to a lower one.
-     * @param position is the position that should be the target for path finding.
-     */
-    void microwave(Position position);
 
     /**
      * Writes the map out to a stream.

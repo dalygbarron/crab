@@ -56,12 +56,12 @@ void Map::update() {
 
 void Map::render(Graphics *graphics, Rect rect, Position middle) {
     Rect bounds(Position(), this->dimensions);
-    Position camera = middle - graphics->dimensions / 2;
+    Position camera = middle - rect.size / 2;
     // render tiles.
-    for (int ix = 0; ix < rect.size.x; ix++) {
-        for (int iy = 0; iy < rect.size.y; iy++) {
+    for (int ix = rect.pos.x; ix < rect.pos.x + rect.size.x; ix++) {
+        for (int iy = rect.pos.y; iy < rect.pos.y + rect.size.y; iy++) {
             Position iteration(ix, iy);
-            Position tile = rect.pos + iteration - camera;
+            Position tile = iteration + camera;
             if (bounds.contains(tile)) {
                 const Floor *floor = Content::floors + this->getTile(tile, Map::LAYER_FLOOR);
                 int wallIndex = this->getTile(tile, Map::LAYER_WALL);
@@ -113,6 +113,8 @@ void Map::walk(Creature *actor, int direction) {
         pos.x--;
         pos.y--;
     }
+    unsigned char wall = this->getTile(pos, Map::LAYER_WALL);
+    if (wall) return;
     // TODO: collision detection and hand to hand combat.
     actor->setPosition(pos);
 }

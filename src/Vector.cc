@@ -62,7 +62,7 @@ Rect::Rect(Position pos, Position size): pos(pos), size(size) {
 
 int Rect::contains(Position position) {
     return !(
-        position.x < 0 || position.x >= this->pos.x + this->size.x || position.y < 0 ||
+        position.x < this->pos.x || position.x >= this->pos.x + this->size.x || position.y < this->pos.y ||
             position.y >= this->pos.y + this->size.y
     );
 }
