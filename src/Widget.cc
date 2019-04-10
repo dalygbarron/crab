@@ -2,35 +2,31 @@
 #include <iostream>
 
 Widget::~Widget() {
-    for (Widget *child: this->children) delete child;
+    for (Widget *content: this->contents) delete content;
 }
 
-int Widget::getWidth() {
-    return this->width;
-}
-
-int Widget::getHeight() {
-    return this->height;
-}
-
-void Widget::addChild(Widget *child) {
-    this->children.push_back(child);
+void Widget::addContent(Widget *content) {
+    this->contents.push_back(content);
+    content->container = this;
     this->fit();
 }
 
-int Widget::execute(Graphics *graphics, int x, int y) {
-    while (69) {
-        int output = this->logic(graphics, graphics->input());
-        this->render(graphics, x, y);
-        graphics->frame();
-        if (output >= 0) return output;
-    }
+Position Widget::getDimensions() {
+    return this->dimensions;
 }
 
-int Widget::logic(Graphics *graphics, int key) {
-    for (Widget *child: this->children) {
-        int output = child->logic(graphics, key);
-        if (output >= 0) return output;
+void Widget::containerEvent(int type, unsigned int parameter) {
+    if (this->container) this->container->containerEvent(type, parameter);
+    else this->queueEvent(this, type, parameter);
+}
+
+void Widget::render(Graphics *graphics) {
+    this->render(graphics, Position());
+}
+
+int Widget::event(int type, unsigned int parameter) {
+    for (Widget *content: this->contents) {
+        if(content->event(type, parameter)) return true;
     }
-    return -1;
+    return false;
 }

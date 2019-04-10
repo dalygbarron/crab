@@ -1,9 +1,12 @@
 #ifndef GUIDE_H
 #define GUIDE_H
 
-#include "../Scene.hh"
+#include "../Layer.hh"
 
-class Guide: public Scene {
+/**
+ * Scene that tells you how to play and all of that kind of stuff.
+ */
+class Guide: public Layer {
 public:
     Scene *logic(int key) {
 

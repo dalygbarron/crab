@@ -6,29 +6,27 @@
 
 class Text: public Widget {
     char const *content;
-    int colour;
+    Colour colour;
 
 public:
     /**
      * creates the text with actual text it shows.
      * @param content is the text it will display.
      */
-    Text(char const *content, int colour = Graphics::CYAN) {
+    Text(char const *content, Colour colour = Colour::CYAN) {
         this->content = content;
         this->colour = colour;
-        this->width = strlen(content);
-        this->height = 1;
+        this->dimensions.x = strlen(content);
+        this->dimensions.y = 1;
+        // TODO: dimensions calculation is not right.
     }
 
-    void fit() {
+    void fit() override {
         // does nothing.
     }
 
-    /**
-     * @Override
-     */
-    void render(Graphics *graphics, int x, int y) {
-        graphics->blitString(this->content, x, y, this->colour);
+    void render(Graphics *graphics, Position pos) override {
+        graphics->blitString(this->content, pos, this->colour);
     }
 };
 

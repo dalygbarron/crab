@@ -1,33 +1,44 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include <forward_list>
 #include <iostream>
 #include "Graphics.hh"
 #include "Floor.hh"
 #include "Wall.hh"
+#include "Vector.hh"
+#include "Move.hh"
+
+/**
+ * Forward declaration.
+ */
+class Creature;
 
 /**
  * This has all floors and walls and shit like that.
  * Also contains items and other things.
  */
 class Map {
-    unsigned char *warmths;
-    const Floor **floors;
-    const Wall **walls;
-    int width;
-    int height;
+    Position dimensions;
+    unsigned char *tiles;
+    std::forward_list<Creature *> creatures;
 
 public:
-    static const int WARMTH_SINK = 0;
-    static const int WARMTH_CARDINAL = 1;
-    static const int WARMTH_N = 2;
+    static const unsigned char LAYER_FLOOR = 0;
+    static const unsigned char LAYER_WALL = 1;
+    static const unsigned char LAYER_SINK = 2;
+    static const unsigned char LAYER_CARDINAL = 3;
+    static const unsigned char LAYER_N = 4;
+
+    Colour topColour = Colour::NAVY;
+    Colour bottomColour = Colour::BLACK;
+
 
     /**
      * Creates the map as a square of given width and height.
-     * @param width  is the width of the map.
-     * @param height is the height of the map.
+     * @param dimensions is the width and height of the map.
      */
-    Map(int width, int height);
+    Map(Position dimensions);
 
     /**
      * Loads the map from an input stream.
@@ -38,56 +49,64 @@ public:
     /**
      * Deletes the junk.
      */
-    virtual ~Map();
+    ~Map();
 
     /**
-     * Tells you what wall is at a given location.
-     * @param x is the horizontal position.
-     * @param y is the vertical position.
-     * @return a pointer to the prototypal wall.
+     * Gets the floor tile object at a given location.
+     * @param position is the location to get the floor for.
+     * @return a pointer to the actual floor object.
      */
-    Wall const *getWall(int x, int y);
+    const Floor *getFloor(Position position) const;
 
     /**
-     * Sets the wall at the given point to a given wall.
-     * @param x    is the horizontal location.
-     * @param y    is the vertical location.
-     * @param wall is the wall to set it to. NULL for no wall.
+     * Gets a tile code from the layers of the map and hands it to you.
+     * @param is the top down position to get the tile for.
+     * @param z is which layer to get the tile from.
+     * @return the code that corresponds to something depending on the layer it is from.
      */
-    void setWall(int x, int y, Wall const *wall);
+    unsigned char getTile(Position position, int z) const;
+
+    /**
+     * Sets a tile to a value.
+     * @param value is the new value to set it to.
+     * @param position is the top down location of the tile.
+     * @param z is which layer to get the tile from.
+     */
+    void setTile(unsigned char value, Position position, int z);
+
+    /**
+     * Puts a creature into the map at the given location.
+     * @param creature is the creature to add.
+     * @param position is it's new location in the map.
+     */
+    void addCreature(Creature *creature, Position position);
+
+    /**
+     * Applies a move to the map and alters it's state by it's effects.
+     * @param move is the move to apply.
+     */
+    void applyMove(Move move);
 
     /**
      * Renders the map to the screen in a bounded area.
      * @param graphics is the renderer.
-     * @param x        is the left side of the box the map is rendered in.
-     * @param y        is the top side of the box the map is renderered in.
-     * @param w        is the width of the box the map is rendered in.
-     * @param h        is the height of the box the map is rendered in.
-     * @param mx       is the left of the tile that should appear in the middle of the map view.
-     * @param my       is the top of the tile that should appear in the middle of the map view.
+     * @param rect     is the area the rendering must take place in.
+     * @param middle   is what position should appear in the middle of the screen.
      */
-    void render(Graphics *graphics, int x, int y, int w, int h, int mx, int my);
+    void render(Graphics *graphics, Rect rect, Position middle);
 
     /**
-     * Gets the value of a generated pathfinding map at a given location. These pathfinding maps are used for enemies
-     * to find their way to the player and can be used from any location. However, for special pathfinding to some
-     * other target a path must be specially generated another way.
-     * @param x    is the horizontal location.
-     * @param y    is the vertical location.
-     * @param type is which pathfinding map to use.
+     * Recalculates all the generic pathfinding paths the map stores. These maps can be used to find
+     * the direction to walk in towards the player from any location on the map by moving from a
+     * tile with a higher value to a lower one.
+     * @param position is the position that should be the target for path finding.
      */
-    unsigned char getWarmth(int x, int y, int type);
-
-    /**
-     * Recalculates all the pathfinding paths the map stores.
-     * @param x is the horizontal target.
-     * @param y is the vertical target.
-     */
-    void recalculateWarmth(int x, int y);
+    void microwave(Position position);
 
     /**
      * Writes the map out to a stream.
      * @param stream is the output it writes to.
+     * TODO: could replace this with stream operator which would be cool.
      */
     void output(std::ostream *stream);
 };

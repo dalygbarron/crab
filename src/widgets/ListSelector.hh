@@ -12,27 +12,31 @@ class ListSelector: public Tall {
     int offset = 0;
 
 public:
-    int logic(Graphics *graphics, int key) {
-        if (key == SDLK_UP) {
-            this->index--;
-            if (this->index < 0) this->index = this->children.size() - 1;
-        } else if (key == SDLK_DOWN) {
-            this->index++;
-            if (this->index >= this->children.size()) this->index = 0;
-        } else if (key == SDLK_RETURN) {
-            return this->index;
+    int event(int type, unsigned int parameter) override {
+        if (type == Layer::EVENT_KEY) {
+            if (parameter == SDLK_DOWN) {
+                this->index++;
+                return true;
+            } else if (parameter == SDLK_UP) {
+                this->index--;
+                return true;
+            } else if (parameter == SDLK_RETURN) {
+                this->containerEvent(Layer::EVENT_WIDGET_CLOSE, this->index);
+                return true;
+            }
         }
-        return -1;
+        return false;
     }
 
-    void render(Graphics *graphics, int x, int y) {
+    void render(Graphics *graphics, Position pos) override {
         int i = 0;
         int offset = 0;
-        for (Widget *child: this->children) {
-            int height = child->getHeight();
-            if (i == this->index) graphics->blitBox(x, y + offset, child->getWidth(), height, Graphics::ORANGE);
-            child->render(graphics, x, y + offset);
-            offset += height;
+        for (Widget *content: this->contents) {
+            Rect box(pos, content->getDimensions());
+            box.pos.y += offset;
+            if (i == this->index) graphics->blitBox(box, Colour::ORANGE);
+            content->render(graphics, box.pos);
+            offset += box.size.y;
             i++;
         }
     }

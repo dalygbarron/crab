@@ -3,7 +3,53 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
-#include "Generator.hh"
+#include "Vector.hh"
+
+/**
+ * Represents a nice colour for you.
+ */
+class Colour {
+public:
+    const static Colour RED;
+    const static Colour MAROON;
+    const static Colour GREEN;
+    const static Colour BLUE;
+    const static Colour NAVY;
+    const static Colour YELLOW;
+    const static Colour ORANGE;
+    const static Colour CYAN;
+    const static Colour MAGENTA;
+    const static Colour BLACK;
+    const static Colour DARK_GREY;
+    const static Colour GREY;
+    const static Colour LIGHT_GREY;
+    const static Colour WHITE;
+
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+
+    /**
+     * Creates a black colour.
+     */
+    Colour();
+
+    /**
+     * Creates the colour for you.
+     * @param red   is the red component up to 255.
+     * @param green is the green component up to 255.
+     * @param blue  is the blue component up to 255.
+     */
+    Colour(unsigned char red, unsigned char green, unsigned char blue);
+
+    /**
+     * Creates a colour that is part of the way between two colours.
+     * @param top    is the first colour.
+     * @param bottom is the second colour.
+     * @param pos    is how far between the two with 0 being top and 1 being bottom.
+     */
+    Colour(Colour top, Colour bottom, float pos);
+};
 
 /**
  * Used to display graphics on the screen and load images and stuff.
@@ -33,33 +79,16 @@ class Graphics {
     SDL_Rect dstRect;
 
 public:
-    const static int RED = 0xff0000;
-    const static int MAROON = 0xa00014;
-    const static int GREEN = 0xff00;
-    const static int BLUE = 0xff;
-    const static int NAVY = 0x33;
-    const static int YELLOW = 0xffff00;
-    const static int ORANGE = 0xfab200;
-    const static int CYAN = 0xffff;
-    const static int MAGENTA = 0xff00ff;
-    const static int BLACK = 0;
-    const static int DARK_GREY = 0x111111;
-    const static int GREY = 0x555555;
-    const static int LIGHT_GREY = 0xbbbbbb;
-    const static int WHITE = 0xffffff;
-
-    const int width;
-    const int height;
-    Generator generator;
+    const Position dimensions;
 
     /**
      * Creates the renderer and a game window.
-     * @param title  is the title of the window.
-     * @param width  is the width of the window.
-     * @param height is the height of the window.
+     * @param title      is the title of the window.
+     * @param dimensions is the dimensions of the window in number of tiles.
+     * @param fullscreen is true if you want the game in fullscreen.
      * @throws int when there is an sdl problem.
      */
-    Graphics(char const *title, int width, int height, int fullscreen, char const *tileset);
+    Graphics(char const *title, Position dimensions, int fullscreen);
 
     /**
      * Destroys the renderer and turns off SDL again.
@@ -69,54 +98,48 @@ public:
     /**
      * Renders a tile from a tileset to a given spot on the screen.
      * @param tile is the numerical index of the tile to blit.
-     * @param x    is the x location in tile coordinates on the screen to place it.
-     * @param y    is the y location in tile coordinates on the screen toi place it.
+     * @param pos  is the location on screen to blit the tile.
      * @param fg   is the foreground colour to give the tile.
      * @param bg   is the background colour to give the tile.
      */
-    void blitTile(unsigned char tile, int x, int y, unsigned int fg, unsigned int bg);
+    void blitTile(unsigned char tile, Position pos, Colour fg, Colour bg);
 
     /**
      * Draw a box on the screen in tile coordinates.
-     * @param x      is the left side of the box location in tile coordinates.
-     * @param y      is the top side of the box location in tile coordinates.
-     * @param w      is the width of the box in tile coordinates.
-     * @param h      is the height of the box in tile coordinates.
+     * @param box    is the geometry of the box to draw onscreen.
      * @param colour is the colour to draw the box in.
      */
-    void blitBox(int x, int y, int w, int h, unsigned int colour);
+    void blitBox(Rect box, Colour colour);
 
     /**
      * Draws a single character to the screen with no backgrond.
-     * @param c      is the character of choice.
-     * @param x      is the left tile position.
-     * @param y      is the top tile position.
-     * @param colour is the colour to draw it in.
+     * @param c        is the character of choice.
+     * @param position is the onscreen location to blit the character.
+     * @param colour   is the colour to draw it in.
      */
-    void blitCharacter(unsigned char c, int x, int y, unsigned int colour);
+    void blitCharacter(unsigned char c, Position position, Colour colour);
 
     /**
      * Writes a piece of text onto the screen unbounded and new lines do cause new lines.
-     * @param text   is the text to write.
-     * @param x      is the left start of the text.
-     * @param y      is the top start of the text.
-     * @param colour is the colour of the text.
+     * @param text     is the text to write.
+     * @param position is the location onscreen to start writing the text.
+     * @param colour   is the colour of the text.
      */
-    void blitString(char const *text, int x, int y, unsigned int colour);
-
-    /**
-     * Gets user input. Technically not graphics related but whatever lol.
-     * @return a user given keycode.
-     * @throws int 0 when a quit event appears.
-     */
-    int input();
+    void blitString(char const *text, Position position, Colour colour);
 
     /**
      * Fills a given rect with colour.
      * @param colour is the colour stored as an int 1 byte each colour.
-     * @param rect   is the rect to fill or null for whole screen.
+     * @param rect   is the rect to fill or 0 for whole screen.
      */
-    void flush(int colour, SDL_Rect *rect = NULL);
+    void flush(Colour colour, SDL_Rect *rect = 0);
+
+    /**
+     * Fills the whole screen with a gradient. TODO: allow rects as well.
+     * @param top    is the colour at the top.
+     * @param bottom is the colour at the bottom.
+     */
+    void flushGradient(Colour top, Colour bottom);
 
     /**
      * Updates the screen to show what has been blitted on there lately.

@@ -12,37 +12,36 @@ class HBox: public Wide {
     int index = 0;
 
 public:
-    int logic(Graphics *graphics, int key) {
-        if (key == SDLK_LEFT) {
-            index--;
-        } else if (key == SDLK_RIGHT) {
-            index++;
-        } else {
-            int i = 0;
-            for (Widget *child: this->children) {
-                if (i == index) return child->logic(graphics, key);
-                i++;
+    int event(int type, unsigned int parameter) override {
+        if (type == Layer::EVENT_KEY) {
+            if (parameter == SDLK_LEFT) {
+                this->index--;
+                return true;
+            } else if (parameter == SDLK_RIGHT) {
+                this->index++;
+                return true;
+            } else {
+                // TODO: this is pure autism.
+                int i = 0;
+                for (Widget *content: this->contents) {
+                    if (i == index) return content->event(type, parameter);
+                    i++;
+                }
             }
         }
-        return -1;
+        return false;
     }
 
-    void render(Graphics *graphics, int x, int y) {
+    void render(Graphics *graphics, Position pos) override {
         int offset = 0;
         int i = 0;
-        graphics->blitBox(x, y, this->getWidth(), this->getHeight(), Graphics::BLACK);
-        for (Widget *child: this->children) {
-            if (i == this->index) {
-                graphics->blitBox(
-                    x + offset,
-                    y,
-                    child->getWidth(),
-                    child->getHeight(),
-                    Graphics::NAVY
-                );
-            }
-            child->render(graphics, x + offset, y);
-            offset += child->getWidth();
+        Rect box(pos, this->dimensions);
+        graphics->blitBox(box, Colour::BLACK);
+        for (Widget *content: this->contents) {
+            box.size = content->getDimensions();
+            if (i == this->index) graphics->blitBox(box, Colour::NAVY);
+            content->render(graphics, box.pos);
+            box.pos.x += box.size.x;
             i++;
         }
     }

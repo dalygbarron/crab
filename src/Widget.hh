@@ -1,18 +1,26 @@
 #ifndef GUI_H
 #define GUI_H
 
+#include "Layer.hh"
 #include <list>
 #include "Graphics.hh"
 
 /**
  * Represents some aspect of the gui like a button or a selecty thingy or some text I guess.
  */
-class Widget {
-    int nChildren = 0;
+class Widget: public Layer {
 protected:
-    int width = 1;
-    int height = 1;
-    std::list<Widget *> children;
+    Position dimensions;
+    std::list<Widget *> contents;
+    Widget *container = 0;
+
+    /**
+     * Adds an event to the queue via this widget's container, unless this is the container in which case it calls the
+     * normal queue event method with itself as the sneder.
+     * @param type      is the type of event.
+     * @param parameter is a parameter to go with the event.
+     */
+    void containerEvent(int type, unsigned int parameter);
 
 public:
     /**
@@ -21,37 +29,17 @@ public:
     virtual ~Widget();
 
     /**
-     * Adds a child to this widget so it will render it and stuff.
-     * @param child is the child to add to the widget in order.
+     * Adds another widget to this widget's contents.
+     * @param content is the thing to add.
      */
-    void addChild(Widget *child);
-
-    /**
-     * Gets the number of children that this widget has.
-     * @return int number of children.
-     */
-    int getNChildren();
+    void addContent(Widget *content);
 
     /**
      * Gives the width of this widget. This doesn't necessarily have to to be followed but might be
      * handy for certain parent widgets.
      * @return the width.
      */
-    int getWidth();
-
-    /**
-     * Gives the height of this widget. This doesn't necessarily have to to be followed but might be
-     * handy for certain parent widgets.
-     * @return the height.
-     */
-    int getHeight();
-
-    /**
-     * Run the widget and return once it's completely done.
-     * @param graphics is used for input and display.
-     * @return int which is >= 0 when something cool is happening.
-     */
-    int execute(Graphics *graphics, int x, int y);
+    Position getDimensions();
 
     /**
      * Resets the widget's width and height to what it deems appropriate.
@@ -59,22 +47,15 @@ public:
     virtual void fit() = 0;
 
     /**
-     * Gives the gui item a chance to update itself and receive user input.
-     * @param graphics is used to execute more widgets.
-     * @param key      is the user input key. This should be sent in so an owner widget can selectively run children.
-     * @return a number >= 0 to tell us that some shit is going down.
-     */
-    virtual int logic(Graphics *graphics, int key);
-
-    /**
-     * Displays the GUI thingy for your enjoyment.
+     * Displays the GUI thingy for your enjoyment anywhere on the screen.
      * @param graphics is the rendering system.
-     * @param x        is the left location to start rendering.
-     * @param y        is the top location to start rendering.
-     * @param w        is the bounding width.
-     * @param h        is the bounding height;
+     * @param pos      is the location at which to do the rendering.
      */
-    virtual void render(Graphics *graphics, int x, int y) = 0;
+    virtual void render(Graphics *graphics, Position pos) = 0;
+
+    virtual void render(Graphics *graphics) override;
+
+    virtual int event(int type, unsigned int parameter) override;
 };
 
 
