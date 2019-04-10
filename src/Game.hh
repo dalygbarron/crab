@@ -3,12 +3,14 @@
 
 #include "Layer.hh"
 #include "Graphics.hh"
+#include "Generator.hh"
 
 /**
  * Represents a ui event.
  * Temporary event storage in queue.
  */
-struct Event {
+class Event {
+public:
     Layer *notifier;
     int type;
     unsigned int parameter;
@@ -24,7 +26,7 @@ class Game: public Layer {
     Generator generator;
     int kill = false;
     int queued = 0;
-    struct Event eventQueue[EVENT_QUEUE_SIZE];
+    Event eventQueue[EVENT_QUEUE_SIZE];
 
     /**
      * Processes user input from SDL.

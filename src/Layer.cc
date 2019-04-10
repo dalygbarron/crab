@@ -37,6 +37,6 @@ void Layer::pushLayer(Layer *layer) {
 void Layer::popLayer() {
     if (this->child) {
         delete this->child;
-        this->child = NULL;
+        this->child = 0;
     }
 }

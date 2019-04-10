@@ -10,8 +10,8 @@
  * of events to process.
  */
 class Layer {
-    Layer *parent = NULL;
-    Layer *child = NULL;
+    Layer *parent = 0;
+    Layer *child = 0;
 
     /**
      * How this layer reacts to an event.
@@ -30,7 +30,7 @@ class Layer {
     /**
      * Tries to process an event and if it is not useful it sends it to the parent layer recursively.
      * @param notifier  is the one sending the event so it can skip processing it. If you might want to process your
-     *                  own event then just pass NULL to this.
+     *                  own event then just pass 0 to this.
      * @param type      is the type of event it is.
      * @param parameter is a parameter to the event.
      */

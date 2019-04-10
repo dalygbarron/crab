@@ -13,13 +13,15 @@
  * @return the new map.
  */
 Map *junk(int depth, int entrances) {
-    Map *map = new Map(300, 300);
-    for (int x = 0; x < 300; x++) {
-        for (int y = 0; y < 300; y++) {
-            map->setTile(rand() % Content::FLOOR_N, x, y, Map::LAYER_FLOOR);
+    Position dimensions(300, 300);
+    Map *map = new Map(dimensions);
+    for (int x = 0; x < dimensions.x; x++) {
+        for (int y = 0; y < dimensions.y; y++) {
+            Position pos(x, y);
+            map->setTile(rand() % Content::FLOOR_N, pos, Map::LAYER_FLOOR);
             int choice = rand() % (JUNK_THRESHOLD + Content::WALL_N);
             if (choice >= Content::WALL_N) choice = 0;
-            map->setTile(choice, x, y, Map::LAYER_WALL);
+            map->setTile(choice, pos, Map::LAYER_WALL);
         }
     }
     return map;
@@ -32,7 +34,7 @@ Map *junk(int depth, int entrances) {
  * @return a fresh new spaceship map.
  */
 Map *ship(int depth, int entrances) {
-    return NULL;
+    return 0;
 }
 
 /**
@@ -42,7 +44,7 @@ Map *ship(int depth, int entrances) {
  * @return a freshly made cave.
  */
 Map *cave(int depth, int entrances) {
-    return NULL;
+    return 0;
 }
 
 /**
@@ -52,7 +54,7 @@ Map *cave(int depth, int entrances) {
  * @return the new mansion map.
  */
 Map *house(int depth, int entrances) {
-    return NULL;
+    return 0;
 }
 
 Map *Generator::generate(unsigned char type, int depth) {

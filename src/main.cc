@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
 	// 		delete scene;
 	// 		return i;
 	// 	}
-	// 	if (newScene == NULL) {
+	// 	if (newScene == 0) {
 	// 		delete scene;
 	// 		return 0;
 	// 	} else if (newScene != scene) {

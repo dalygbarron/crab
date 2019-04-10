@@ -10,10 +10,9 @@
  */
 class Widget: public Layer {
 protected:
-    int width = 1;
-    int height = 1;
+    Position dimensions;
     std::list<Widget *> contents;
-    Widget *container = NULL;
+    Widget *container = 0;
 
     /**
      * Adds an event to the queue via this widget's container, unless this is the container in which case it calls the
@@ -40,14 +39,7 @@ public:
      * handy for certain parent widgets.
      * @return the width.
      */
-    int getWidth();
-
-    /**
-     * Gives the height of this widget. This doesn't necessarily have to to be followed but might be
-     * handy for certain parent widgets.
-     * @return the height.
-     */
-    int getHeight();
+    Position getDimensions();
 
     /**
      * Resets the widget's width and height to what it deems appropriate.
@@ -57,12 +49,9 @@ public:
     /**
      * Displays the GUI thingy for your enjoyment anywhere on the screen.
      * @param graphics is the rendering system.
-     * @param x        is the left location to start rendering.
-     * @param y        is the top location to start rendering.
-     * @param w        is the bounding width.
-     * @param h        is the bounding height;
+     * @param pos      is the location at which to do the rendering.
      */
-    virtual void render(Graphics *graphics, int x, int y) = 0;
+    virtual void render(Graphics *graphics, Position pos) = 0;
 
     virtual void render(Graphics *graphics) override;
 

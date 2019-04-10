@@ -17,7 +17,7 @@ namespace Content {
     const unsigned char FLOOR_GRASS = 0;
     const unsigned char FLOOR_N = 1;
     const Floor floors[] = {
-        Floor(0xb0, 0x137032, "a nice grass")
+        Floor(0xb0, Colour(19, 112, 50), "a nice grass")
     };
 
     const unsigned char WALL_NONE = 0;
@@ -25,7 +25,7 @@ namespace Content {
     const unsigned char WALL_N = 2;
     const Wall walls[] = {
         Wall(),
-        Wall(0x05, 0x332300, "a nice tree")
+        Wall(0x05, Colour(51, 35, 0), "a nice tree")
     };
 };
 

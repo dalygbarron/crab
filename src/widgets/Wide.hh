@@ -2,21 +2,19 @@
 #define WIDE_H
 
 #include "../Widget.hh"
+#include <iostream>
 
 /**
  * Fits so that the contents can all go on top of one another.
  */
 class Wide: public Widget {
-    void fit() {
-        this->width = 0;
-        this->height = 0;
+    void fit() override {
+        this->dimensions = Position();
         for (Widget *content: this->contents) {
-            int contentWidth = content->getWidth();
-            int contentHeight = content->getHeight();
-            this->width += contentWidth;
-            if (contentHeight > this->height) this->height = contentHeight;
+            Position contentDimensions = content->getDimensions();
+            this->dimensions.x += contentDimensions.x;
+            if (contentDimensions.y > this->dimensions.y) this->dimensions.y = contentDimensions.y;
         }
-
     }
 };
 

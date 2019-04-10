@@ -34,8 +34,8 @@ public:
         this->addContent(box);
     }
 
-    void render(Graphics *graphics, int x, int y) override {
-        for (Widget *content: this->contents) content->render(graphics, x, y);
+    void render(Graphics *graphics, Position pos) override {
+        for (Widget *content: this->contents) content->render(graphics, pos);
     }
 };
 

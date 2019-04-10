@@ -12,7 +12,7 @@ class HBox: public Wide {
     int index = 0;
 
 public:
-    int event(int type, unsigned int parameter) {
+    int event(int type, unsigned int parameter) override {
         if (type == Layer::EVENT_KEY) {
             if (parameter == SDLK_LEFT) {
                 this->index--;
@@ -32,22 +32,16 @@ public:
         return false;
     }
 
-    void render(Graphics *graphics, int x, int y) {
+    void render(Graphics *graphics, Position pos) override {
         int offset = 0;
         int i = 0;
-        graphics->blitBox(x, y, this->getWidth(), this->getHeight(), Graphics::BLACK);
+        Rect box(pos, this->dimensions);
+        graphics->blitBox(box, Colour::BLACK);
         for (Widget *content: this->contents) {
-            if (i == this->index) {
-                graphics->blitBox(
-                    x + offset,
-                    y,
-                    content->getWidth(),
-                    content->getHeight(),
-                    Graphics::NAVY
-                );
-            }
-            content->render(graphics, x + offset, y);
-            offset += content->getWidth();
+            box.size = content->getDimensions();
+            if (i == this->index) graphics->blitBox(box, Colour::NAVY);
+            content->render(graphics, box.pos);
+            box.pos.x += box.size.x;
             i++;
         }
     }

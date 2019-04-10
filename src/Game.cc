@@ -7,8 +7,8 @@ void Game::input() {
     SDL_Event e;
     while (69) {
         if (SDL_PollEvent(&e) == 0) break;
-        if (e.type == SDL_QUIT) this->queueEvent(NULL, Layer::EVENT_QUIT, 0);
-        else if (e.type == SDL_KEYDOWN) this->queueEvent(NULL, Layer::EVENT_KEY, e.key.keysym.sym);
+        if (e.type == SDL_QUIT) this->queueEvent(0, Layer::EVENT_QUIT, 0);
+        else if (e.type == SDL_KEYDOWN) this->queueEvent(0, Layer::EVENT_KEY, e.key.keysym.sym);
     }
 }
 
@@ -29,7 +29,7 @@ void Game::queueEvent(Layer *notifier, int type, unsigned int parameter) {
     this->queued++;
 }
 
-Game::Game(int argc): graphics("bongo", 64, 48, argc > 1) {
+Game::Game(int argc): graphics("bongo", Position(64, 48), argc > 1) {
     this->pushLayer(new Title());
 }
 
@@ -48,7 +48,7 @@ int Game::event(int type, unsigned int parameter) {
         return true;
     } else if (type == Layer::EVENT_MAP) {
         this->popLayer();
-        this->pushLayer(new Level(generator.generate(0, 0)));
+        this->pushLayer(new Level(generator.generate(0, 0), Position(20, 20)));
         return true;
     }
     return false;

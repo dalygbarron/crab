@@ -11,12 +11,8 @@ void Widget::addContent(Widget *content) {
     this->fit();
 }
 
-int Widget::getWidth() {
-    return this->width;
-}
-
-int Widget::getHeight() {
-    return this->height;
+Position Widget::getDimensions() {
+    return this->dimensions;
 }
 
 void Widget::containerEvent(int type, unsigned int parameter) {
@@ -25,7 +21,7 @@ void Widget::containerEvent(int type, unsigned int parameter) {
 }
 
 void Widget::render(Graphics *graphics) {
-    this->render(graphics, 0, 0);
+    this->render(graphics, Position());
 }
 
 int Widget::event(int type, unsigned int parameter) {
