@@ -1,37 +1,59 @@
 #include "Game.hh"
 #include <iostream>
-#include "Input.hh"
+#include <SDL2/SDL.h>
 #include "scenes/Title.hh"
 
+void Game::input() {
+    SDL_Event e;
+    while (69) {
+        if (SDL_PollEvent(&e) == 0) break;
+        if (e.type == SDL_QUIT) this->queueEvent(NULL, Layer::EVENT_QUIT, 0);
+        else if (e.type == SDL_KEYDOWN) this->queueEvent(NULL, Layer::EVENT_KEY, e.key.keysym.sym);
+    }
+}
+
+void Game::runEvents() {
+    for (int i = 0; i < this->queued; i++) {
+        Layer *notifier = this->eventQueue[i].notifier;
+        int type = this->eventQueue[i].type;
+        int parameter = this->eventQueue[i].parameter;
+        this->notify(notifier, type, parameter);
+    }
+    this->queued = 0;
+}
+
+void Game::queueEvent(Layer *notifier, int type, unsigned int parameter) {
+    this->eventQueue[this->queued].notifier = notifier;
+    this->eventQueue[this->queued].type = type;
+    this->eventQueue[this->queued].parameter = parameter;
+    this->queued++;
+}
 
 Game::Game(int argc): graphics("bongo", 64, 48, argc > 1) {
-    this->input.pushListener(this);
-    this->setScene(new Title(&this->input));
-}
-
-int Game::event(Speaker *speaker, int type, int parameter) {
-    if (type == Speaker::EVENT_QUIT) {
-        this->kill = true;
-        return true;
-    } else if (type == Speaker::EVENT_MAP) {
-        this->setScene(new Level(&this->input, generator.generate(0, 0)));
-    }
-    return false;
-}
-
-void Game::setScene(Scene *scene) {
-    if (this->scene) {
-        this->scene->removeGui(&this->input);
-        delete this->scene;
-    }
-    this->scene = scene;
-    scene->pushListener(this);
+    this->pushLayer(new Title());
 }
 
 void Game::run() {
     while (!this->kill) {
-        this->scene->display(&this->graphics);
+        this->display(&graphics);
         graphics.frame();
-        this->input.update();
+        this->input();
+        this->runEvents();
     }
+}
+
+int Game::event(int type, unsigned int parameter) {
+    if (type == Layer::EVENT_QUIT) {
+        this->kill = true;
+        return true;
+    } else if (type == Layer::EVENT_MAP) {
+        this->popLayer();
+        this->pushLayer(new Level(generator.generate(0, 0)));
+        return true;
+    }
+    return false;
+}
+
+void Game::render(Graphics *graphics) {
+    // does nothing.
 }

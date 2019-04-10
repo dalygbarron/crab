@@ -1,29 +1,26 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "../Scene.hh"
+#include "../Layer.hh"
 #include "../Map.hh"
 #include <iostream>
-#include "../Input.hh"
 
 /**
  * Scene where you play the game for real.
  */
-class Level: public Scene
+class Level: public Layer
 {
     Map *map;
     int x = 0;
     int y = 0;
 
 public:
-    Level(Input *input, Map *map) {
+    Level(Map *map) {
         this->map = map;
-        input->pushListener(this);
     }
 
-    int event(Speaker *speaker, int type, int parameter) {
-        std::cout << 4 << std::endl;
-        if (type != Speaker::EVENT_KEY) return false;
+    int event(int type, unsigned int parameter) override {
+        if (type != Layer::EVENT_KEY) return false;
         if (parameter == SDLK_UP) this->y--;
         if (parameter == SDLK_DOWN) this->y++;
         if (parameter == SDLK_LEFT) this->x--;
@@ -31,7 +28,7 @@ public:
         return true;
     }
 
-    void render(Graphics *graphics) {
+    void render(Graphics *graphics) override {
         graphics->flush(this->map->colour);
         graphics->blitString("Tony Abbot", graphics->height, 0, Graphics::WHITE);
         graphics->blitString("camel rider", graphics->height, 1, Graphics::WHITE);

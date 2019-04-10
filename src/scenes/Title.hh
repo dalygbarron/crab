@@ -1,10 +1,10 @@
 #ifndef TITLE_H
 #define TITLE_H
 
-#include "../Scene.hh"
+#include "../Layer.hh"
 #include <iostream>
 #include <cstdlib>
-#include "../Observer.hh"
+#include "../Layer.hh"
 #include "../widgets/Text.hh"
 #include "../menus/MainMenu.hh"
 #include "../scenes/Level.hh"
@@ -12,7 +12,7 @@
 /**
  * Title Screen scene which shows the main menu and nice stuff like that.
  */
-class Title: public Scene
+class Title: public Layer
 {
     char const *choices[5] = {"New Game", "Load Game", "Guide", "Credits", "Quit"};
     int choice = -1;
@@ -21,19 +21,19 @@ class Title: public Scene
 
 public:
 
-    Title(Input *input) {
-        this->addGui(input, new MainMenu(choices));
+    Title() {
+        this->pushLayer(new MainMenu(choices));
     }
 
-    int event(Speaker *speaker, int type, int parameter) {
-        if (type == Speaker::EVENT_WIDGET_CLOSE) {
-            this->speak(Speaker::EVENT_MAP, 462378);
+    int event(int type, unsigned int parameter) override {
+        if (type == Layer::EVENT_WIDGET_CLOSE) {
+            this->queueEvent(this, Layer::EVENT_MAP, 462378);
             return true;
         }
         return false;
     }
 
-    void render(Graphics *graphics) {
+    void render(Graphics *graphics) override {
         for (int i = 0; i < graphics->height; i++) graphics->blitBox(0, i, graphics->width, 1, i);
         if (this->choice >= 0) graphics->blitString(choices[this->choice], 0, 0, Graphics::CYAN);
     }

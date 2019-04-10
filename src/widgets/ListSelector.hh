@@ -12,8 +12,8 @@ class ListSelector: public Tall {
     int offset = 0;
 
 public:
-    int event(Speaker *speaker, int type, int parameter) {
-        if (type == Speaker::EVENT_KEY) {
+    int event(int type, unsigned int parameter) {
+        if (type == Layer::EVENT_KEY) {
             if (parameter == SDLK_DOWN) {
                 this->index++;
                 return true;
@@ -21,7 +21,7 @@ public:
                 this->index--;
                 return true;
             } else if (parameter == SDLK_RETURN) {
-                this->parentSpeak(Speaker::EVENT_WIDGET_CLOSE, this->index);
+                this->containerEvent(Layer::EVENT_WIDGET_CLOSE, this->index);
                 return true;
             }
         }
@@ -31,10 +31,10 @@ public:
     void render(Graphics *graphics, int x, int y) {
         int i = 0;
         int offset = 0;
-        for (Widget *child: this->children) {
-            int height = child->getHeight();
-            if (i == this->index) graphics->blitBox(x, y + offset, child->getWidth(), height, Graphics::ORANGE);
-            child->render(graphics, x, y + offset);
+        for (Widget *content: this->contents) {
+            int height = content->getHeight();
+            if (i == this->index) graphics->blitBox(x, y + offset, content->getWidth(), height, Graphics::ORANGE);
+            content->render(graphics, x, y + offset);
             offset += height;
             i++;
         }
