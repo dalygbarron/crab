@@ -1,6 +1,7 @@
 #include "Map.hh"
 
 #include <iostream>
+#include <queue>
 #include "Graphics.hh"
 #include "Content.hh"
 #include "Vector.hh"
@@ -66,7 +67,8 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
                 const Floor *floor = Content::floors + this->getTile(tile, Map::LAYER_FLOOR);
                 int wallIndex = this->getTile(tile, Map::LAYER_WALL);
                 if (wallIndex == 0) {
-                    graphics->blitCharacter(floor->tile, iteration, floor->colour);
+                    graphics->blitTile(0, iteration, floor->colour, Colour(this->getTile(tile, Map::LAYER_SINK) * 2, 0, this->getTile(tile, Map::LAYER_SINK)));
+                    //graphics->blitCharacter(floor->tile, iteration, floor->colour);
                 } else {
                     const Wall *wall = Content::walls + wallIndex;
                     graphics->blitCharacter(wall->tile, iteration, wall->colour);
@@ -82,8 +84,29 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
 }
 
 void Map::microwave(Position position) {
-    // TODO: Gotta do some pathfinding algorithms here.
-
+    // To get a Dijkstra map, you start with an integer array representing your map, with some set of goal cells set
+    // to zero and all the rest set to a very high number. Iterate through the map's "floor" cells -- skip the
+    // impassable wall cells. If any floor tile has a value greater than 1 regarding to its lowest-value floor neighbour
+    // (in a cardinal direction - i.e. up, down, left or right; a cell next to the one we are checking), set it to be
+    // exactly 1 greater than its lowest value neighbor. Repeat until no changes are made. The resulting grid of numbers
+    // represents the number of steps that it will take to get from any given tile to the nearest goal.
+    // Initialise to big number.
+    Position offsets[] = {Position(-1, 0), Position(1, 0), Position(0, -1), Position(0, 1)};
+    memset(this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_SINK, 0xff, sizeof(unsigned char) * this->dimensions.x * this->dimensions.y);
+    std::queue<Position> visit;
+    this->setTile(0, position, Map::LAYER_SINK);
+    visit.push(position);
+    while (!visit.empty()) {
+        position = visit.front();
+        visit.pop();
+        unsigned char value = this->getTile(position, Map::LAYER_SINK);
+        for (Position offset: offsets) {
+            if (!this->getTile(position + offset, Map::LAYER_WALL) && this->getTile(position + offset, Map::LAYER_SINK) > value + 1 && value < 30) {
+                this->setTile(value + 1, position + offset, Map::LAYER_SINK);
+                visit.push(position + offset);
+            }
+        }
+    }
 }
 
 void Map::output(std::ostream *stream) {

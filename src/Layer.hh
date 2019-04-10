@@ -47,11 +47,11 @@ protected:
     virtual void queueEvent(Layer *notifier, int type, unsigned int parameter);
 
 public:
-    const int EVENT_QUIT = 0;
-    const int EVENT_KEY = 1;
-    const int EVENT_WIDGET_CLOSE = 2;
-    const int EVENT_WIDGET_UPDATE = 3;
-    const int EVENT_MAP = 4;
+    static const int EVENT_QUIT = 0;
+    static const int EVENT_KEY = 1;
+    static const int EVENT_WIDGET_CLOSE = 2;
+    static const int EVENT_WIDGET_UPDATE = 3;
+    static const int EVENT_MAP = 4;
 
     /**
      * Hell yeah destructo time.

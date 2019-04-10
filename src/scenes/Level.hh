@@ -20,6 +20,7 @@ class Level: public Layer
      */
     void turn(Move move) {
         this->map->applyMove(move);
+        this->map->microwave(this->player->getPosition());
         this->map->update();
     }
 
