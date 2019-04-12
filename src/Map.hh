@@ -35,7 +35,9 @@ public:
     static const unsigned char LAYER_WALL = 1;
     static const unsigned char LAYER_SINK = 2;
     static const unsigned char LAYER_CARDINAL = 3;
-    static const unsigned char LAYER_N = 4;
+    static const unsigned char LAYER_FOV = 4;
+    static const unsigned char LAYER_SEEN = 5;
+    static const unsigned char LAYER_N = 6;
 
     Colour topColour = Colour::NAVY;
     Colour bottomColour = Colour::BLACK;

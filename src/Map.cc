@@ -6,6 +6,8 @@
 #include "Content.hh"
 #include "Vector.hh"
 
+#define LIGHT_RADIUS 10
+
 Map::Map(Position dimensions): dimensions(dimensions) {
     this->tiles = new unsigned char[dimensions.x * dimensions.y * Map::LAYER_N];
 }
@@ -84,15 +86,10 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
 }
 
 void Map::microwave(Position position) {
-    // To get a Dijkstra map, you start with an integer array representing your map, with some set of goal cells set
-    // to zero and all the rest set to a very high number. Iterate through the map's "floor" cells -- skip the
-    // impassable wall cells. If any floor tile has a value greater than 1 regarding to its lowest-value floor neighbour
-    // (in a cardinal direction - i.e. up, down, left or right; a cell next to the one we are checking), set it to be
-    // exactly 1 greater than its lowest value neighbor. Repeat until no changes are made. The resulting grid of numbers
-    // represents the number of steps that it will take to get from any given tile to the nearest goal.
-    // Initialise to big number.
+    // Clear memory for pathmap, cardinal map, and field of view map.
+    memset(this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_SINK, 0xff, sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 3);
+    // main path map.
     Position offsets[] = {Position(-1, 0), Position(1, 0), Position(0, -1), Position(0, 1)};
-    memset(this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_SINK, 0xff, sizeof(unsigned char) * this->dimensions.x * this->dimensions.y);
     std::queue<Position> visit;
     this->setTile(0, position, Map::LAYER_SINK);
     visit.push(position);
@@ -107,6 +104,10 @@ void Map::microwave(Position position) {
             }
         }
     }
+    // TODO: cardinal map. Maybe think if I need to do it at all actually.
+    // TODO: field of view map.
+
+    // TODO: seen map.
 }
 
 void Map::output(std::ostream *stream) {
