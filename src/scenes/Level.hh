@@ -42,7 +42,7 @@ public:
 
     void render(Graphics *graphics) override {
         Rect mapBox(Position(), Position(graphics->dimensions.y, graphics->dimensions.y));
-        graphics->flush(this->map->topColour);
+        graphics->flush(this->map->bg);
         graphics->blitString("Tony Abbot", Position(graphics->dimensions.y, 0), Colour::WHITE);
         graphics->blitString("camel rider", Position(graphics->dimensions.y, 1), Colour::WHITE);
         graphics->blitString("+10/20", Position(graphics->dimensions.y, 2), Colour::WHITE);

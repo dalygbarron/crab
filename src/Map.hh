@@ -21,6 +21,7 @@ class Creature;
 class Map {
     Position dimensions;
     unsigned char *tiles;
+    Colour light[];
     std::forward_list<Creature *> creatures;
 
     /**
@@ -39,8 +40,7 @@ public:
     static const unsigned char LAYER_SEEN = 5;
     static const unsigned char LAYER_N = 6;
 
-    Colour topColour = Colour::NAVY;
-    Colour bottomColour = Colour::BLACK;
+    Colour bg = Colour::NAVY;
 
 
     /**
@@ -65,7 +65,7 @@ public:
      * @param position is the location to get the floor for.
      * @return a pointer to the actual floor object.
      */
-    const Floor *getFloor(Position position) const;
+    const Floor *getFloor(Position pos) const;
 
     /**
      * Gets a tile code from the layers of the map and hands it to you.
@@ -73,7 +73,7 @@ public:
      * @param z is which layer to get the tile from.
      * @return the code that corresponds to something depending on the layer it is from.
      */
-    unsigned char getTile(Position position, int z) const;
+    unsigned char getTile(Position pos, int z) const;
 
     /**
      * Sets a tile to a value.
@@ -81,14 +81,14 @@ public:
      * @param position is the top down location of the tile.
      * @param z is which layer to get the tile from.
      */
-    void setTile(unsigned char value, Position position, int z);
+    void setTile(unsigned char value, Position pos, int z);
 
     /**
      * Puts a creature into the map at the given location.
      * @param creature is the creature to add.
      * @param position is it's new location in the map.
      */
-    void addCreature(Creature *creature, Position position);
+    void addCreature(Creature *creature, Position pos);
 
     /**
      * Applies a move to the map and alters it's state by it's effects.
@@ -100,9 +100,15 @@ public:
      * Recalculates all the generic pathfinding paths the map stores. These maps can be used to find
      * the direction to walk in towards the player from any location on the map by moving from a
      * tile with a higher value to a lower one.
-     * @param position is the position that should be the target for path finding.
+     * @param pos is the position that should be the target for path finding.
      */
-    void microwave(Position position);
+    void microwave(Position pos);
+
+    /**
+     * Recalculates all the lighting and line of sight for the map. NB: This is possibly going to change a bit.
+     * @param pos is the pos of the player.
+     */
+    void lighting(Position pos);
 
     /**
      * Goes through all creatures in the map that are ready to have a turn and applies their turns.
