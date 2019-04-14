@@ -49,6 +49,48 @@ public:
      * @param pos    is how far between the two with 0 being top and 1 being bottom.
      */
     Colour(Colour top, Colour bottom, float pos);
+
+    /**
+     * Adds two colours together bounded at max light.
+     * @param other is the second colour to add.
+     * @return a new colour which is the sum of both.
+     */
+    Colour operator+(Colour other) const;
+
+    /**
+     * Subtracts one colour from another.
+     * @param other is the colour to subtract.
+     * @return the result.
+     */
+    Colour operator-(Colour other) const;
+
+    /**
+     * Multiplies two colours together as if their values were between 0 and 1. Like 0 = 0, and 255 = 1.
+     * @param other is the other colour to multiply.
+     * @return the result of the multiplication.
+     */
+    Colour operator*(Colour other) const;
+
+    /**
+     * Divides the values of one colour by the values of another.
+     * @param other is that other.
+     * @return the result of the divisiton.
+     */
+    Colour operator/(Colour other) const;
+
+    /**
+     * Multiplies the values of a colour individually by some number.
+     * @param other is the numebr to multiply by.
+     * @return the result.
+     */
+    Colour operator*(float other) const;
+
+    /**
+     * Divides a colour by an amount.
+     * @param other is that amount.
+     * @return the result.
+     */
+    Colour operator/(float other) const;
 };
 
 /**

@@ -52,6 +52,48 @@ Colour::Colour(Colour top, Colour bottom, float pos) {
     this->blue = top.blue * (1 - pos) + bottom.blue * pos;
 }
 
+Colour Colour::operator+(Colour other) const {
+    int r = this->red + other.red;
+    int g = this->green + other.green;
+    int b = this->blue + other.blue;
+    return Colour(
+        (r > 255) ? 255 : r,
+        (g > 255) ? 255 : g,
+        (b > 255) ? 255 : b
+    );
+}
+
+Colour Colour::operator-(Colour other) const {
+    return Colour(this->red - other.red, this->green - other.green, this->blue - other.blue);
+}
+
+Colour Colour::operator*(Colour other) const {
+    float r = this->red / 255.0f * other.red / 255.0f;
+    float g = this->green / 255.0f * other.green / 255.0f;
+    float b = this->blue / 255.0f * other.blue / 255.0f;
+    return Colour((unsigned char)(r * 255), (unsigned char)(g * 255), (unsigned char)(b * 255));
+}
+
+Colour Colour::operator/(Colour other) const {
+    return Colour(this->red / other.red, this->green / other.green, this->blue / other.blue);
+}
+
+Colour Colour::operator*(float other) const {
+    float r = this->red * other;
+    float g = this->green * other;
+    float b = this->blue * other;
+    return Colour(
+        (r > 255) ? 255 : (unsigned char)r,
+        (g > 255) ? 255 : (unsigned char)g,
+        (b > 255) ? 255 : (unsigned char)b
+    );
+
+}
+
+Colour Colour::operator/(float other) const {
+    return Colour(this->red / other, this->green / other, this->blue / other);
+}
+
 Graphics::Graphics(char const *title, Position dimensions, int fullscreen): dimensions(dimensions) {
     // Start sdl and stuff.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {

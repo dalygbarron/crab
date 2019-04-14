@@ -21,15 +21,37 @@ class Creature;
 class Map {
     Position dimensions;
     unsigned char *tiles;
-    Colour light[];
+    Colour *light;
     std::forward_list<Creature *> creatures;
 
     /**
      * Make a creature walk in a direction.
-     * @param actor is the creature walking.
+     * @param actor     is the creature walking.
      * @param direction is the direction to go in by the codes in Move.hh
      */
     void walk(Creature *actor, int direction);
+
+    /**
+     * Calculates all the generic pathfinding maps.
+     * @param pos is the position of the player.
+     */
+    void pathing(Position pos);
+
+    /**
+     * Calculates all the lighting and line of sight for the map. NB: This is possibly going to change a bit.
+     * @param pos is the position of the player.
+     */
+    void lighting(Position pos);
+
+    /**
+     * Performs a single recursive quadrant scan for lighting to the north.
+     * @param pos        is the origin position.
+     * @param startAngle is the starting angle which also determines the starting location.
+     * @param endAngle   is the ending angle which also determines the ending location.
+     * @param iteration  is which iteration from the centre this begins at.
+     * @param quadrant   is which direction to go in basically.
+     */
+    void lightScan(Position pos, float startAngle, float endAngle, int iteration, int quadrant);
 
 public:
     static const unsigned char LAYER_FLOOR = 0;
@@ -61,6 +83,20 @@ public:
     ~Map();
 
     /**
+     * Gives you the light value at a given spot.
+     * @param pos is the spot to get the light at.
+     * @return the light as a colour.
+     */
+    Colour getLight(Position pos) const;
+
+    /**
+     * Sets the light value at a given spot.
+     * @param pos    is the position at which to set the light.
+     * @param colour is the value to set the light to.
+     */
+    void setLight(Position pos, Colour colour);
+
+    /**
      * Gets the floor tile object at a given location.
      * @param position is the location to get the floor for.
      * @return a pointer to the actual floor object.
@@ -69,17 +105,17 @@ public:
 
     /**
      * Gets a tile code from the layers of the map and hands it to you.
-     * @param is the top down position to get the tile for.
-     * @param z is which layer to get the tile from.
+     * @param pos is the top down position to get the tile for.
+     * @param z   is which layer to get the tile from.
      * @return the code that corresponds to something depending on the layer it is from.
      */
     unsigned char getTile(Position pos, int z) const;
 
     /**
      * Sets a tile to a value.
-     * @param value is the new value to set it to.
+     * @param value    is the new value to set it to.
      * @param position is the top down location of the tile.
-     * @param z is which layer to get the tile from.
+     * @param z        is which layer to get the tile from.
      */
     void setTile(unsigned char value, Position pos, int z);
 
@@ -103,12 +139,6 @@ public:
      * @param pos is the position that should be the target for path finding.
      */
     void microwave(Position pos);
-
-    /**
-     * Recalculates all the lighting and line of sight for the map. NB: This is possibly going to change a bit.
-     * @param pos is the pos of the player.
-     */
-    void lighting(Position pos);
 
     /**
      * Goes through all creatures in the map that are ready to have a turn and applies their turns.

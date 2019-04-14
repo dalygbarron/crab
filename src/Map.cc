@@ -7,11 +7,11 @@
 #include "Vector.hh"
 
 #define SINK_RADIUS 25
-#define LIGHT_RADIUS 10
+#define LIGHT_RADIUS 25
 
 Map::Map(Position dimensions): dimensions(dimensions) {
     this->tiles = new unsigned char[dimensions.x * dimensions.y * Map::LAYER_N];
-    this->light = new Color[dimensions.x * dimensions.y];
+    this->light = new Colour[dimensions.x * dimensions.y];
 }
 
 Map::Map(std::istream *stream): dimensions() {
@@ -20,6 +20,15 @@ Map::Map(std::istream *stream): dimensions() {
 
 Map::~Map() {
     delete this->tiles;
+    delete this->light;
+}
+
+Colour Map::getLight(Position pos) const {
+    return this->light[pos.y * this->dimensions.x + pos.x];
+}
+
+void Map::setLight(Position pos, Colour colour) {
+    this->light[pos.y * this->dimensions.x + pos.x] = colour;
 }
 
 unsigned char Map::getTile(Position pos, int z) const {
@@ -56,9 +65,20 @@ void Map::applyMove(Move move) {
 }
 
 void Map::microwave(Position pos) {
-    // Clear memory for pathmap, cardinal map, and field of view map.
-    memset(this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_SINK, 0xff, sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 3);
-    // main path map.
+    // clear byte maps with large value.
+    memset(
+        this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_SINK,
+        0xff,
+        sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 3
+    );
+    // clear light map with darkness.
+    memset(this->light, 0, sizeof(Colour) * this->dimensions.x * this->dimensions.y);
+    // calculate new values.
+    this->pathing(pos);
+    this->lighting(pos);
+}
+
+void Map::pathing(Position pos) {
     Position offsets[] = {
         Position(-1, 0),
         Position(1, 0),
@@ -86,7 +106,51 @@ void Map::microwave(Position pos) {
     // TODO: cardinal map. Maybe think if I need to do it at all actually.
 }
 
-void lighting(Position pos)
+void Map::lighting(Position pos) {
+    this->lightScan(pos, -1, 1, 1, 0);
+    this->lightScan(pos, -1, 1, 1, 1);
+    this->lightScan(pos, -1, 1, 1, 2);
+    this->lightScan(pos, -1, 1, 1, 3);
+}
+
+void Map::lightScan(Position pos, float startSlope, float endSlope, int iteration, int direction) {
+    int dead = false;
+    for (int i = iteration; i < LIGHT_RADIUS && !dead; i++) {
+        int scanStart = i * startSlope;
+        int scanEnd = i * endSlope;
+        int blocked = true;
+        int clearStart = scanStart;
+        for (int c = scanStart; c < scanEnd; c++) {
+            Position current;
+            if (direction == 0) current = pos + Position(c, 0 - i);
+            if (direction == 1) current = pos + Position(0 - c, i);
+            if (direction == 2) current = pos + Position(0 - i, 0 - c);
+            if (direction == 3) current = pos + Position(i, c);
+            this->setLight(current, Colour::WHITE - Colour(i * 10, i * 10, i * 10));
+            this->setTile(true, current, Map::LAYER_SEEN);
+            this->setTile(true, current, Map::LAYER_FOV);
+            int wall = this->getTile(current, Map::LAYER_WALL);
+            if (wall) {
+                dead = true;
+                if (!blocked) {
+                    float innerStart = clearStart / (float)i;
+                    float innerEnd = c / (float)i;
+                    this->lightScan(pos, innerStart, innerEnd, i + 1, direction);
+                }
+                blocked = true;
+            } else {
+                if (blocked) {
+                    clearStart = c;
+                    blocked = false;
+                }
+            }
+        }
+        // one last go for when it reaches the end with a single blockage and no new window.
+        if (!blocked && dead) {
+            this->lightScan(pos, clearStart / (float)i, scanEnd / (float)i, i + 1, direction);
+        }
+    }
+}
 
 void Map::update() {
     for (Creature *creature: this->creatures) this->applyMove(creature->getMove(this));
@@ -101,15 +165,18 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
             Position iteration(ix, iy);
             Position tile = iteration + camera;
             if (bounds.contains(tile)) {
-                const Floor *floor = Content::floors + this->getTile(tile, Map::LAYER_FLOOR);
-                int wallIndex = this->getTile(tile, Map::LAYER_WALL);
-                if (wallIndex == 0) {
-                    float height = this->getTile(tile, Map::LAYER_SINK);
-                    graphics->blitTile(0, iteration, floor->colour, Colour(Colour::RED, Colour::NAVY, height / SINK_RADIUS));
-                    //graphics->blitCharacter(floor->tile, iteration, floor->colour);
-                } else {
-                    const Wall *wall = Content::walls + wallIndex;
-                    graphics->blitCharacter(wall->tile, iteration, wall->colour);
+                if (this->getTile(tile, Map::LAYER_SEEN)) {
+                    Colour light = this->getLight(tile);
+                    const Floor *floor = Content::floors + this->getTile(tile, Map::LAYER_FLOOR);
+                    int wallIndex = this->getTile(tile, Map::LAYER_WALL);
+                    if (wallIndex == 0) {
+                        //float height = this->getTile(tile, Map::LAYER_SINK);
+                        //graphics->blitTile(0, iteration, floor->colour, Colour(Colour::RED, Colour::NAVY, height / SINK_RADIUS));
+                        graphics->blitCharacter(floor->tile, iteration, floor->colour * light);
+                    } else {
+                        const Wall *wall = Content::walls + wallIndex;
+                        graphics->blitCharacter(wall->tile, iteration, wall->colour * light);
+                    }
                 }
             }
         }
@@ -117,7 +184,7 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
     // Render creatures.
     for (Creature *creature: this->creatures) {
         Position pos = creature->getPosition() - camera;
-        if (rect.contains(pos)) graphics->blitTile(3, pos, Colour::RED, this->topColour);
+        if (rect.contains(pos)) graphics->blitTile(3, pos, Colour::RED, this->bg);
     }
 }
 
