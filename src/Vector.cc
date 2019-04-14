@@ -10,42 +10,42 @@ Position::Position(short x, short y) {
     this->y = y;
 }
 
-Position Position::operator+(const Position other) {
+Position Position::operator+(const Position other) const {
     Position pos;
     pos.x = this->x + other.x;
     pos.y = this->y + other.y;
     return pos;
 }
 
-Position Position::operator-(const Position other) {
+Position Position::operator-(const Position other) const {
     Position pos;
     pos.x = this->x - other.x;
     pos.y = this->y - other.y;
     return pos;
 }
 
-Position Position::operator*(const Position other) {
+Position Position::operator*(const Position other) const {
     Position pos;
     pos.x = this->x * other.x;
     pos.y = this->y * other.y;
     return pos;
 }
 
-Position Position::operator/(const Position other) {
+Position Position::operator/(const Position other) const {
     Position pos;
     pos.x = this->x / other.x;
     pos.y = this->y / other.y;
     return pos;
 }
 
-Position Position::operator*(float other) {
+Position Position::operator*(float other) const {
     Position pos;
     pos.x = this->x * other;
     pos.y = this->y * other;
     return pos;
 }
 
-Position Position::operator/(float other) {
+Position Position::operator/(float other) const {
     Position pos;
     pos.x = this->x / other;
     pos.y = this->y / other;
@@ -62,7 +62,7 @@ Rect::Rect(Position pos, Position size): pos(pos), size(size) {
 
 int Rect::contains(Position position) {
     return !(
-        position.x < 0 || position.x >= this->pos.x + this->size.x || position.y < 0 ||
+        position.x < this->pos.x || position.x >= this->pos.x + this->size.x || position.y < this->pos.y ||
             position.y >= this->pos.y + this->size.y
     );
 }

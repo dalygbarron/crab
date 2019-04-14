@@ -5,8 +5,13 @@
 
 void Game::input() {
     SDL_Event e;
+    int i = 3;
     while (69) {
-        if (SDL_PollEvent(&e) == 0) break;
+        if (!i) return;
+        if (SDL_PollEvent(&e) == 0) {
+            i--;
+            break;
+        }
         if (e.type == SDL_QUIT) this->queueEvent(0, Layer::EVENT_QUIT, 0);
         else if (e.type == SDL_KEYDOWN) this->queueEvent(0, Layer::EVENT_KEY, e.key.keysym.sym);
     }

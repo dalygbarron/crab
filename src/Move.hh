@@ -12,8 +12,9 @@ class Mob;
  */
 class Move {
 public:
-    static const unsigned char ACTION_WALK = 0;
-    static const unsigned char ACTION_INVALID = 255;
+    static const unsigned char ACTION_WALK = 0x00;
+    static const unsigned char ACTION_SKIP = 0xfe;
+    static const unsigned char ACTION_INVALID = 0xff;
 
     static const unsigned int DIR_N = 0;
     static const unsigned int DIR_NE = 1;

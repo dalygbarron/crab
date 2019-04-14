@@ -27,15 +27,6 @@ class Layer {
      */
     virtual void render(Graphics *graphics) = 0;
 
-    /**
-     * Tries to process an event and if it is not useful it sends it to the parent layer recursively.
-     * @param notifier  is the one sending the event so it can skip processing it. If you might want to process your
-     *                  own event then just pass 0 to this.
-     * @param type      is the type of event it is.
-     * @param parameter is a parameter to the event.
-     */
-    void report(Layer *notifier, int type, unsigned int parameter);
-
 protected:
     /**
      * Sends an event to the top of the layer stack so it can be passed back down from the top.
@@ -56,11 +47,11 @@ protected:
     virtual void queueEvent(Layer *notifier, int type, unsigned int parameter);
 
 public:
-    const int EVENT_QUIT = 0;
-    const int EVENT_KEY = 1;
-    const int EVENT_WIDGET_CLOSE = 2;
-    const int EVENT_WIDGET_UPDATE = 3;
-    const int EVENT_MAP = 4;
+    static const int EVENT_QUIT = 0;
+    static const int EVENT_KEY = 1;
+    static const int EVENT_WIDGET_CLOSE = 2;
+    static const int EVENT_WIDGET_UPDATE = 3;
+    static const int EVENT_MAP = 4;
 
     /**
      * Hell yeah destructo time.

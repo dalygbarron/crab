@@ -3,21 +3,16 @@
 
 #include "Creature.hh"
 
+/**
+ * Represents the player character. They are special because they only give out skip moves, as their moves are handled
+ * by the level layer.
+ */
 class Player: public Creature {
-    Move nextMove;
-    int moveStale = true;
-
 public:
     /**
-     * Default constructor.
+     * Default constructor to set prototype automatiically.
      */
     Player();
-
-    /**
-     * Since the player is just player controlled, you must tell them what move you want them to do before you ask them.
-     * @param move is the move you want them to perform.
-     */
-    void setMove(Move move);
 
     virtual Move getMove(Map const *map) override;
 };

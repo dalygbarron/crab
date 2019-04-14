@@ -1,6 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
+#include <iostream>
+
 /**
  * Represents a location in 2d space.
  */
@@ -26,42 +28,43 @@ public:
      * @param other is the other position to add on to this one.
      * @return the new position.
      */
-    Position operator+(Position other);
+    Position operator+(Position other) const;
 
     /**
      * Subtraction operator.
      * @param other is the other position to remove from this one.
      * @return the new position.
      */
-    Position operator-(Position other);
+    Position operator-(Position other) const;
 
     /**
      * Multiplication operator.
      * @param other is the other position to multiply this one by.
      * @return the new position.
      */
-    Position operator*(Position other);
+    Position operator*(Position other) const;
 
     /**
      * Division operator.
      * @param other is the other position to divide this one by.
      * @return the new position.
      */
-    Position operator/(Position other);
+    Position operator/(Position other) const;
 
     /**
      * Multiplication operator with float.
      * @param other is the other position to multiply this one by.
      * @return the new position.
      */
-    Position operator*(float other);
+    Position operator*(float other) const;
 
     /**
      * Division operator with float.
      * @param other is the other position to divide this one by.
      * @return the new position.
      */
-    Position operator/(float other);
+    Position operator/(float other) const;
+
 };
 
 /**
