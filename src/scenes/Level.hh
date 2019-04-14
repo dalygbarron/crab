@@ -29,6 +29,7 @@ public:
         this->map = map;
         player = new Player();
         map->addCreature(player, playerPos);
+        map->microwave(player->getPosition());
     }
 
     int event(int type, unsigned int parameter) override {

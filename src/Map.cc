@@ -120,12 +120,12 @@ void Map::lightScan(Position pos, float startSlope, float endSlope, int iteratio
         int scanEnd = i * endSlope;
         int blocked = true;
         int clearStart = scanStart;
-        for (int c = scanStart; c < scanEnd; c++) {
+        for (int c = scanStart; c <= scanEnd; c++) {
             Position current;
             if (direction == 0) current = pos + Position(c, 0 - i);
-            if (direction == 1) current = pos + Position(0 - c, i);
-            if (direction == 2) current = pos + Position(0 - i, 0 - c);
-            if (direction == 3) current = pos + Position(i, c);
+            else if (direction == 1) current = pos + Position(0 - c, i);
+            else if (direction == 2) current = pos + Position(0 - i, 0 - c);
+            else if (direction == 3) current = pos + Position(i, c);
             this->setLight(current, Colour::WHITE - Colour(i * 10, i * 10, i * 10));
             this->setTile(true, current, Map::LAYER_SEEN);
             this->setTile(true, current, Map::LAYER_FOV);
@@ -134,7 +134,7 @@ void Map::lightScan(Position pos, float startSlope, float endSlope, int iteratio
                 dead = true;
                 if (!blocked) {
                     float innerStart = clearStart / (float)i;
-                    float innerEnd = c / (float)i;
+                    float innerEnd = (c - 1) / (float)i;
                     this->lightScan(pos, innerStart, innerEnd, i + 1, direction);
                 }
                 blocked = true;
