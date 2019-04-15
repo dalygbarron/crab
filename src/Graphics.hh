@@ -187,6 +187,13 @@ public:
      * Updates the screen to show what has been blitted on there lately.
      */
     void frame();
+
+    void playSong();
+
+    /**
+     * Plays a sound effect for your satisfaction.
+     */
+    void playSound();
 };
 
 #endif

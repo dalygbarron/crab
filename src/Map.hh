@@ -32,18 +32,6 @@ class Map {
     void walk(Creature *actor, int direction);
 
     /**
-     * Calculates all the generic pathfinding maps.
-     * @param pos is the position of the player.
-     */
-    void pathing(Position pos);
-
-    /**
-     * Calculates all the lighting and line of sight for the map. NB: This is possibly going to change a bit.
-     * @param pos is the position of the player.
-     */
-    void lighting(Position pos);
-
-    /**
      * Performs a single recursive quadrant scan for lighting to the north.
      * @param pos        is the origin position.
      * @param startAngle is the starting angle which also determines the starting location.
@@ -59,8 +47,9 @@ public:
     static const unsigned char LAYER_SINK = 2;
     static const unsigned char LAYER_CARDINAL = 3;
     static const unsigned char LAYER_FOV = 4;
-    static const unsigned char LAYER_SEEN = 5;
-    static const unsigned char LAYER_N = 6;
+    static const unsigned char LAYER_TEMP = 5;
+    static const unsigned char LAYER_SEEN = 6;
+    static const unsigned char LAYER_N = 7;
 
     Colour bg = Colour::NAVY;
 
@@ -133,12 +122,16 @@ public:
     void applyMove(Move move);
 
     /**
-     * Recalculates all the generic pathfinding paths the map stores. These maps can be used to find
-     * the direction to walk in towards the player from any location on the map by moving from a
-     * tile with a higher value to a lower one.
-     * @param pos is the position that should be the target for path finding.
+     * Calculates all the generic pathfinding maps.
+     * @param pos is the position of the player.
      */
-    void microwave(Position pos);
+    void pathing(Position pos);
+
+    /**
+     * Calculates all the lighting and line of sight for the map. NB: This is possibly going to change a bit.
+     * @param pos is the position of the player.
+     */
+    void lighting(Position pos);
 
     /**
      * Goes through all creatures in the map that are ready to have a turn and applies their turns.

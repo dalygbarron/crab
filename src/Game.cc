@@ -40,10 +40,12 @@ Game::Game(int argc): graphics("bongo", Position(64, 48), argc > 1) {
 
 void Game::run() {
     while (!this->kill) {
+        //int time = SDL_GetTicks();
         this->display(&graphics);
         graphics.frame();
         this->input();
         this->runEvents();
+        //std::cout << SDL_GetTicks() - time << std::endl;
     }
 }
 

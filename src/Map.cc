@@ -21,6 +21,7 @@ Map::Map(std::istream *stream): dimensions() {
 Map::~Map() {
     delete this->tiles;
     delete this->light;
+    for (Creature *creature: this->creatures) delete creature;
 }
 
 Colour Map::getLight(Position pos) const {
@@ -64,21 +65,15 @@ void Map::applyMove(Move move) {
     }
 }
 
-void Map::microwave(Position pos) {
-    // clear byte maps with large value.
+
+void Map::pathing(Position pos) {
+    // clear old data.
     memset(
         this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_SINK,
         0xff,
-        sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 3
+        sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 2
     );
-    // clear light map with darkness.
-    memset(this->light, 0, sizeof(Colour) * this->dimensions.x * this->dimensions.y);
-    // calculate new values.
-    this->pathing(pos);
-    this->lighting(pos);
-}
-
-void Map::pathing(Position pos) {
+    // algorithm
     Position offsets[] = {
         Position(-1, 0),
         Position(1, 0),
@@ -107,10 +102,21 @@ void Map::pathing(Position pos) {
 }
 
 void Map::lighting(Position pos) {
+    // clear old memory and set up
+    memset(
+        this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_FOV,
+        false,
+        sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 2
+    );
+    memset(this->light, 0, sizeof(Colour) * this->dimensions.x * this->dimensions.y);
+    for (Creature *creature: this->creatures) this->setTile(true, creature->getPosition(), Map::LAYER_TEMP);
+    // algorithm,.
     this->lightScan(pos, -1, 1, 1, 0);
     this->lightScan(pos, -1, 1, 1, 1);
     this->lightScan(pos, -1, 1, 1, 2);
     this->lightScan(pos, -1, 1, 1, 3);
+    this->setLight(pos, Colour::WHITE);
+    this->setTile(true, pos, Map::LAYER_FOV);
 }
 
 void Map::lightScan(Position pos, float startSlope, float endSlope, int iteration, int direction) {
@@ -126,10 +132,10 @@ void Map::lightScan(Position pos, float startSlope, float endSlope, int iteratio
             else if (direction == 1) current = pos + Position(0 - c, i);
             else if (direction == 2) current = pos + Position(0 - i, 0 - c);
             else if (direction == 3) current = pos + Position(i, c);
-            this->setLight(current, Colour::WHITE - Colour(i * 10, i * 10, i * 10));
+            this->setLight(current, Colour::WHITE - Colour(i * 10 - abs(c), i * 10 - abs(c), i * 10 - abs(c)));
             this->setTile(true, current, Map::LAYER_SEEN);
             this->setTile(true, current, Map::LAYER_FOV);
-            int wall = this->getTile(current, Map::LAYER_WALL);
+            int wall = this->getTile(current, Map::LAYER_WALL) || this->getTile(current, Map::LAYER_TEMP);
             if (wall) {
                 dead = true;
                 if (!blocked) {
@@ -170,8 +176,8 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
                     const Floor *floor = Content::floors + this->getTile(tile, Map::LAYER_FLOOR);
                     int wallIndex = this->getTile(tile, Map::LAYER_WALL);
                     if (wallIndex == 0) {
-                        //float height = this->getTile(tile, Map::LAYER_SINK);
-                        //graphics->blitTile(0, iteration, floor->colour, Colour(Colour::RED, Colour::NAVY, height / SINK_RADIUS));
+                        //int height = this->getTile(tile, Map::LAYER_SEEN);
+                        //if (height) graphics->blitTile(floor->tile, iteration, floor->colour, Colour::RED);
                         graphics->blitCharacter(floor->tile, iteration, floor->colour * light);
                     } else {
                         const Wall *wall = Content::walls + wallIndex;
@@ -183,8 +189,11 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
     }
     // Render creatures.
     for (Creature *creature: this->creatures) {
+        Position tile = creature->getPosition();
         Position pos = creature->getPosition() - camera;
-        if (rect.contains(pos)) graphics->blitTile(3, pos, Colour::RED, this->bg);
+        Colour light = this->getLight(tile);
+        int view = this->getTile(tile, Map::LAYER_FOV);
+        if (rect.contains(pos) && view) graphics->blitTile(3, pos, Colour::RED * light, this->bg);
     }
 }
 
