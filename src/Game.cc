@@ -1,4 +1,5 @@
 #include "Game.hh"
+#include "Content.hh"
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "scenes/Title.hh"
@@ -35,7 +36,12 @@ void Game::queueEvent(Layer *notifier, int type, unsigned int parameter) {
 }
 
 Game::Game(int argc): graphics("bongo", Position(64, 48), argc > 1) {
+    Content::load();
     this->pushLayer(new Title());
+}
+
+Game::~Game() {
+    Content::free();
 }
 
 void Game::run() {

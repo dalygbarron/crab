@@ -33,7 +33,7 @@ public:
         player = new Player();
         map->addCreature(player, playerPos);
         for (int i = 0; i < 20; i++) {
-            map->addCreature(Content::getCreature(Content::CREATURE_RAT), Position(rand() % 300, rand() % 300));
+            map->addCreature(Content::getCreature(0), Position(rand() % 300, rand() % 300));
         }
         this->map->lighting(this->player->getPosition());
     }

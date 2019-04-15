@@ -3,6 +3,7 @@
 
 #include "Layer.hh"
 #include "Graphics.hh"
+#include "Content.hh"
 #include "Generator.hh"
 
 /**
@@ -46,6 +47,11 @@ public:
      * @param argc is the number of commandline arguments TODO improve this.
      */
     Game(int argc);
+
+    /**
+     * When the game is over we must delete some stuff.
+     */
+    ~Game();
 
     /**
      * Runs the game until it is done.

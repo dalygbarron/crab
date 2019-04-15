@@ -10,29 +10,20 @@
  * Contains creative type data about the game.
  */
 namespace Content {
-    const unsigned char CREATURE_NONE = 0;
-    const unsigned char CREATURE_RAT = 1;
-    const unsigned char CREATURE_N = 2;
-    const ProtoCreature protoCreatures[] = {
-        ProtoCreature(),
-        ProtoCreature(10, 10, 0x36, Colour::BLUE, ProtoCreature::TEMPERAMENT_THING)
-    };
-
+    const ProtoCreature protoCreatures[] = {};
     const ProtoItem protoItems[] = {};
+    const Floor floors[] = {};
+    const Wall walls[] = {};
 
-    const unsigned char FLOOR_GRASS = 0;
-    const unsigned char FLOOR_N = 1;
-    const Floor floors[] = {
-        Floor(0xb0, Colour(19, 112, 50), "a nice grass")
-    };
+    /**
+     * Loads all the game content out of the files and keeps it here.
+     */
+    void load();
 
-    const unsigned char WALL_NONE = 0;
-    const unsigned char WALL_TREE = 1;
-    const unsigned char WALL_N = 2;
-    const Wall walls[] = {
-        Wall(),
-        Wall(0x05, Colour(51, 35, 0), "a nice tree")
-    };
+    /**
+     * Deletes all the game content again.
+     */
+    void free();
 
     /**
      * Create an instance of a creature based on a prototype which is given by it's index in the array of creatures.

@@ -1,6 +1,6 @@
 #include "Creature.hh"
 
-ProtoCreature::ProtoCreature(): maxHealth(0), maxMana(0), tile(0), colour(), temperament(0) {
+ProtoCreature::ProtoCreature() {
     // does nothing.
 }
 
@@ -10,8 +10,7 @@ ProtoCreature::ProtoCreature(
     unsigned char tile,
     Colour colour,
     unsigned char temperament
-): maxHealth(maxHealth), maxMana(maxMana), tile(tile), colour(colour), temperament(temperament) {
-    // Does nothing.
+) {
 }
 
 Creature::Creature(const ProtoCreature *prototype): prototype(prototype) {

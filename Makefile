@@ -4,7 +4,7 @@ OBJS = main.o Graphics.o Widget.o Map.o Generator.o Floor.o Wall.o Game.o Layer.
 HEADERS := $(call rwildcard,src/,*.hh)
 OBJ_NAME = main
 CFLAGS = -std=c++14
-LFLAGS = -lSDL2 -lSDL2_image
+LFLAGS = -lSDL2 -lSDL2_image -lpthread -ldl
 ADD =
 SIZE = 64
 CC = g++
@@ -14,17 +14,20 @@ bing.png: bing2.png
 	cp bing2.png bing.png
 	sips -Z $(SIZE) bing.png
 
+sqlite3.o: src/sqlite3.c
+	gcc -c -o sqlite3.o src/sqlite3.c $(ADD)
+
 %.o: src/%.cc $(HEADERS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(ADD)
 
-all: $(OBJS)
-	$(CC) $(OBJS) $(LFLAGS) -o $(OBJ_NAME) $(CFLAGS) $(ADD)
+all: $(OBJS) sqlite3.o
+	$(CC) $(OBJS) sqlite3.o $(LFLAGS) -o $(OBJ_NAME) $(CFLAGS) $(ADD)
 
 run: all bing.png
 	./$(OBJ_NAME)
 
 clean:
-	rm -f $(OBJ_NAME) $(OBJS) bing.png
+	rm -f $(OBJ_NAME) $(OBJS) sqlite3.o bing.png
 
 count:
 	git ls-files | xargs wc -l

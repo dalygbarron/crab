@@ -18,9 +18,9 @@ Map *junk(int depth, int entrances) {
     for (int x = 0; x < dimensions.x; x++) {
         for (int y = 0; y < dimensions.y; y++) {
             Position pos(x, y);
-            map->setTile(rand() % Content::FLOOR_N, pos, Map::LAYER_FLOOR);
-            int choice = rand() % (JUNK_THRESHOLD + Content::WALL_N);
-            if (choice >= Content::WALL_N) choice = 0;
+            map->setTile(rand() % 2, pos, Map::LAYER_FLOOR);
+            int choice = rand() % (JUNK_THRESHOLD + 2);
+            if (choice >= 2) choice = 0;
             map->setTile(choice, pos, Map::LAYER_WALL);
         }
     }

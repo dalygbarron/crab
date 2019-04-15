@@ -10,8 +10,12 @@
  * Prototypal creature that stores unchanging properties of a given kind of creature.
  */
 class ProtoCreature {
-    int maxHealth;
-    int maxMana;
+    char *name;
+    char *description;
+    int constitution;
+    int intelligence;
+    int strength;
+    int mobility;
     unsigned char tile;
     Colour colour;
     unsigned char temperament;
@@ -21,8 +25,9 @@ public:
     static const unsigned char TEMPERAMENT_GRUNT = 1;
     static const unsigned char TEMPERAMENT_N = 2;
 
-    static const unsigned char BONUS_RED = 0;
+    static const unsigned char BONUS_NONE = 0;
     static const unsigned char BONUS_SWOLE = 1;
+    static const unsigned char BONUS_RED = 2;
 
     /**
      * Blank constructor for nothing creature.
