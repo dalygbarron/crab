@@ -2,7 +2,8 @@
 #include <sqlite3.h>
 
 #define CONTENT_FILE "content.db"
-#define QUERY "SELECT * FROM tag"
+#define TAG_QUERY "SELECT _category.name FROM tag JOIN _category ON tag.category = _category.id WHERE tag.target = 1"
+#define CREATURE_QUERY "SELECT * FROM creature"
 
 int callback(void *NotUsed, int argc, char **argv, char **azColName){
     for(int i = 0; i < argc; i++) {
@@ -14,17 +15,17 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName){
 
 void Content::load() {
     sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc = sqlite3_open(CONTENT_FILE, &db);
-    if (rc) {
+    char *error = 0;
+    int response = sqlite3_open(CONTENT_FILE, &db);
+    if (response) {
         std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
-    rc = sqlite3_exec(db, QUERY, callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
-        std::cerr << "SQL Error: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
+    response = sqlite3_exec(db, CREATURE_QUERY, callback, 0, &error);
+    if (response != SQLITE_OK) {
+        std::cerr << "SQL Error: " << error << std::endl;
+        sqlite3_free(error);
     }
     sqlite3_close(db);
 }
