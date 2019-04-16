@@ -30,4 +30,4 @@ clean:
 	rm -f $(OBJ_NAME) $(OBJS) sqlite3.o bing.png
 
 count:
-	git ls-files | xargs wc -l
+	git ls-files *[^.cc] | xargs wc -l

@@ -12,7 +12,7 @@
  * @param entrances is how many up stairs there must be in the map.
  * @return the new map.
  */
-Map *junk(int depth, int entrances) {
+static Map *junk(int depth, int entrances) {
     Position dimensions(300, 300);
     Map *map = new Map(dimensions);
     for (int x = 0; x < dimensions.x; x++) {
@@ -33,7 +33,7 @@ Map *junk(int depth, int entrances) {
  * @param entrances is how many up stairs there must be in the map.
  * @return a fresh new spaceship map.
  */
-Map *ship(int depth, int entrances) {
+static Map *ship(int depth, int entrances) {
     return 0;
 }
 
@@ -43,7 +43,7 @@ Map *ship(int depth, int entrances) {
  * @param entrances is how many up stairs there must be in the map.
  * @return a freshly made cave.
  */
-Map *cave(int depth, int entrances) {
+static Map *cave(int depth, int entrances) {
     return 0;
 }
 
@@ -53,11 +53,11 @@ Map *cave(int depth, int entrances) {
  * @param entrances is how many up stairs there must be in the map.
  * @return the new mansion map.
  */
-Map *house(int depth, int entrances) {
+static Map *house(int depth, int entrances) {
     return 0;
 }
 
-Map *Generator::generate(unsigned char type, int depth) {
+Map *Generator::generate(const Content *content, unsigned char type, int depth) {
     switch(type) {
         case GENERATOR_JUNK: return junk(depth, 1);
         case GENERATOR_SHIP: return ship(depth, 1);

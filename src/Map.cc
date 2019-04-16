@@ -10,8 +10,12 @@
 #define LIGHT_RADIUS 25
 
 Map::Map(Position dimensions): dimensions(dimensions) {
-    this->tiles = new unsigned char[dimensions.x * dimensions.y * Map::LAYER_N];
-    this->light = new Colour[dimensions.x * dimensions.y];
+    this->layerSize = dimensions.x * dimensions.y;
+    this->floors = new Floor *[this->layerSize];
+    this->walls = new Wall *[this->layerSize];
+    this->paths = new unsigned char[this->layerSize * Map::LAYER_N];
+    this->seen = new unsigned char [this->layerSize];
+    this->light = new Colour[this->layerSize];
 }
 
 Map::Map(std::istream *stream): dimensions() {
@@ -19,7 +23,10 @@ Map::Map(std::istream *stream): dimensions() {
 }
 
 Map::~Map() {
-    delete this->tiles;
+    delete this->floors;
+    delete this->walls;
+    delete this->paths;
+    delete this->seen;
     delete this->light;
     for (Creature *creature: this->creatures) delete creature;
 }
@@ -33,18 +40,23 @@ void Map::setLight(Position pos, Colour colour) {
 }
 
 unsigned char Map::getTile(Position pos, int z) const {
-    return this->tiles[this->dimensions.x * this->dimensions.y * z + pos.y * this->dimensions.x + pos.x];
+    return this->tiles[this->layerSize * z + pos.y * this->dimensions.x + pos.x];
 }
 
 const Floor *Map::getFloor(Position pos) const {
-    return Content::floors +
-        this->tiles[
-            this->dimensions.x * this->dimensions.y * Map::LAYER_FLOOR + pos.y * this->dimensions.x + pos.x
-        ];
+    return this->floors[this->dimensions.x * this->dimensions.y + pos.y * this->dimensions.x + pos.x];
 }
 
-void Map::setTile(unsigned char value, Position pos, int z) {
-    this->tiles[this->dimensions.x * this->dimensions.y * z + pos.y * this->dimensions.x + pos.x] = value;
+const Wall *Map::getWall(Position pos) const {
+    return this->walls[this->dimensions.x * this->dimensions.y + ]
+}
+
+void Map::setPath(unsigned char value, Position pos, int z) {
+    this->paths[this->dimensions.x * this->dimensions.y * z + pos.y * this->dimensions.x + pos.x] = value;
+}
+
+unsigned char Map::getPath(Position pos, int z) {
+    return this->paths[this->dimensions.x * this->dimensions.y * z + pos.y * this->dimensions.x + pos.x];
 }
 
 void Map::addCreature(Creature *creature, Position pos) {

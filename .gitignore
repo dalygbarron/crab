@@ -2,3 +2,4 @@ main
 main.dSYM
 *.o
 bing.png
+.DS_STORE

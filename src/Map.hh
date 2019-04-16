@@ -20,8 +20,12 @@ class Creature;
  */
 class Map {
     Position dimensions;
-    unsigned char *tiles;
+    const Floor **floors;
+    const Wall **walls;
+    unsigned char *paths;
+    unsigned char *seen;
     Colour *light;
+    int layerSize;
     std::forward_list<Creature *> creatures;
 
     /**
@@ -42,14 +46,11 @@ class Map {
     void lightScan(Position pos, float startAngle, float endAngle, int iteration, int quadrant);
 
 public:
-    static const unsigned char LAYER_FLOOR = 0;
-    static const unsigned char LAYER_WALL = 1;
-    static const unsigned char LAYER_SINK = 2;
-    static const unsigned char LAYER_CARDINAL = 3;
-    static const unsigned char LAYER_FOV = 4;
-    static const unsigned char LAYER_TEMP = 5;
-    static const unsigned char LAYER_SEEN = 6;
-    static const unsigned char LAYER_N = 7;
+    static const unsigned char LAYER_SINK = 0;
+    static const unsigned char LAYER_CARDINAL = 1;
+    static const unsigned char LAYER_FOV = 2;
+    static const unsigned char LAYER_TEMP = 3;
+    static const unsigned char LAYER_N = 4;
 
     Colour bg = Colour::NAVY;
 
@@ -93,20 +94,54 @@ public:
     const Floor *getFloor(Position pos) const;
 
     /**
-     * Gets a tile code from the layers of the map and hands it to you.
+     * sets a floor tile to belong to a given kind of floor.
+     * @param floor is the floor that you want that tile to be.
+     * @param pos   is the position of the tile you are changing.
+     */
+    void setFloor(const Floor *floor, Position pos)
+
+    /**
+     * Gets a wall tile.
+     * @param pos is the location of the wall tile to get.
+     */
+    const Wall *getWall(Position pos) const;
+
+    /**
+     * Sets a wall tile to a given wall.
+     * @param wall is the wall you are setting it to.
+     * @param pos  is the location yu are changing.
+     */
+    void setWall(const Wall *wall, Position pos);
+
+    /**
+     * Gets a path value from the layers of the map and hands it to you.
      * @param pos is the top down position to get the tile for.
      * @param z   is which layer to get the tile from.
      * @return the code that corresponds to something depending on the layer it is from.
      */
-    unsigned char getTile(Position pos, int z) const;
+    unsigned char getPath(Position pos, int z) const;
 
     /**
-     * Sets a tile to a value.
+     * Sets a path tile to a value.
      * @param value    is the new value to set it to.
      * @param position is the top down location of the tile.
      * @param z        is which layer to get the tile from.
      */
-    void setTile(unsigned char value, Position pos, int z);
+    void setPath(unsigned char value, Position pos, int z);
+
+    /**
+     * Get whether a given tile has been seen by the player.
+     * @param pos is the position of the tile.
+     * @return true if the player has seen it otherwise false.
+     */
+    unsigned char getSeen(Position pos) const;
+
+    /**
+     * Sets whether the player has seen a given tile.
+     * @param value is the true or false value of whether they have.
+     * @param pos   is the tile location in question.
+     */
+    void setSeen(unsigned char value, Position pos);
 
     /**
      * Puts a creature into the map at the given location.

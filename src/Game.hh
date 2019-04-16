@@ -24,7 +24,7 @@ public:
  */
 class Game: public Layer {
     Graphics graphics;
-    Generator generator;
+    Content content;
     int kill = false;
     int queued = 0;
     Event eventQueue[EVENT_QUEUE_SIZE];

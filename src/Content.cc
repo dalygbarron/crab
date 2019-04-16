@@ -1,22 +1,19 @@
 #include "Content.hh"
 #include <sqlite3.h>
 
-#define CONTENT_FILE "content.db"
-#define TAG_QUERY "SELECT _category.name FROM tag JOIN _category ON tag.category = _category.id WHERE tag.target = 1"
-#define CREATURE_QUERY "SELECT * FROM creature"
+#define TAG_QUERY "SELECT category FROM tag LEFT JOIN creature ON tag.creature = creature.id WHERE creature.id = ?"
+#define CREATURE_QUERY "SELECT creature.id FROM creature WHERE creature.id = ?"
 
-int callback(void *NotUsed, int argc, char **argv, char **azColName){
-    for(int i = 0; i < argc; i++) {
-        std::cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << std::endl;
-    }
-    std::cout << std::endl;
-    return 0;
+void loadCreatures(sqlite3 *db) {
+
 }
 
-void Content::load() {
+
+
+Content::Content(const char *contentFile) {
     sqlite3 *db;
     char *error = 0;
-    int response = sqlite3_open(CONTENT_FILE, &db);
+    int response = sqlite3_open(contentFile, &db);
     if (response) {
         std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
@@ -27,16 +24,25 @@ void Content::load() {
         std::cerr << "SQL Error: " << error << std::endl;
         sqlite3_free(error);
     }
+    std::cout << sqlite3_execScalar(db, "SELECT COUNT(*) FROM creature") << " rows." << std::endl;
     sqlite3_close(db);
 }
 
-void Content::free() {
-    delete Content::protoCreatures;
-    delete Content::protoItems;
-    delete Content::floors;
-    delete Content::walls;
+Content::~Content() {
+    delete this->protoCreatures;
+    delete this->protoItems;
+    delete this->floors;
+    delete this->walls;
 }
 
-Creature *Content::getCreature(unsigned char index) {
-    return new Creature(Content::protoCreatures + index);
+const Floor *Content::getFloor(unsigned char index) const {
+    return this->floors[index];
+}
+
+const Floor *Content::getWall(unsigned char index) const {
+    return this->walls[index];
+}
+
+Creature *Content::getCreature(unsigned char index) const {
+    return new Creature(protoCreatures + index);
 }

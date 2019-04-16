@@ -61,7 +61,7 @@ int Game::event(int type, unsigned int parameter) {
         return true;
     } else if (type == Layer::EVENT_MAP) {
         this->popLayer();
-        this->pushLayer(new Level(generator.generate(0, 0), Position(20, 20)));
+        this->pushLayer(new Level(Generator::generate(&content, 0, 0), Position(50, 50)));
         return true;
     }
     return false;
