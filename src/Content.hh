@@ -1,6 +1,7 @@
 #ifndef CONTENT_H
 #define CONTENT_H
 
+#include "Repository.hh"
 #include "Creature.hh"
 #include "Item.hh"
 #include "Floor.hh"
@@ -9,17 +10,42 @@
 /**
  * Contains creative type data about the game.
  */
-class Content {
+class Content: public Repository {
     ProtoCreature *protoCreatures;
     ProtoItem *protoItems;
     Floor *floors;
     Wall *walls;
 
+    /**
+     * Loads in all the floors at the start.
+     * @param db is the sqlite database for reading in data with.
+     */
+    void loadFloors(sqlite3 *db);
+
+    /**
+     * Loads in all the walls at the start.
+     * @param db is the sqlite database for reading in data with.
+     */
+    void loadWalls(sqlite3 *db);
+
+    /**
+     * Loads in all the creatures at the start.
+     * @param db is the sqlite database for reading in data with.
+     */
+    void loadCreatures(sqlite3 *db);
+
+    /**
+     * Loads in all the items at the start.
+     * @param db is the sqlite database for reading in data with.
+     */
+    void loadItems(sqlite3 *db);
+
 public:
     /**
      * Loads all the game content out of the files and keeps it here.
+     * @param contentFile is the sqlite db containing the game's data.
      */
-    Content();
+    Content(const char *contentFile);
 
     /**
      * Deletes all the game content again.

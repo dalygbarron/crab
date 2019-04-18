@@ -35,13 +35,8 @@ void Game::queueEvent(Layer *notifier, int type, unsigned int parameter) {
     this->queued++;
 }
 
-Game::Game(int argc): graphics("bongo", Position(64, 48), argc > 1) {
-    Content::load();
+Game::Game(int argc): graphics("bongo", Position(64, 48), argc > 1), content("content.db") {
     this->pushLayer(new Title());
-}
-
-Game::~Game() {
-    Content::free();
 }
 
 void Game::run() {

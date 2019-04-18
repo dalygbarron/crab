@@ -10,39 +10,30 @@
  * Prototypal creature that stores unchanging properties of a given kind of creature.
  */
 class ProtoCreature {
-    char *name;
-    char *description;
+public:
+    static const int TEMPERAMENT_THING = 0;
+    static const int TEMPERAMENT_GRUNT = 1;
+    static const int TEMPERAMENT_N = 2;
+
+    static const int BONUS_NONE = 0;
+    static const int BONUS_SWOLE = 1;
+    static const int BONUS_RED = 2;
+
+    const char *name;
+    const char *description;
     int constitution;
     int intelligence;
     int strength;
     int mobility;
     unsigned char tile;
     Colour colour;
-    unsigned char temperament;
-
-public:
-    static const unsigned char TEMPERAMENT_THING = 0;
-    static const unsigned char TEMPERAMENT_GRUNT = 1;
-    static const unsigned char TEMPERAMENT_N = 2;
-
-    static const unsigned char BONUS_NONE = 0;
-    static const unsigned char BONUS_SWOLE = 1;
-    static const unsigned char BONUS_RED = 2;
+    int temperament;
+    int rating;
 
     /**
      * Blank constructor for nothing creature.
      */
     ProtoCreature();
-
-    /**
-     * Creates you a protocreature. TODO: might not work like this if these can vary.
-     * @param maxHealth   is the prototype's max health.
-     * @param maxMana     is the prototype's max mana.
-     * @param tile        is the prototype's display tile.
-     * @param colour      is the colour of the prototypal creature.
-     * @param temperament is the temperament that creatres of this type will have.
-     */
-    ProtoCreature(int maxHealth, int maxMana, unsigned char tile, Colour colour, unsigned char temperament);
 };
 
 /**

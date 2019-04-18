@@ -16,20 +16,20 @@ public:
     static const unsigned char ACTION_SKIP = 0xfe;
     static const unsigned char ACTION_INVALID = 0xff;
 
-    static const unsigned int DIR_N = 0;
-    static const unsigned int DIR_NE = 1;
-    static const unsigned int DIR_E = 2;
-    static const unsigned int DIR_SE = 3;
-    static const unsigned int DIR_S = 4;
-    static const unsigned int DIR_SW = 5;
-    static const unsigned int DIR_W = 6;
-    static const unsigned int DIR_NW = 7;
-    static const unsigned int DIR_NONE = 8;
+    static const int DIR_N = 0;
+    static const int DIR_NE = 1;
+    static const int DIR_E = 2;
+    static const int DIR_SE = 3;
+    static const int DIR_S = 4;
+    static const int DIR_SW = 5;
+    static const int DIR_W = 6;
+    static const int DIR_NW = 7;
+    static const int DIR_NONE = 8;
 
     Creature *actor;
     Mob *target;
     unsigned char action;
-    unsigned int parameter;
+    int parameter;
 
     /**
      * Default constructor for your enjoyment.

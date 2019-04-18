@@ -49,11 +49,6 @@ public:
     Game(int argc);
 
     /**
-     * When the game is over we must delete some stuff.
-     */
-    ~Game();
-
-    /**
      * Runs the game until it is done.
      */
     void run();

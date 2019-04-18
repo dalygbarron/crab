@@ -1,30 +1,52 @@
 #include "Content.hh"
 #include <sqlite3.h>
+#include "Queries.gen.hh"
 
-#define TAG_QUERY "SELECT category FROM tag LEFT JOIN creature ON tag.creature = creature.id WHERE creature.id = ?"
-#define CREATURE_QUERY "SELECT creature.id FROM creature WHERE creature.id = ?"
+void Content::loadFloors(sqlite3 *db) {
+    int count = this->processInt(db, Queries::countFloors);
+    sqlite3_stmt *floors = this->prepareStatement(db, Queries::allFloors);
 
-void loadCreatures(sqlite3 *db) {
+}
+
+void Content::loadWalls(sqlite3 *db) {
+    //int count = this->count(db, "wall");
 
 }
 
 
+void Content::loadCreatures(sqlite3 *db) {
+    int count = this->processInt(db, Queries::countCreatures);
+    this->protoCreatures = new ProtoCreature[count];
+    sqlite3_stmt *creatures = this->prepareStatement(db, Queries::allCreatures);
+    int response = sqlite3_step(creatures);
+    while (response == SQLITE_ROW) {
+        int id = sqlite3_column_int(creatures, 0);
+        this->protoCreatures[id - 1].name = (const char *)sqlite3_column_text(creatures, 1);
+        this->protoCreatures[id - 1].description = (const char *)sqlite3_column_text(creatures, 2);
+        this->protoCreatures[id - 1].tile = sqlite3_column_int(creatures, 3);
+        this->protoCreatures[id - 1].colour = Colour(sqlite3_column_int(creatures, 4));
+        this->protoCreatures[id - 1].temperament = sqlite3_column_int(creatures, 5);
+        this->protoCreatures[id - 1].rating = sqlite3_column_int(creatures, 6);
+        this->protoCreatures[id - 1].strength = sqlite3_column_int(creatures, 7);
+        this->protoCreatures[id - 1].intelligence = sqlite3_column_int(creatures, 8);
+        this->protoCreatures[id - 1].mobility = sqlite3_column_int(creatures, 9);
+        response = sqlite3_step(creatures);
+    }
+    sqlite3_finalize(creatures);
+}
+
+void Content::loadItems(sqlite3 *db) {
+    // I ain't done items yet so this sits dormant.
+}
+
 
 Content::Content(const char *contentFile) {
-    sqlite3 *db;
-    char *error = 0;
-    int response = sqlite3_open(contentFile, &db);
-    if (response) {
-        std::cerr << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
-        sqlite3_close(db);
-        return;
-    }
-    response = sqlite3_exec(db, CREATURE_QUERY, callback, 0, &error);
-    if (response != SQLITE_OK) {
-        std::cerr << "SQL Error: " << error << std::endl;
-        sqlite3_free(error);
-    }
-    std::cout << sqlite3_execScalar(db, "SELECT COUNT(*) FROM creature") << " rows." << std::endl;
+    sqlite3 *db = this->prepareDatabase(contentFile);
+    if (!db) throw "Fuck, can't open content database.";
+    this->loadFloors(db);
+    this->loadWalls(db);
+    this->loadCreatures(db);
+    this->loadItems(db);
     sqlite3_close(db);
 }
 
@@ -36,11 +58,11 @@ Content::~Content() {
 }
 
 const Floor *Content::getFloor(unsigned char index) const {
-    return this->floors[index];
+    return this->floors + index;
 }
 
-const Floor *Content::getWall(unsigned char index) const {
-    return this->walls[index];
+const Wall *Content::getWall(unsigned char index) const {
+    return this->walls + index;
 }
 
 Creature *Content::getCreature(unsigned char index) const {

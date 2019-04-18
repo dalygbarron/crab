@@ -46,10 +46,10 @@ Colour::Colour(unsigned char red, unsigned char green, unsigned char blue) {
     this->blue = blue;
 }
 
-Colour::Colour(Colour top, Colour bottom, float pos) {
-    this->red = top.red * (1 - pos) + bottom.red * pos;
-    this->green = top.green * (1 - pos) + bottom.green * pos;
-    this->blue = top.blue * (1 - pos) + bottom.blue * pos;
+Colour::Colour(int values) {
+    this->red = (values >> 16) & 0xff;
+    this->green = (values >> 8) & 0xff;
+    this->blue = values & 0xff;
 }
 
 Colour Colour::operator+(Colour other) const {
@@ -214,15 +214,8 @@ void Graphics::flush(Colour colour, SDL_Rect *rect) {
 }
 
 void Graphics::flushGradient(Colour top, Colour bottom) {
-    this->dstRect.x = 0;
-    this->dstRect.y = 0;
-    this->dstRect.w *= this->dimensions.x;
-    for (int i = 0; i < this->dimensions.y; i++) {
-        this->flush(Colour(top, bottom, i / (float)this->dimensions.y), &this->dstRect);
-        this->dstRect.y += this->dstRect.h;
-    }
-    // Put dstRect back to normal size.
-    this->dstRect.w = this->srcRect.w;
+    // TODO: fix.
+    flush(Colour::GREEN, 0);
 }
 
 void Graphics::frame() {

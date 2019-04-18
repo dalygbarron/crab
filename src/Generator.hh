@@ -1,6 +1,8 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
+#include "Content.hh"
+
 /**
  * Forward declaration.
  */
@@ -22,7 +24,7 @@ namespace Generator {
      * @param depth     is how far down this map is as they get harder etc.
      * @return the new map for your pleasure.
      */
-    Map *generate(Content *content, unsigned char type, int depth = 1);
+    Map *generate(const Content *content, unsigned char type, int depth = 1);
 };
 
 #endif

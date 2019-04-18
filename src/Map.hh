@@ -19,11 +19,11 @@ class Creature;
  * Also contains items and other things.
  */
 class Map {
+    int id = -1;
     Position dimensions;
     const Floor **floors;
     const Wall **walls;
-    unsigned char *paths;
-    unsigned char *seen;
+    unsigned char *layers;
     Colour *light;
     int layerSize;
     std::forward_list<Creature *> creatures;
@@ -46,11 +46,16 @@ class Map {
     void lightScan(Position pos, float startAngle, float endAngle, int iteration, int quadrant);
 
 public:
-    static const unsigned char LAYER_SINK = 0;
-    static const unsigned char LAYER_CARDINAL = 1;
-    static const unsigned char LAYER_FOV = 2;
-    static const unsigned char LAYER_TEMP = 3;
-    static const unsigned char LAYER_N = 4;
+    static const unsigned char LAYER_PATH_SINK = 0;
+    static const unsigned char LAYER_PATH_CARDINAL = 1;
+    static const unsigned char LAYER_VIEW_FOV = 2;
+    static const unsigned char LAYER_VIEW_TEMP = 3;
+    static const unsigned char LAYER_SEEN = 4;
+    static const unsigned char LAYER_N = 5;
+    static const unsigned char LAYER_PATH_OFFSET = 0;
+    static const unsigned char LAYER_VIEW_OFFSET = 2;
+    static const unsigned char LAYER_PATH_N = 2;
+    static const unsigned char LAYER_VIEW_N = 2;
 
     Colour bg = Colour::NAVY;
 
@@ -60,12 +65,6 @@ public:
      * @param dimensions is the width and height of the map.
      */
     Map(Position dimensions);
-
-    /**
-     * Loads the map from an input stream.
-     * @param stream is the input stream to read the map from.
-     */
-    Map(std::istream *stream);
 
     /**
      * Deletes the junk.
@@ -98,7 +97,7 @@ public:
      * @param floor is the floor that you want that tile to be.
      * @param pos   is the position of the tile you are changing.
      */
-    void setFloor(const Floor *floor, Position pos)
+    void setFloor(const Floor *floor, Position pos);
 
     /**
      * Gets a wall tile.
@@ -114,34 +113,20 @@ public:
     void setWall(const Wall *wall, Position pos);
 
     /**
-     * Gets a path value from the layers of the map and hands it to you.
+     * Gets a value from the layers of the map and hands it to you.
      * @param pos is the top down position to get the tile for.
      * @param z   is which layer to get the tile from.
      * @return the code that corresponds to something depending on the layer it is from.
      */
-    unsigned char getPath(Position pos, int z) const;
+    unsigned char getTile(Position pos, int z) const;
 
     /**
-     * Sets a path tile to a value.
+     * Sets a tile to a value.
      * @param value    is the new value to set it to.
      * @param position is the top down location of the tile.
      * @param z        is which layer to get the tile from.
      */
-    void setPath(unsigned char value, Position pos, int z);
-
-    /**
-     * Get whether a given tile has been seen by the player.
-     * @param pos is the position of the tile.
-     * @return true if the player has seen it otherwise false.
-     */
-    unsigned char getSeen(Position pos) const;
-
-    /**
-     * Sets whether the player has seen a given tile.
-     * @param value is the true or false value of whether they have.
-     * @param pos   is the tile location in question.
-     */
-    void setSeen(unsigned char value, Position pos);
+    void setTile(unsigned char value, Position pos, int z);
 
     /**
      * Puts a creature into the map at the given location.
@@ -180,13 +165,6 @@ public:
      * @param middle   is what position should appear in the middle of the screen.
      */
     void render(Graphics *graphics, Rect rect, Position middle);
-
-    /**
-     * Writes the map out to a stream.
-     * @param stream is the output it writes to.
-     * TODO: could replace this with stream operator which would be cool.
-     */
-    void output(std::ostream *stream);
 };
 
 #endif

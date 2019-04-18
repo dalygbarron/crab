@@ -11,22 +11,16 @@
 
 Map::Map(Position dimensions): dimensions(dimensions) {
     this->layerSize = dimensions.x * dimensions.y;
-    this->floors = new Floor *[this->layerSize];
-    this->walls = new Wall *[this->layerSize];
-    this->paths = new unsigned char[this->layerSize * Map::LAYER_N];
-    this->seen = new unsigned char [this->layerSize];
+    this->floors = new Floor const *[this->layerSize];
+    this->walls = new Wall const *[this->layerSize];
+    this->layers = new unsigned char[this->layerSize * Map::LAYER_N];
     this->light = new Colour[this->layerSize];
-}
-
-Map::Map(std::istream *stream): dimensions() {
-    // TODO: load the map from stream. and the dimensions bit is obviously wrong as well.
 }
 
 Map::~Map() {
     delete this->floors;
     delete this->walls;
-    delete this->paths;
-    delete this->seen;
+    delete this->layers;
     delete this->light;
     for (Creature *creature: this->creatures) delete creature;
 }
@@ -39,24 +33,28 @@ void Map::setLight(Position pos, Colour colour) {
     this->light[pos.y * this->dimensions.x + pos.x] = colour;
 }
 
-unsigned char Map::getTile(Position pos, int z) const {
-    return this->tiles[this->layerSize * z + pos.y * this->dimensions.x + pos.x];
+void Map::setFloor(const Floor *floor, Position pos) {
+    this->floors[pos.y * this->dimensions.x + pos.x] = floor;
 }
 
 const Floor *Map::getFloor(Position pos) const {
-    return this->floors[this->dimensions.x * this->dimensions.y + pos.y * this->dimensions.x + pos.x];
+    return this->floors[pos.y * this->dimensions.x + pos.x];
+}
+
+void Map::setWall(const Wall *wall, Position pos) {
+    this->walls[pos.y * this->dimensions.x + pos.x] = wall;
 }
 
 const Wall *Map::getWall(Position pos) const {
-    return this->walls[this->dimensions.x * this->dimensions.y + ]
+    return this->walls[pos.y * this->dimensions.x + pos.x];
 }
 
-void Map::setPath(unsigned char value, Position pos, int z) {
-    this->paths[this->dimensions.x * this->dimensions.y * z + pos.y * this->dimensions.x + pos.x] = value;
+void Map::setTile(unsigned char value, Position pos, int z) {
+    this->layers[this->layerSize * z + pos.y * this->dimensions.x + pos.x] = value;
 }
 
-unsigned char Map::getPath(Position pos, int z) {
-    return this->paths[this->dimensions.x * this->dimensions.y * z + pos.y * this->dimensions.x + pos.x];
+unsigned char Map::getTile(Position pos, int z) const {
+    return this->layers[this->layerSize * z + pos.y * this->dimensions.x + pos.x];
 }
 
 void Map::addCreature(Creature *creature, Position pos) {
@@ -80,11 +78,7 @@ void Map::applyMove(Move move) {
 
 void Map::pathing(Position pos) {
     // clear old data.
-    memset(
-        this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_SINK,
-        0xff,
-        sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 2
-    );
+    memset(this->layers + Map::LAYER_PATH_OFFSET, 0xff, sizeof(unsigned char) * this->layerSize * Map::LAYER_N);
     // algorithm
     Position offsets[] = {
         Position(-1, 0),
@@ -97,15 +91,17 @@ void Map::pathing(Position pos) {
         Position(-1, 1)
     };
     std::queue<Position> visit;
-    this->setTile(0, pos, Map::LAYER_SINK);
+    this->setTile(0, pos, Map::LAYER_PATH_SINK);
     visit.push(pos);
     while (!visit.empty()) {
         pos = visit.front();
         visit.pop();
-        unsigned char value = this->getTile(pos, Map::LAYER_SINK);
+        unsigned char value = this->getTile(pos, Map::LAYER_PATH_SINK);
         for (Position offset: offsets) {
-            if (!this->getTile(pos + offset, Map::LAYER_WALL) && this->getTile(pos + offset, Map::LAYER_SINK) > value + 1 && value < SINK_RADIUS) {
-                this->setTile(value + 1, pos + offset, Map::LAYER_SINK);
+            const Wall *wall = this->getWall(pos + offset);
+            unsigned char current = this->getTile(pos + offset, Map::LAYER_PATH_SINK);
+            if (!wall && current > value + 1 && value < SINK_RADIUS) {
+                this->setTile(value + 1, pos + offset, Map::LAYER_PATH_SINK);
                 visit.push(pos + offset);
             }
         }
@@ -115,20 +111,16 @@ void Map::pathing(Position pos) {
 
 void Map::lighting(Position pos) {
     // clear old memory and set up
-    memset(
-        this->tiles + this->dimensions.x * this->dimensions.y * Map::LAYER_FOV,
-        false,
-        sizeof(unsigned char) * this->dimensions.x * this->dimensions.y * 2
-    );
-    memset(this->light, 0, sizeof(Colour) * this->dimensions.x * this->dimensions.y);
-    for (Creature *creature: this->creatures) this->setTile(true, creature->getPosition(), Map::LAYER_TEMP);
+    memset(this->layers + Map::LAYER_VIEW_OFFSET, false, sizeof(unsigned char) * this->layerSize * Map::LAYER_VIEW_N);
+    memset(this->light, 0, sizeof(Colour) * this->layerSize);
+    for (Creature *creature: this->creatures) this->setTile(true, creature->getPosition(), Map::LAYER_VIEW_TEMP);
     // algorithm,.
     this->lightScan(pos, -1, 1, 1, 0);
     this->lightScan(pos, -1, 1, 1, 1);
     this->lightScan(pos, -1, 1, 1, 2);
     this->lightScan(pos, -1, 1, 1, 3);
     this->setLight(pos, Colour::WHITE);
-    this->setTile(true, pos, Map::LAYER_FOV);
+    this->setTile(true, pos, Map::LAYER_VIEW_FOV);
 }
 
 void Map::lightScan(Position pos, float startSlope, float endSlope, int iteration, int direction) {
@@ -146,8 +138,8 @@ void Map::lightScan(Position pos, float startSlope, float endSlope, int iteratio
             else if (direction == 3) current = pos + Position(i, c);
             this->setLight(current, Colour::WHITE - Colour(i * 10 - abs(c), i * 10 - abs(c), i * 10 - abs(c)));
             this->setTile(true, current, Map::LAYER_SEEN);
-            this->setTile(true, current, Map::LAYER_FOV);
-            int wall = this->getTile(current, Map::LAYER_WALL) || this->getTile(current, Map::LAYER_TEMP);
+            this->setTile(true, current, Map::LAYER_VIEW_FOV);
+            int wall = this->getWall(current) || this->getTile(current, Map::LAYER_VIEW_TEMP);
             if (wall) {
                 dead = true;
                 if (!blocked) {
@@ -185,16 +177,12 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
             if (bounds.contains(tile)) {
                 if (this->getTile(tile, Map::LAYER_SEEN)) {
                     Colour light = this->getLight(tile);
-                    const Floor *floor = Content::floors + this->getTile(tile, Map::LAYER_FLOOR);
-                    int wallIndex = this->getTile(tile, Map::LAYER_WALL);
-                    if (wallIndex == 0) {
-                        //int height = this->getTile(tile, Map::LAYER_SEEN);
-                        //if (height) graphics->blitTile(floor->tile, iteration, floor->colour, Colour::RED);
-                        graphics->blitCharacter(floor->tile, iteration, floor->colour * light);
-                    } else {
-                        const Wall *wall = Content::walls + wallIndex;
-                        graphics->blitCharacter(wall->tile, iteration, wall->colour * light);
-                    }
+                    const Floor *floor = this->getFloor(tile);
+                    const Wall *wall = this->getWall(tile);
+                    if (!wall) graphics->blitCharacter(floor->tile, iteration, floor->colour * light);
+                    else graphics->blitCharacter(wall->tile, iteration, wall->colour * light);
+                    //int height = this->getTile(tile, Map::LAYER_SEEN);
+                    //if (height) graphics->blitTile(floor->tile, iteration, floor->colour, Colour::RED);
                 }
             }
         }
@@ -204,13 +192,9 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
         Position tile = creature->getPosition();
         Position pos = creature->getPosition() - camera;
         Colour light = this->getLight(tile);
-        int view = this->getTile(tile, Map::LAYER_FOV);
+        int view = this->getTile(tile, Map::LAYER_VIEW_FOV);
         if (rect.contains(pos) && view) graphics->blitTile(3, pos, Colour::RED * light, this->bg);
     }
-}
-
-void Map::output(std::ostream *stream) {
-    // TODO: Gotta output the map to the stream/
 }
 
 void Map::walk(Creature *actor, int direction) {
@@ -236,8 +220,7 @@ void Map::walk(Creature *actor, int direction) {
         pos.x--;
         pos.y--;
     }
-    unsigned char wall = this->getTile(pos, Map::LAYER_WALL);
-    if (wall) return;
+    if (this->getWall(pos)) return;
     // TODO: collision detection and hand to hand combat.
     actor->setPosition(pos);
 }

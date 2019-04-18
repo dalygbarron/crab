@@ -32,9 +32,6 @@ public:
         this->map = map;
         player = new Player();
         map->addCreature(player, playerPos);
-        for (int i = 0; i < 20; i++) {
-            map->addCreature(Content::getCreature(0), Position(rand() % 300, rand() % 300));
-        }
         this->map->lighting(this->player->getPosition());
     }
 

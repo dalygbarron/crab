@@ -8,20 +8,20 @@
 
 /**
  * Generates a map full of randomised junk for a quick test.
+ * @param content   is the container of the game content.
  * @param depth     is not used here.
  * @param entrances is how many up stairs there must be in the map.
  * @return the new map.
  */
-static Map *junk(int depth, int entrances) {
+static Map *junk(const Content *content, int depth, int entrances) {
     Position dimensions(300, 300);
     Map *map = new Map(dimensions);
     for (int x = 0; x < dimensions.x; x++) {
         for (int y = 0; y < dimensions.y; y++) {
             Position pos(x, y);
-            map->setTile(rand() % 2, pos, Map::LAYER_FLOOR);
+            map->setFloor(content->getFloor(rand() % 2), pos);
             int choice = rand() % (JUNK_THRESHOLD + 2);
-            if (choice >= 2) choice = 0;
-            map->setTile(choice, pos, Map::LAYER_WALL);
+            if (choice < 2) map->setWall(content->getWall(choice), pos);
         }
     }
     return map;
@@ -59,7 +59,7 @@ static Map *house(int depth, int entrances) {
 
 Map *Generator::generate(const Content *content, unsigned char type, int depth) {
     switch(type) {
-        case GENERATOR_JUNK: return junk(depth, 1);
+        case GENERATOR_JUNK: return junk(content, depth, 1);
         case GENERATOR_SHIP: return ship(depth, 1);
         case GENERATOR_CAVE: return cave(depth, 1);
         case GENERATOR_HOUSE: return house(depth, 1);
