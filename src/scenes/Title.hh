@@ -37,7 +37,7 @@ public:
     }
 
     void render(Graphics *graphics) override {
-        graphics->flushGradient(Colour::RED, Colour(rand(), rand(), rand()));
+        graphics->flushGradient(Colour::RED, Colour::BLUE);
         if (this->choice >= 0) graphics->blitString(choices[this->choice], Position(), Colour::CYAN);
     }
 };

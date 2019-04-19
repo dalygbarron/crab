@@ -4,37 +4,51 @@
 #include "Mob.hh"
 #include "Move.hh"
 #include "Map.hh"
+#include "Graphics.hh"
 
 /**
  * Prototypal creature that stores unchanging properties of a given kind of creature.
  */
 class ProtoCreature {
-    const int maxHealth;
-    const int maxMana;
-
 public:
-    /**
-     * Creates you a protocreature. TODO: might not work like this if these can vary.
-     * @param maxHealth is the prototype's max health.
-     * @param maxMana   is the prototype's max mana.
-     */
-    ProtoCreature(int maxHealth, int maxMana);
+    static const int TEMPERAMENT_THING = 0;
+    static const int TEMPERAMENT_GRUNT = 1;
+    static const int TEMPERAMENT_N = 2;
 
+    static const int BONUS_NONE = 0;
+    static const int BONUS_SWOLE = 1;
+    static const int BONUS_RED = 2;
+
+    const char *name;
+    const char *description;
+    int constitution;
+    int intelligence;
+    int strength;
+    int mobility;
+    unsigned char tile;
+    Colour colour;
+    int temperament;
+    int rating;
+
+    /**
+     * Blank constructor for nothing creature.
+     */
+    ProtoCreature();
 };
 
 /**
  * A living breathing creature in the game which walks around in the level and shit.
  */
 class Creature: public Mob {
-    unsigned char prototype;
+    const ProtoCreature *prototype;
     unsigned short timer = 0;
 
 public:
     /**
      * Makes the creature by giving it a prototype to instantiate.
-     * @param prototype is the index of the creature's prototype.
+     * @param prototype is the prototypal creature this one is based on.
      */
-    Creature(unsigned char prototype);
+    Creature(const ProtoCreature *prototype);
 
     /**
      * Asks the creature what they would like to do this turn.

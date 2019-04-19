@@ -1,4 +1,5 @@
 #include "Game.hh"
+#include "Content.hh"
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "scenes/Title.hh"
@@ -34,16 +35,18 @@ void Game::queueEvent(Layer *notifier, int type, unsigned int parameter) {
     this->queued++;
 }
 
-Game::Game(int argc): graphics("bongo", Position(64, 48), argc > 1) {
+Game::Game(int argc): graphics("bongo", Position(64, 48), argc > 1), content("content.db") {
     this->pushLayer(new Title());
 }
 
 void Game::run() {
     while (!this->kill) {
+        //int time = SDL_GetTicks();
         this->display(&graphics);
         graphics.frame();
         this->input();
         this->runEvents();
+        //std::cout << SDL_GetTicks() - time << std::endl;
     }
 }
 
@@ -53,7 +56,7 @@ int Game::event(int type, unsigned int parameter) {
         return true;
     } else if (type == Layer::EVENT_MAP) {
         this->popLayer();
-        this->pushLayer(new Level(generator.generate(0, 0), Position(20, 20)));
+        this->pushLayer(new Level(Generator::generate(&content, 0, 0), Position(50, 50)));
         return true;
     }
     return false;

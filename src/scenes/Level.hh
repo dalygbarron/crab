@@ -4,6 +4,8 @@
 #include "../Layer.hh"
 #include "../Map.hh"
 #include "../Player.hh"
+#include "../Content.hh"
+#include "../Creature.hh"
 #include <iostream>
 
 /**
@@ -20,8 +22,9 @@ class Level: public Layer
      */
     void turn(Move move) {
         this->map->applyMove(move);
-        this->map->microwave(this->player->getPosition());
+        this->map->pathing(this->player->getPosition());
         this->map->update();
+        this->map->lighting(this->player->getPosition());
     }
 
 public:
@@ -29,7 +32,7 @@ public:
         this->map = map;
         player = new Player();
         map->addCreature(player, playerPos);
-        map->microwave(player->getPosition());
+        this->map->lighting(this->player->getPosition());
     }
 
     int event(int type, unsigned int parameter) override {
@@ -44,13 +47,12 @@ public:
     void render(Graphics *graphics) override {
         Rect mapBox(Position(), Position(graphics->dimensions.y, graphics->dimensions.y));
         graphics->flush(this->map->bg);
-        graphics->blitString("Tony Abbot", Position(graphics->dimensions.y, 0), Colour::WHITE);
-        graphics->blitString("camel rider", Position(graphics->dimensions.y, 1), Colour::WHITE);
+        graphics->blitString("\x03""Tony Abbot", Position(graphics->dimensions.y, 0), Colour::WHITE);
+        graphics->blitString("\xe3""Chinese FB-69", Position(graphics->dimensions.y, 1), Colour::WHITE);
         graphics->blitString("+10/20", Position(graphics->dimensions.y, 2), Colour::WHITE);
         graphics->blitString("*4/9", Position(graphics->dimensions.y, 3), Colour::WHITE);
         graphics->blitString("^123/643", Position(graphics->dimensions.y, 4), Colour::WHITE);
         this->map->render(graphics, mapBox, this->player->getPosition());
-        // graphics->blitTile(0x03, x, y, Colour::RED, this->map->colour);
     }
 };
 

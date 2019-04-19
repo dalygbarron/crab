@@ -14,6 +14,7 @@ public:
     const static Colour MAROON;
     const static Colour GREEN;
     const static Colour BLUE;
+    const static Colour SKY;
     const static Colour NAVY;
     const static Colour YELLOW;
     const static Colour ORANGE;
@@ -43,12 +44,10 @@ public:
     Colour(unsigned char red, unsigned char green, unsigned char blue);
 
     /**
-     * Creates a colour that is part of the way between two colours.
-     * @param top    is the first colour.
-     * @param bottom is the second colour.
-     * @param pos    is how far between the two with 0 being top and 1 being bottom.
+     * Converts an rgb int into a colour object.
+     * @param values is the int containing the colours.
      */
-    Colour(Colour top, Colour bottom, float pos);
+    Colour(int values);
 
     /**
      * Adds two colours together bounded at max light.
@@ -187,6 +186,16 @@ public:
      * Updates the screen to show what has been blitted on there lately.
      */
     void frame();
+
+    /**
+     * Plays a nice song for your pleasure.
+     */
+    void playSong();
+
+    /**
+     * Plays a sound effect for your satisfaction.
+     */
+    void playSound();
 };
 
 #endif

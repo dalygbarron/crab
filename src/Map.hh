@@ -19,9 +19,14 @@ class Creature;
  * Also contains items and other things.
  */
 class Map {
+    int id = -1;
     Position dimensions;
-    unsigned char *tiles;
+    const Floor **floors;
+    const Wall **walls;
+    unsigned char *layers;
     Colour *light;
+    Colour ambientLight = Colour(50, 0, 0);
+    int layerSize;
     std::forward_list<Creature *> creatures;
 
     /**
@@ -30,18 +35,6 @@ class Map {
      * @param direction is the direction to go in by the codes in Move.hh
      */
     void walk(Creature *actor, int direction);
-
-    /**
-     * Calculates all the generic pathfinding maps.
-     * @param pos is the position of the player.
-     */
-    void pathing(Position pos);
-
-    /**
-     * Calculates all the lighting and line of sight for the map. NB: This is possibly going to change a bit.
-     * @param pos is the position of the player.
-     */
-    void lighting(Position pos);
 
     /**
      * Performs a single recursive quadrant scan for lighting to the north.
@@ -54,15 +47,19 @@ class Map {
     void lightScan(Position pos, float startAngle, float endAngle, int iteration, int quadrant);
 
 public:
-    static const unsigned char LAYER_FLOOR = 0;
-    static const unsigned char LAYER_WALL = 1;
-    static const unsigned char LAYER_SINK = 2;
-    static const unsigned char LAYER_CARDINAL = 3;
-    static const unsigned char LAYER_FOV = 4;
-    static const unsigned char LAYER_SEEN = 5;
-    static const unsigned char LAYER_N = 6;
+    static const unsigned char LAYER_PATH_SINK = 0;
+    static const unsigned char LAYER_PATH_CARDINAL = 1;
+    static const unsigned char LAYER_VIEW_FOV = 2;
+    static const unsigned char LAYER_VIEW_TEMP = 3;
+    static const unsigned char LAYER_SEEN = 4;
+    static const unsigned char LAYER_N = 5;
+    static const unsigned char LAYER_PATH_OFFSET = 0;
+    static const unsigned char LAYER_VIEW_OFFSET = 2;
+    static const unsigned char LAYER_PATH_N = 2;
+    static const unsigned char LAYER_VIEW_N = 2;
 
     Colour bg = Colour::NAVY;
+    Colour bump = Colour::NAVY / 2;
 
 
     /**
@@ -70,12 +67,6 @@ public:
      * @param dimensions is the width and height of the map.
      */
     Map(Position dimensions);
-
-    /**
-     * Loads the map from an input stream.
-     * @param stream is the input stream to read the map from.
-     */
-    Map(std::istream *stream);
 
     /**
      * Deletes the junk.
@@ -104,7 +95,27 @@ public:
     const Floor *getFloor(Position pos) const;
 
     /**
-     * Gets a tile code from the layers of the map and hands it to you.
+     * sets a floor tile to belong to a given kind of floor.
+     * @param floor is the floor that you want that tile to be.
+     * @param pos   is the position of the tile you are changing.
+     */
+    void setFloor(const Floor *floor, Position pos);
+
+    /**
+     * Gets a wall tile.
+     * @param pos is the location of the wall tile to get.
+     */
+    const Wall *getWall(Position pos) const;
+
+    /**
+     * Sets a wall tile to a given wall.
+     * @param wall is the wall you are setting it to.
+     * @param pos  is the location yu are changing.
+     */
+    void setWall(const Wall *wall, Position pos);
+
+    /**
+     * Gets a value from the layers of the map and hands it to you.
      * @param pos is the top down position to get the tile for.
      * @param z   is which layer to get the tile from.
      * @return the code that corresponds to something depending on the layer it is from.
@@ -133,12 +144,16 @@ public:
     void applyMove(Move move);
 
     /**
-     * Recalculates all the generic pathfinding paths the map stores. These maps can be used to find
-     * the direction to walk in towards the player from any location on the map by moving from a
-     * tile with a higher value to a lower one.
-     * @param pos is the position that should be the target for path finding.
+     * Calculates all the generic pathfinding maps.
+     * @param pos is the position of the player.
      */
-    void microwave(Position pos);
+    void pathing(Position pos);
+
+    /**
+     * Calculates all the lighting and line of sight for the map. NB: This is possibly going to change a bit.
+     * @param pos is the position of the player.
+     */
+    void lighting(Position pos);
 
     /**
      * Goes through all creatures in the map that are ready to have a turn and applies their turns.
@@ -152,13 +167,6 @@ public:
      * @param middle   is what position should appear in the middle of the screen.
      */
     void render(Graphics *graphics, Rect rect, Position middle);
-
-    /**
-     * Writes the map out to a stream.
-     * @param stream is the output it writes to.
-     * TODO: could replace this with stream operator which would be cool.
-     */
-    void output(std::ostream *stream);
 };
 
 #endif

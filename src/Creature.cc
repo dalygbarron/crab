@@ -1,13 +1,13 @@
 #include "Creature.hh"
 
-ProtoCreature::ProtoCreature(int maxHealth, int maxMana): maxHealth(maxHealth), maxMana(maxMana) {
-    // Does nothing.
+ProtoCreature::ProtoCreature() {
+    // does nothing.
 }
 
-Creature::Creature(unsigned char prototype) {
-    this->prototype = prototype;
+Creature::Creature(const ProtoCreature *prototype): prototype(prototype) {
+    // does nothing.
 }
 
 Move Creature::getMove(const Map *map) {
-    return Move();
+    return Move(this, Move::ACTION_WALK, rand() % 8);
 }
