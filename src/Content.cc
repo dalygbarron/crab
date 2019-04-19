@@ -4,15 +4,35 @@
 
 void Content::loadFloors(sqlite3 *db) {
     int count = this->processInt(db, Queries::countFloors);
+    this->floors = new Floor[count];
     sqlite3_stmt *floors = this->prepareStatement(db, Queries::allFloors);
-
+    int response = sqlite3_step(floors);
+    while (response == SQLITE_ROW) {
+        int id = sqlite3_column_int(floors, 0);
+        this->floors[id - 1].tile = sqlite3_column_int(floors, 1);
+        this->floors[id - 1].colour = Colour(sqlite3_column_int(floors, 2));
+        this->floors[id - 1].description = (const char *)sqlite3_column_text(floors, 3);
+        response = sqlite3_step(floors);
+    }
+    sqlite3_finalize(floors);
 }
 
 void Content::loadWalls(sqlite3 *db) {
-    //int count = this->count(db, "wall");
-
+    int count = this->processInt(db, Queries::countWalls);
+    this->walls = new Wall[count];
+    sqlite3_stmt *walls = this->prepareStatement(db, Queries::allWalls);
+    int response = sqlite3_step(walls);
+    while (response == SQLITE_ROW) {
+        int id = sqlite3_column_int(walls, 0);
+        this->walls[id - 1].description = (const char *)sqlite3_column_text(walls, 1);
+        this->walls[id - 1].tile = sqlite3_column_int(walls, 2);
+        this->walls[id - 1].colour = Colour(sqlite3_column_int(walls, 3));
+        this->walls[id - 1].blockSight = sqlite3_column_int(walls, 4);
+        this->walls[id - 1].blockMove = sqlite3_column_int(walls, 5);
+        response = sqlite3_step(walls);
+    }
+    sqlite3_finalize(walls);
 }
-
 
 void Content::loadCreatures(sqlite3 *db) {
     int count = this->processInt(db, Queries::countCreatures);

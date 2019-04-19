@@ -2,7 +2,7 @@ SELECT
     tag.category
 FROM
     tag
-INNER JOIN
+LEFT JOIN -- maybe this should be inner join so it doesn't pick up junk tags I dunno.
     creature
 ON
     creature.id = tag.creature

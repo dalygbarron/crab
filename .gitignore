@@ -5,3 +5,5 @@ bing.png
 .DS_STORE
 src/Queries.gen.cc
 src/Queries.gen.hh
+scripts
+scripts/*

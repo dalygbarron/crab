@@ -78,7 +78,7 @@ void Map::applyMove(Move move) {
 
 void Map::pathing(Position pos) {
     // clear old data.
-    memset(this->layers + Map::LAYER_PATH_OFFSET, 0xff, sizeof(unsigned char) * this->layerSize * Map::LAYER_N);
+    memset(this->layers + Map::LAYER_PATH_OFFSET * this->layerSize, 0xff, sizeof(unsigned char) * this->layerSize * Map::LAYER_PATH_N);
     // algorithm
     Position offsets[] = {
         Position(-1, 0),
@@ -111,8 +111,7 @@ void Map::pathing(Position pos) {
 
 void Map::lighting(Position pos) {
     // clear old memory and set up
-    memset(this->layers + Map::LAYER_VIEW_OFFSET, false, sizeof(unsigned char) * this->layerSize * Map::LAYER_VIEW_N);
-    memset(this->light, 0, sizeof(Colour) * this->layerSize);
+    memset(this->layers + Map::LAYER_VIEW_OFFSET * this->layerSize, false, sizeof(unsigned char) * this->layerSize * Map::LAYER_VIEW_N);
     for (Creature *creature: this->creatures) this->setTile(true, creature->getPosition(), Map::LAYER_VIEW_TEMP);
     // algorithm,.
     this->lightScan(pos, -1, 1, 1, 0);
@@ -176,13 +175,12 @@ void Map::render(Graphics *graphics, Rect rect, Position middle) {
             Position tile = iteration + camera;
             if (bounds.contains(tile)) {
                 if (this->getTile(tile, Map::LAYER_SEEN)) {
-                    Colour light = this->getLight(tile);
+                    Colour light = this->getLight(tile) + this->ambientLight;
+                    int visible = this->getTile(tile, Map::LAYER_VIEW_FOV);
                     const Floor *floor = this->getFloor(tile);
                     const Wall *wall = this->getWall(tile);
-                    if (!wall) graphics->blitCharacter(floor->tile, iteration, floor->colour * light);
-                    else graphics->blitCharacter(wall->tile, iteration, wall->colour * light);
-                    //int height = this->getTile(tile, Map::LAYER_SEEN);
-                    //if (height) graphics->blitTile(floor->tile, iteration, floor->colour, Colour::RED);
+                    if (!wall) graphics->blitCharacter(floor->tile, iteration, visible ? floor->colour * light : Colour::DARK_GREY);
+                    else graphics->blitCharacter(wall->tile, iteration, visible ? wall->colour * light : Colour::GREY);
                 }
             }
         }

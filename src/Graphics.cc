@@ -14,7 +14,9 @@ const Colour Colour::GREEN = Colour(0, 255, 0);
 
 const Colour Colour::BLUE = Colour(0, 0, 255);
 
-const Colour Colour::NAVY = Colour(0, 0, 32);
+const Colour Colour::NAVY = Colour(0, 0, 34);
+
+const Colour Colour::SKY = Colour(135, 206, 235);
 
 const Colour Colour::YELLOW = Colour(255, 255, 0);
 
@@ -26,7 +28,7 @@ const Colour Colour::MAGENTA = Colour(255, 0, 255);
 
 const Colour Colour::BLACK = Colour(0, 0, 0);
 
-const Colour Colour::DARK_GREY = Colour(20, 20, 20);
+const Colour Colour::DARK_GREY = Colour(31, 31, 31);
 
 const Colour Colour::GREY = Colour(100, 100, 100);
 

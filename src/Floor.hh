@@ -10,22 +10,14 @@
 class Floor
 {
 public:
-    const unsigned char tile;
-    const Colour colour;
+    unsigned char tile;
+    Colour colour;
     const char *description;
 
     /**
      * Generic constructor.
      */
     Floor();
-
-    /**
-     * Builds a floor with it's things.
-     * @param tile        is the tile it should render as.
-     * @param colour      is the colour it is drawn in.
-     * @param description is the text description of the tile.
-     */
-    Floor(unsigned char tile, Colour colour, const char *description);
 
 };
 

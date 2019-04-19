@@ -1,13 +1,11 @@
 SELECT
-    id,
-    name,
-    description,
-    tile,
-    colour,
-    temperament,
-    rating,
-    strength,
-    intelligence,
-    mobility
+    floor.id,
+    floor.tile,
+    _colour.value,
+    floor.description
 FROM
-    creature;
+    floor
+LEFT JOIN
+    _colour
+ON
+    floor.colour = _colour.name;

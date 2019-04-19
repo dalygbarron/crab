@@ -14,6 +14,7 @@ public:
     const static Colour MAROON;
     const static Colour GREEN;
     const static Colour BLUE;
+    const static Colour SKY;
     const static Colour NAVY;
     const static Colour YELLOW;
     const static Colour ORANGE;

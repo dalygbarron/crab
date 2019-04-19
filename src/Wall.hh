@@ -20,7 +20,6 @@ public:
      * Generic constructor.
      */
     Wall();
-
 };
 
 #endif

@@ -16,7 +16,7 @@ CC = g++
 
 bing.png: bing2.png
 	cp bing2.png bing.png
-	sips -Z $(SIZE) bing.png
+	#sips -Z $(SIZE) bing.png
 
 sqlite3.o: src/sqlite3.c
 	gcc -c -o sqlite3.o src/sqlite3.c $(ADD)

@@ -25,6 +25,7 @@ class Map {
     const Wall **walls;
     unsigned char *layers;
     Colour *light;
+    Colour ambientLight = Colour(50, 0, 0);
     int layerSize;
     std::forward_list<Creature *> creatures;
 
@@ -58,6 +59,7 @@ public:
     static const unsigned char LAYER_VIEW_N = 2;
 
     Colour bg = Colour::NAVY;
+    Colour bump = Colour::NAVY / 2;
 
 
     /**

@@ -4,7 +4,7 @@
 #include "Map.hh"
 #include "Content.hh"
 
-#define JUNK_THRESHOLD 50
+#define JUNK_THRESHOLD 10
 
 /**
  * Generates a map full of randomised junk for a quick test.
@@ -20,8 +20,8 @@ static Map *junk(const Content *content, int depth, int entrances) {
         for (int y = 0; y < dimensions.y; y++) {
             Position pos(x, y);
             map->setFloor(content->getFloor(rand() % 2), pos);
-            int choice = rand() % (JUNK_THRESHOLD + 2);
-            if (choice < 2) map->setWall(content->getWall(choice), pos);
+            int choice = rand() % (JUNK_THRESHOLD + 1);
+            if (choice < 1) map->setWall(content->getWall(choice), pos);
         }
     }
     return map;
