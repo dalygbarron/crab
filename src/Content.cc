@@ -1,5 +1,5 @@
 #include "Content.hh"
-#include <sqlite3.h>
+#include "sqlite3.h"
 #include "Queries.gen.hh"
 
 void Content::loadFloors(sqlite3 *db) {
