@@ -66,6 +66,7 @@ Colour Colour::operator+(Colour other) const {
 }
 
 Colour Colour::operator-(Colour other) const {
+    // TODO: this is problematic due to wrapping rn sjhould be like the addition.
     return Colour(this->red - other.red, this->green - other.green, this->blue - other.blue);
 }
 
