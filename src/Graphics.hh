@@ -90,6 +90,13 @@ public:
      * @return the result.
      */
     Colour operator/(float other) const;
+
+    /**
+     * Gives you the power of the light. It is like a real basic merge of all three values together when you just want
+     * to know there is something there.
+     * @return red green and blue put together.
+     */
+    int power() const;
 };
 
 /**

@@ -97,6 +97,10 @@ Colour Colour::operator/(float other) const {
     return Colour(this->red / other, this->green / other, this->blue / other);
 }
 
+int Colour::power() const {
+    return this->red + this->green + this->blue;
+}
+
 Graphics::Graphics(char const *title, Position dimensions, int fullscreen): dimensions(dimensions) {
     // Start sdl and stuff.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {

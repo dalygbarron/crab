@@ -8,6 +8,8 @@
 
 #define SINK_RADIUS 25
 #define LIGHT_RADIUS 25
+#define LIGHT_POWER 20
+#define SIGHT_THRESHOLD 50
 
 Map::Map(Position dimensions): dimensions(dimensions) {
     this->layerSize = dimensions.x * dimensions.y;
@@ -29,8 +31,12 @@ Colour Map::getLight(Position pos) const {
     return this->light[pos.y * this->dimensions.x + pos.x];
 }
 
-void Map::setLight(Position pos, Colour colour) {
-    this->light[pos.y * this->dimensions.x + pos.x] = colour;
+void Map::setLight(Position pos, Colour light) {
+    this->light[pos.y * this->dimensions.x + pos.x] = light;
+}
+
+void Map::addLight(Position pos, Colour light) {
+    this->light[pos.y * this->dimensions.x + pos.x] = this->light[pos.y * this->dimensions.x + pos.x] + light;
 }
 
 void Map::setFloor(const Floor *floor, Position pos) {
@@ -100,7 +106,7 @@ void Map::pathing(Position pos) {
         for (Position offset: offsets) {
             const Wall *wall = this->getWall(pos + offset);
             unsigned char current = this->getTile(pos + offset, Map::LAYER_PATH_SINK);
-            if (!wall && current > value + 1 && value < SINK_RADIUS) {
+            if ((!wall || !wall->blockMove) && current > value + 1 && value < SINK_RADIUS) {
                 this->setTile(value + 1, pos + offset, Map::LAYER_PATH_SINK);
                 visit.push(pos + offset);
             }
@@ -112,13 +118,14 @@ void Map::pathing(Position pos) {
 void Map::lighting(Position pos) {
     // clear old memory and set up
     memset(this->layers + Map::LAYER_VIEW_OFFSET * this->layerSize, false, sizeof(unsigned char) * this->layerSize * Map::LAYER_VIEW_N);
+    for (int i = 0; i < this->layerSize; i++) this->light[i] = this->ambientLight;
     for (Creature *creature: this->creatures) this->setTile(true, creature->getPosition(), Map::LAYER_VIEW_TEMP);
     // algorithm,.
     this->lightScan(pos, -1, 1, 1, 0);
     this->lightScan(pos, -1, 1, 1, 1);
     this->lightScan(pos, -1, 1, 1, 2);
     this->lightScan(pos, -1, 1, 1, 3);
-    this->setLight(pos, Colour::WHITE);
+    this->addLight(pos, Colour::WHITE);
     this->setTile(true, pos, Map::LAYER_VIEW_FOV);
 }
 
@@ -135,11 +142,15 @@ void Map::lightScan(Position pos, float startSlope, float endSlope, int iteratio
             else if (direction == 1) current = pos + Position(0 - c, i);
             else if (direction == 2) current = pos + Position(0 - i, 0 - c);
             else if (direction == 3) current = pos + Position(i, c);
-            this->setLight(current, Colour::WHITE - Colour(i * 10 - abs(c), i * 10 - abs(c), i * 10 - abs(c)));
-            this->setTile(true, current, Map::LAYER_SEEN);
-            this->setTile(true, current, Map::LAYER_VIEW_FOV);
-            int wall = this->getWall(current) || this->getTile(current, Map::LAYER_VIEW_TEMP);
-            if (wall) {
+            float distance = sqrt(i * i + c * c) / LIGHT_POWER;
+            if (distance > 1) distance = 1;
+            if (c != scanEnd || endSlope != 1)this->addLight(current, Colour::WHITE * (1 - distance));
+            if (this->getLight(current).power() > SIGHT_THRESHOLD) {
+                this->setTile(true, current, Map::LAYER_SEEN);
+                this->setTile(true, current, Map::LAYER_VIEW_FOV);
+            }
+            const Wall *wall = this->getWall(current);
+            if ((wall && wall->blockSight) || this->getTile(current, Map::LAYER_VIEW_TEMP)) {
                 dead = true;
                 if (!blocked) {
                     float innerStart = clearStart / (float)i;
@@ -218,7 +229,8 @@ void Map::walk(Creature *actor, int direction) {
         pos.x--;
         pos.y--;
     }
-    if (this->getWall(pos)) return;
+    const Wall *wall = this->getWall(pos);
+    if (wall && wall->blockMove) return;
     // TODO: collision detection and hand to hand combat.
     actor->setPosition(pos);
 }
