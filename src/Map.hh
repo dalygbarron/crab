@@ -25,7 +25,7 @@ class Map {
     const Wall **walls;
     unsigned char *layers;
     Colour *light;
-    Colour ambientLight = Colour(50, 0, 0);
+    Colour ambientLight = Colour(0, 0, 0);
     int layerSize;
     std::forward_list<Creature *> creatures;
 
@@ -59,7 +59,6 @@ public:
     static const unsigned char LAYER_VIEW_N = 2;
 
     Colour bg = Colour::NAVY;
-    Colour bump = Colour::NAVY / 2;
 
 
     /**
@@ -82,10 +81,17 @@ public:
 
     /**
      * Sets the light value at a given spot.
-     * @param pos    is the position at which to set the light.
-     * @param colour is the value to set the light to.
+     * @param pos   is the position at which to set the light.
+     * @param light is the value to set the light to.
      */
-    void setLight(Position pos, Colour colour);
+    void setLight(Position pos, Colour light);
+
+    /**
+     * Adds onto a light value at a given spot.
+     * @param pos   is the location to add the light at.
+     * @param light is the value of light to add.
+     */
+    void addLight(Position pos, Colour light);
 
     /**
      * Gets the floor tile object at a given location.
